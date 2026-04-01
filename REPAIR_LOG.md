@@ -1,8 +1,10 @@
 # REPAIR LOG — Kresic Digital Systems
 
-> **Audit performed:** 2026-03-30  
-> **Auditor:** AI Architect / Full-Stack Security Auditor  
-> **Scope:** All source files in `/app`, `/components`, `/lib`, `/dictionaries`, `tailwind.config.ts`, `next.config.mjs`, `.gitignore`, `.env.example`
+> **Original audit:** 2026-03-30  
+> **Last supplement:** 2026-04-01  
+> **Auditor / maintainer notes:** Security, performance, and compliance-oriented change log (not a penetration-test certificate).  
+> **Initial scope:** `/app`, `/components`, `/lib`, `/dictionaries`, `tailwind.config.ts`, `next.config.mjs`, `.gitignore`, `.env.example`  
+> **Supplement scope (through commit `57cf345`):** `app/page.tsx`, `app/actions/sendEmail.ts`, landing/LCP components, Three.js visuals, `DeferMount.tsx`, `GlobalLegalFooter.tsx`, `globals.css`, README alignment
 
 ---
 
@@ -74,6 +76,17 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 ---
 
+## CRITICAL FIX — C6 *(2026-04-01 supplement)*
+
+**File:** `app/actions/sendEmail.ts`  
+**Problem:** The original `CONTROL_CHARS` regular expression did **not** remove ASCII newline (U+000A), carriage return (U+000D), or tab (U+0009). Those code points could remain in `name` (and thus in the email **subject** prefix) or in other fields, enabling **header / SMTP line-breaking** behaviour in downstream mail pipelines. The `email` field was trimmed and lowercased but **not** passed through the same control-character stripper before use in `replyTo` and in the HTML `mailto:` attribute. Separately, `Promise.race` between `resend.emails.send()` and a timeout could leave the Resend promise **rejecting after** the race had already failed on timeout, risking **unhandled promise rejections** in a serverless runtime.  
+**Fix:**  
+- Replaced the regex with `[\u0000-\u001F\u007F]` so **all C0 control characters and DEL** are stripped from free-text fields.  
+- Applied `stripControl()` to `email` after trim/lowercase, before validation and Resend payload construction.  
+- Attached a no-op `.catch()` to the send promise so a late rejection after a timeout does not surface as an unhandled rejection.
+
+---
+
 ## WARNING FIX — W1
 
 **File:** `app/datenschutz/page.tsx`  
@@ -128,19 +141,69 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 ---
 
+## WARNING FIX — W3 *(2026-04-01 supplement)*
+
+**Files:** `components/HeroVisual.tsx`, `components/DataFlowVisual.tsx`, `components/InfrastructureGrid.tsx`, `components/MarketPulseVisual.tsx`  
+**Problem:** Resize handling used a debounced callback without clearing the pending `setTimeout` on unmount. After `WebGLRenderer.dispose()`, a fired debounce could still call `setSize` / `render` on a torn-down GL context. The animation loop scheduled `requestAnimationFrame` before running the frame body, so one additional frame could be scheduled unless the loop short-circuited when the component had unmounted.  
+**Fix:** Introduced an `alive` (or equivalent) flag set false in the effect cleanup; guard the first line of the animation function; store the debounce timer id and `clearTimeout` it in cleanup alongside `ResizeObserver.disconnect()` and `cancelAnimationFrame`.
+
+---
+
+## OPTIMIZATION — O5 *(2026-04-01 supplement)*
+
+**Files:** `app/page.tsx`, `components/KDSLogoSsr.tsx`, `LandingHeaderShellClient.tsx`, `LandingLcpHero.tsx`, `HeroBackdrop.tsx`, `HeroCopyMarkup.tsx`, `HeroTextIsland.tsx`, `components/LandingPage.tsx`, `components/landing/HeavyVisuals.tsx`, `components/DeferMount.tsx`, `app/layout.tsx` (fonts), `app/globals.css`  
+**Problem:** The marketing home route previously bundled the full interactive landing (including hero and header) in ways that delayed **LCP** (notably logo + hero text) and increased **TBT** during hydration. Hero Three.js and heavy chunks competed with the main thread immediately after load. Card WebGL read `clientWidth` / `clientHeight` synchronously at effect start, contributing to **forced reflow** in Lighthouse-style traces.  
+**Fix (summary):**  
+- **RSC-first LCP path:** `app/page.tsx` composes a server-rendered **logo link** (`KDSLogoSsr`) and **default DE hero copy** (`HeroCopyMarkup` inside `HeroTextIsland`); `HeroTextIsland` swaps to EN when locale changes. Interactive chrome lives in **`LandingHeaderShellClient`** with the logo passed as a server-rendered slot.  
+- **Hero WebGL:** `HeroBackdrop` wraps `DeferHeavyChild` + dynamic `HeroVisual`; `scheduleAfterHydrationIdle` waits for post-hydration frames, a configurable delay, then **`requestIdleCallback`** (with fallback), with a higher delay floor on narrow viewports. **`DeferHeavyChild`** clears its schedule on unmount and gates `setShow` with a `mounted` flag.  
+- **Below-fold WebGL:** Card scenes remain behind **`next/dynamic` (`ssr: false`)** and **`MountWhenVisible`**.  
+- **Sizing:** Hero and card Three.js components take dimensions from **`ResizeObserver`** entries (debounced where appropriate) instead of synchronous layout reads on the first effect tick.  
+- **Typography:** `JetBrains_Mono` (weight 700, `display: "swap"`, preload) supplies the SVG wordmark; hero copy uses a CSS **`lcp-fade-in`** keyframe instead of an intersection-driven fade for the primary headline block.
+
+---
+
+## OPTIMIZATION — O6 *(2026-04-01 supplement)*
+
+**Files:** `components/HeroVisual.tsx`, `components/DataFlowVisual.tsx`, `components/InfrastructureGrid.tsx`, `components/MarketPulseVisual.tsx`  
+**Problem:** Mobile WebGL was either overly conservative (e.g. fixed DPR of 1) or expensive (antialias on all small screens). Shader precision and particle counts were not tuned as a single policy across scenes.  
+**Fix:** Unified policy: **`setPixelRatio(Math.min(devicePixelRatio, 2))`**, **`antialias`** only when `navigator.hardwareConcurrency > 4`, **`precision: "mediump"`** on `WebGLRenderer`, tuned particle/segment counts, and **debounced resize** (where still applicable before W3’s teardown hardening).
+
+---
+
+## OPTIMIZATION — O7 *(2026-04-01 supplement)*
+
+**Files:** `components/LandingPage.tsx` (`SiteFooter`), `components/GlobalLegalFooter.tsx`  
+**Problem:** Footer layout used `justify-between` on desktop with legal links rendered in a **separate** global footer, producing a visually disjointed stack (logo / copyright / GitHub vs. legal row) and awkward wrapping on small viewports.  
+**Fix:** **`SiteFooter`** is a single **centred column**: logo, copyright, then a **nav** with GitHub + Impressum + Datenschutz (labels from `t.legalFooter` for EN/DE). On small screens links stack vertically; on `sm+` a horizontal row uses subtle separators. **`GlobalLegalFooter`** is a client component that **returns `null` when `usePathname() === "/"`** so the home page does not duplicate the legal strip; other routes keep the compact global legal bar.
+
+---
+
+## Related hardening (commit history — summary)
+
+| Theme | Commits (examples) | Notes |
+|------|---------------------|--------|
+| Contact abuse & resilience | `36e4760`, `06525fa`, `291f407` | Honeypot field, submit timing gate, in-memory rate limit by IP, `RESEND_TO_EMAIL` override, trimmed quoted env values, distinct errors for missing API key vs missing production sender |
+| Observability | `f52666b`, `57dda2b`, `689ad6b` | Structured logging for Resend failures; global error boundary; dev-only noise reduction elsewhere |
+| Bundle / route performance | `25a7639`, `8e753fe`, `3548b59` | Code-splitting and lazy strategies for landing and WebGL chunks |
+| Documentation | `f95defa`, `aea7194` | README aligned with deployment env and current RSC/LCP architecture |
+
+---
+
 ## No action required — Verified correct
 
 | Area | Finding |
 |---|---|
 | `app/actions/sendEmail.ts` | Server-side consent check (`consent !== "on" && consent !== "true"`) correctly double-keys the client-side checkbox — GDPR compliant |
 | `app/actions/sendEmail.ts` | `escapeHtml()` is applied to all user-supplied content rendered into the HTML email body — XSS-safe |
+| `app/actions/sendEmail.ts` | `name`, `email`, and `message` pass through full C0 **stripControl** before validation and send (see **C6**) |
 | `app/actions/sendEmail.ts` | `locale` is normalised to `"de" \| "en"` before use — injection-safe |
+| `components/DeferMount.tsx` | `DeferHeavyChild` cancels scheduled idle/timer work on unmount and guards `setShow` after unmount |
 | `components/ContactFormWithConsent.tsx` | `useTransition` + `isPending` prevents duplicate form submissions |
 | `components/ContactFormWithConsent.tsx` | `role="status" aria-live="polite"` on feedback `<div>` — accessible |
 | `app/impressum/page.tsx` | Kleinunternehmer notice (§ 19 UStG) present — TMG/DACH compliant |
 | `app/datenschutz/page.tsx` | User rights section (Art. 15–21 DSGVO) present and correctly addressed |
 | `lib/i18n.tsx` | No secrets, no external calls — pure client state management |
-| `tailwind.config.ts` | `darkMode: "media"` — correct for a site without a manual dark-mode toggle |
+| `tailwind.config.ts` | `darkMode: "class"` with `dark` on `<html>` — matches the project’s explicit dark-first marketing UI |
 | `next/image` | `priority` set on above-the-fold portrait — LCP optimised |
 | `app/layout.tsx` | `Providers` wrapper correctly positions `I18nProvider` above all page components |
 | `.gitignore` | `.env`, `.env.local`, and all `.env.*.local` variants are correctly excluded |
