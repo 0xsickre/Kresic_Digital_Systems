@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  ::selection {
+    @apply bg-emerald-500/30 text-white;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+
+  html,
+  body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+      env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  img,
+  video,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Eingefügtes Rechts-HTML (z. B. Export) — uklapa se u tamnu temu */
+@layer components {
+  .legal-html {
+    @apply text-sm leading-relaxed text-slate-300;
+  }
+
+  .legal-html :where(h1, h2, h3, h4) {
+    @apply font-semibold tracking-tight text-white;
+  }
+
+  .legal-html h1 {
+    @apply mt-8 text-3xl font-semibold tracking-tight text-white first:mt-0 sm:text-4xl;
+  }
+
+  .legal-html h2 {
+    @apply mt-8 border-b border-white/10 pb-2 text-base first:mt-0;
+  }
+
+  .legal-html h3 {
+    @apply mt-6 text-sm;
+  }
+
+  .legal-html p {
+    @apply mt-3 text-slate-400;
+  }
+
+  .legal-html a {
+    @apply text-indigo-300 underline-offset-2 hover:underline;
+  }
+
+  .legal-html ul,
+  .legal-html ol {
+    @apply mt-3 list-inside space-y-2 text-slate-400;
+  }
+
+  .legal-html ul {
+    @apply list-disc;
+  }
+
+  .legal-html ol {
+    @apply list-decimal;
+  }
+
+  .legal-html strong {
+    @apply font-semibold text-slate-200;
+  }
+
+  .legal-html table {
+    @apply mt-4 w-full border-collapse text-left text-slate-400;
+  }
+
+  .legal-html th,
+  .legal-html td {
+    @apply border border-white/10 px-3 py-2 align-top;
+  }
+}
