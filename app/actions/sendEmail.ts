@@ -3,6 +3,13 @@
 import { headers } from "next/headers";
 import { Resend } from "resend";
 
+import de from "@/dictionaries/de.json";
+import en from "@/dictionaries/en.json";
+import { contactServiceSubjectTag } from "@/lib/contact-service";
+import {
+  contactFormSchema,
+  contactFormZodUserMessage,
+} from "@/lib/schemas/contactForm";
 import { SITE_EMAIL } from "@/lib/site";
 
 export type SendEmailResult =
@@ -11,9 +18,6 @@ export type SendEmailResult =
 
 // ─── Limits ───────────────────────────────────────────────────────────────────
 
-const MAX_NAME_LEN = 200;
-const MAX_EMAIL_LEN = 320;
-const MAX_MESSAGE_LEN = 8_000;
 const RESEND_TIMEOUT_MS = 10_000;
 const MIN_SUBMIT_DELAY_MS = 2_000;
 const RATE_WINDOW_MS = 60_000;
@@ -104,9 +108,15 @@ function messages(locale: string) {
     fillAll: de
       ? "Bitte füllen Sie alle Felder aus."
       : "Please fill in all fields.",
-    tooLong: de
-      ? "Ein Eingabefeld überschreitet die maximale Länge."
-      : "An input field exceeds the maximum allowed length.",
+    serviceRequired: de
+      ? "Bitte wählen Sie eine Leistung."
+      : "Please select a service area.",
+    messageTooShort: de
+      ? "Bitte geben Sie mindestens 10 Zeichen bei den Projektdetails ein."
+      : "Please enter at least 10 characters in the project details.",
+    nameTooShort: de
+      ? "Bitte geben Sie mindestens 2 Zeichen für den Namen ein."
+      : "Please enter at least 2 characters for your name.",
     consent: de ? "Einwilligung ist erforderlich." : "Consent is required.",
     invalidEmail: de
       ? "Bitte geben Sie eine gültige E-Mail-Adresse ein."
@@ -196,34 +206,38 @@ export async function sendEmail(
 
     // ── Input extraction & sanitisation ──────────────────────────────────────
 
-    const name = stripControl(String(formData.get("name") ?? "").trim());
-    const email = stripControl(
-      String(formData.get("email") ?? "").trim().toLowerCase(),
-    );
-    const message = stripControl(
-      String(formData.get("message") ?? "").trim(),
-    );
-    const consent = formData.get("consent");
+    const rawConsent = formData.get("consent");
+    const consentField =
+      rawConsent === "on" || rawConsent === "true" ? rawConsent : undefined;
 
-    if (!name || !email || !message) {
-      return { success: false, error: t.fillAll };
+    const payload = {
+      name: stripControl(String(formData.get("name") ?? "").trim()),
+      email: stripControl(String(formData.get("email") ?? "").trim().toLowerCase()),
+      message: stripControl(String(formData.get("message") ?? "").trim()),
+      service: stripControl(String(formData.get("service") ?? "").trim()),
+      consent: consentField,
+    };
+
+    const parsed = contactFormSchema.safeParse(payload);
+    if (!parsed.success) {
+      return {
+        success: false,
+        error: contactFormZodUserMessage(parsed.error.issues, {
+          serviceRequired: t.serviceRequired,
+          messageTooShort: t.messageTooShort,
+          nameTooShort: t.nameTooShort,
+          invalidEmail: t.invalidEmail,
+          consent: t.consent,
+          fillAll: t.fillAll,
+        }),
+      };
     }
 
-    if (
-      name.length > MAX_NAME_LEN ||
-      email.length > MAX_EMAIL_LEN ||
-      message.length > MAX_MESSAGE_LEN
-    ) {
-      return { success: false, error: t.tooLong };
-    }
+    const { name, email, message, service } = parsed.data;
 
-    if (consent !== "on" && consent !== "true") {
-      return { success: false, error: t.consent };
-    }
-
-    if (!BASIC_EMAIL.test(email)) {
-      return { success: false, error: t.invalidEmail };
-    }
+    const dict = locale === "de" ? de : en;
+    const serviceLabel =
+      dict.form.serviceOptions[service] ?? contactServiceSubjectTag(service);
 
     // ── Sender / recipient ───────────────────────────────────────────────────
 
@@ -252,7 +266,10 @@ export async function sendEmail(
     // ── Send with timeout ────────────────────────────────────────────────────
 
     const resend = new Resend(apiKey);
-    const safeSubject = `New Lead: ${stripControl(name).slice(0, 80)} — Kresic Digital Systems`;
+    const tag = contactServiceSubjectTag(service);
+    const safeSubject = stripControl(
+      `[KDS][${tag}] ${name.slice(0, 60)} — Kresic Digital Systems`,
+    ).slice(0, 220);
 
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
@@ -262,10 +279,11 @@ export async function sendEmail(
         to: [to],
         replyTo: email,
         subject: safeSubject,
-        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        text: `Name: ${name}\nEmail: ${email}\nService: ${serviceLabel} (${service})\n\nMessage:\n${message}`,
         html: [
           `<p><strong>Name:</strong> ${escapeHtml(name)}</p>`,
           `<p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>`,
+          `<p><strong>Service:</strong> ${escapeHtml(serviceLabel)} <code>${escapeHtml(service)}</code></p>`,
           `<p><strong>Message:</strong></p>`,
           `<p>${escapeHtml(message).replace(/\n/g, "<br/>")}</p>`,
         ].join(""),

@@ -69,6 +69,16 @@ export type LandingDictionary = {
     name: string;
     email: string;
     message: string;
+    serviceLabel: string;
+    servicePlaceholder: string;
+    serviceOptions: {
+      web_arch: string;
+      three_js: string;
+      ai_automation: string;
+      security_audit: string;
+      data_quant: string;
+      other: string;
+    };
     consent: string;
     consentError: string;
     submit: string;

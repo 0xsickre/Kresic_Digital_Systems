@@ -71,6 +71,10 @@
     @apply mt-6 text-sm;
   }
 
+  .legal-html h4 {
+    @apply mt-5 text-xs font-semibold uppercase tracking-wide text-slate-200;
+  }
+
   .legal-html p {
     @apply mt-3 text-slate-400;
   }

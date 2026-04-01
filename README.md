@@ -29,6 +29,7 @@ This is not a generic template; structure and copy reflect how the business is p
 | 3D | **Three.js** | Hero particle/visual (`HeroVisual.tsx`); **`ResizeObserver`**-driven sizing (no sync layout reads on mount); card visuals use the same pattern. |
 | Motion | **Framer Motion** | Scoped to **`/demo/market-analytics`**; landing below the hero uses **`FadeIn`** + CSS; hero intro uses a small **`lcp-fade-in`** keyframe in `globals.css`. |
 | Email | **Resend** | Server Action only (`app/actions/sendEmail.ts`); API key never shipped to the client. |
+| Validation | **Zod** | Contact payload validated in the Server Action (`lib/schemas/contactForm.ts`); service area enum in `lib/contact-service.ts`. |
 | i18n | **React Context** + JSON | `I18nProvider` / `useI18n`; `en.json` / `de.json` asserted as `LandingDictionary`. |
 | Icons | **Inline SVG** + **Lucide** | Most marketing icons are local SVG components; demo route uses `lucide-react`. |
 | Images | **`next/image`** | AVIF/WebP in `next.config.mjs`; tuned `deviceSizes`. |
@@ -40,7 +41,7 @@ This is not a generic template; structure and copy reflect how the business is p
 
 - **Client vs server boundaries** — `Providers.tsx` wraps the tree with `I18nProvider`. **`app/page.tsx`** is a Server Component that streams **logo + hero text** in the first HTML (`KDSLogoSsr`, `HeroCopyMarkup`, `LandingLcpHero`), wraps the interactive header in **`LandingHeaderShellClient`** (client, with a server-rendered logo slot), and mounts **`HeroBackdrop`** (deferred **Three.js** via `DeferMount` → `requestIdleCallback` after post-hydration delays). **`LandingPage`** is client-only for the rest of the scroll story. Heavy card WebGL uses `next/dynamic` (`ssr: false`) plus `MountWhenVisible` / `DeferMount` in `components/landing/HeavyVisuals.tsx`. Legal routes and root metadata stay server-centric.
 - **i18n** — No route-based `[locale]` segments: locale is UI state. All visible strings for the landing flow go through dictionaries so EN/DE stay in sync. The contact form posts a hidden `locale` field so **server-side validation errors** match the active language.
-- **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. Consent is enforced **in submit handler** (message from `form.consentError`) and **again in the Server Action** (`consent === "on" || consent === "true"`).
+- **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. Consent is enforced **in submit handler** (message from `form.consentError`) and **again in the Server Action** (Zod `consent` enum). A required **service area** `<select>` maps to localized labels in `dictionaries/en.json` & `de.json` and short inbox tags (`[KDS][WebGL] …`) on the outbound subject.
 - **XSS hardening in email** — Outbound HTML from user fields passes through `escapeHtml()` before being embedded in the Resend payload.
 - **Security headers** — `next.config.mjs` applies CSP (with allowances for Next inline scripts/styles + Google Fonts), HSTS, frame ancestors, permissions policy, etc.
 

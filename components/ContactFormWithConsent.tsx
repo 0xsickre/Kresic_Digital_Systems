@@ -4,23 +4,18 @@ import type { FormEvent } from "react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
 import { sendEmail } from "@/app/actions/sendEmail";
-import type { LocaleCode } from "@/dictionaries/types";
+import type { LandingDictionary, LocaleCode } from "@/dictionaries/types";
+import { CONTACT_SERVICE_VALUES } from "@/lib/contact-service";
 
-export type ContactFormLabels = {
-  name: string;
-  email: string;
-  message: string;
-  consent: string;
-  consentError: string;
-  submit: string;
-  sending: string;
-  success: string;
-};
+export type ContactFormLabels = LandingDictionary["form"];
 
 type ContactFormWithConsentProps = {
   labels: ContactFormLabels;
   locale: LocaleCode;
 };
+
+const fieldClassName =
+  "mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-600";
 
 export function ContactFormWithConsent({
   labels,
@@ -115,8 +110,9 @@ export function ContactFormWithConsent({
           type="text"
           autoComplete="name"
           required
+          minLength={2}
           maxLength={200}
-          className="mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-600"
+          className={fieldClassName}
           disabled={isPending}
         />
       </div>
@@ -134,9 +130,34 @@ export function ContactFormWithConsent({
           autoComplete="email"
           required
           maxLength={320}
-          className="mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-600"
+          className={fieldClassName}
           disabled={isPending}
         />
+      </div>
+      <div>
+        <label
+          htmlFor="contact-service"
+          className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-slate-500"
+        >
+          {labels.serviceLabel}
+        </label>
+        <select
+          id="contact-service"
+          name="service"
+          required
+          defaultValue=""
+          className={fieldClassName}
+          disabled={isPending}
+        >
+          <option value="" disabled>
+            {labels.servicePlaceholder}
+          </option>
+          {CONTACT_SERVICE_VALUES.map((value) => (
+            <option key={value} value={value}>
+              {labels.serviceOptions[value]}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         <label
@@ -150,8 +171,9 @@ export function ContactFormWithConsent({
           name="message"
           rows={4}
           required
+          minLength={10}
           maxLength={8000}
-          className="mt-2 w-full resize-y rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-600"
+          className={`${fieldClassName} resize-y`}
           disabled={isPending}
         />
       </div>
