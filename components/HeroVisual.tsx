@@ -24,14 +24,6 @@ const RADIUS = 280;
 const ANTIALIAS =
   typeof navigator !== "undefined" && navigator.hardwareConcurrency > 4;
 
-function makeDebounce(fn: () => void, ms: number) {
-  let t = 0;
-  return () => {
-    window.clearTimeout(t);
-    t = window.setTimeout(fn, ms);
-  };
-}
-
 export default function HeroVisual() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [sessionUid, setSessionUid] = useState<string | null>(null);
@@ -44,6 +36,7 @@ export default function HeroVisual() {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
+    let alive = true;
     const scene = new Scene();
 
     /** Avoid sync layout reads on effect start — sizes come from ResizeObserver only. */
@@ -159,12 +152,16 @@ export default function HeroVisual() {
       particlesMat.size = w < 640 ? 1.35 : 1.8;
     };
 
-    const debouncedApplySize = makeDebounce(() => {
-      applySize(pendingW, pendingH);
-    }, 120);
-
     let pendingW = 1;
     let pendingH = 1;
+    let resizeDebounceT = 0;
+    const scheduleResizeApply = () => {
+      window.clearTimeout(resizeDebounceT);
+      resizeDebounceT = window.setTimeout(() => {
+        if (!alive) return;
+        applySize(pendingW, pendingH);
+      }, 120) as unknown as number;
+    };
 
     const resizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
@@ -181,7 +178,7 @@ export default function HeroVisual() {
       }
       pendingW = w;
       pendingH = Math.max(h, 1);
-      debouncedApplySize();
+      scheduleResizeApply();
     });
     resizeObserver.observe(container, { box: "border-box" });
 
@@ -189,6 +186,7 @@ export default function HeroVisual() {
     const clock = new Clock();
 
     const animate = () => {
+      if (!alive) return;
       animationFrameId = requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
 
@@ -241,6 +239,8 @@ export default function HeroVisual() {
     animate();
 
     return () => {
+      alive = false;
+      window.clearTimeout(resizeDebounceT);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("click", onClick);
       resizeObserver.disconnect();

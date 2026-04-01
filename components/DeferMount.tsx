@@ -73,17 +73,22 @@ export function DeferHeavyChild({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
     const isNarrow =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(max-width: 767px)").matches;
     const effectiveDelay = isNarrow ? Math.max(delayMs, 1280) : delayMs;
 
-    return scheduleAfterHydrationIdle(
+    const cancelSchedule = scheduleAfterHydrationIdle(
       () => {
-        setShow(true);
+        if (mounted) setShow(true);
       },
       { delayMs: effectiveDelay, idleTimeoutMs: 3000 },
     );
+    return () => {
+      mounted = false;
+      cancelSchedule();
+    };
   }, [delayMs]);
 
   return show ? children : fallback;

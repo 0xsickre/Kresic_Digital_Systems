@@ -21,14 +21,6 @@ const SEGMENTS = IS_MOBILE ? 30 : 60;
 const ANTIALIAS =
   typeof navigator !== "undefined" && navigator.hardwareConcurrency > 4;
 
-function makeDebounce(fn: () => void, ms: number) {
-  let t = 0;
-  return () => {
-    window.clearTimeout(t);
-    t = window.setTimeout(fn, ms);
-  };
-}
-
 type Props = { className?: string };
 
 export default function InfrastructureGrid({ className }: Props) {
@@ -37,6 +29,7 @@ export default function InfrastructureGrid({ className }: Props) {
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
+    let alive = true;
 
     const scene = new Scene();
     const camera = new PerspectiveCamera(60, 1, 0.1, 1000);
@@ -80,6 +73,7 @@ export default function InfrastructureGrid({ className }: Props) {
     let animId: number;
 
     const animate = () => {
+      if (!alive) return;
       animId = requestAnimationFrame(animate);
       const time = clock.getElapsedTime();
       const posAttr = geometry.attributes.position;
@@ -111,7 +105,14 @@ export default function InfrastructureGrid({ className }: Props) {
       camera.updateProjectionMatrix();
       renderer.setSize(w, hh);
     };
-    const debouncedResize = makeDebounce(() => applySize(pendingW, pendingH), 120);
+    let resizeDebounceT = 0;
+    const scheduleResize = () => {
+      window.clearTimeout(resizeDebounceT);
+      resizeDebounceT = window.setTimeout(() => {
+        if (!alive) return;
+        applySize(pendingW, pendingH);
+      }, 120) as unknown as number;
+    };
     const ro = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (!entry) return;
@@ -123,11 +124,13 @@ export default function InfrastructureGrid({ className }: Props) {
         pendingW = entry.contentRect.width;
         pendingH = Math.max(entry.contentRect.height, 1);
       }
-      debouncedResize();
+      scheduleResize();
     });
     ro.observe(container, { box: "border-box" });
 
     return () => {
+      alive = false;
+      window.clearTimeout(resizeDebounceT);
       ro.disconnect();
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("mouseenter", onEnter);
