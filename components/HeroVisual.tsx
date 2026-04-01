@@ -46,14 +46,8 @@ export default function HeroVisual() {
     const container = containerRef.current;
     const scene = new Scene();
 
-    const getSize = () => {
-      const w = container.clientWidth;
-      const h = Math.max(container.clientHeight, 1);
-      return { w, h };
-    };
-
-    const { w: iw, h: ih } = getSize();
-    const camera = new PerspectiveCamera(75, iw / ih, 0.1, 2000);
+    /** Avoid sync layout reads on effect start — sizes come from ResizeObserver only. */
+    const camera = new PerspectiveCamera(75, 1, 0.1, 2000);
     camera.position.z = 450;
 
     const applyCameraForWidth = (w: number) => {
@@ -69,7 +63,7 @@ export default function HeroVisual() {
       powerPreference: "low-power",
       precision: "mediump",
     });
-    renderer.setSize(iw, ih);
+    renderer.setSize(1, 1);
     /** Use real dPR but cap at 2 — sharp on Retina/AMOLED without killing fill rate. */
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.domElement.style.pointerEvents = "none";
@@ -155,20 +149,41 @@ export default function HeroVisual() {
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("click", onClick);
 
-    const applySize = () => {
-      const { w, h } = getSize();
-      camera.aspect = w / h;
+    const applySize = (w: number, h: number) => {
+      const hh = Math.max(h, 1);
+      if (w <= 0) return;
+      camera.aspect = w / hh;
       applyCameraForWidth(w);
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.setSize(w, hh);
       particlesMat.size = w < 640 ? 1.35 : 1.8;
     };
 
-    /** Debounce resize so orientation-change on mobile fires only once per gesture. */
-    const debouncedApplySize = makeDebounce(applySize, 120);
-    const resizeObserver = new ResizeObserver(debouncedApplySize);
-    resizeObserver.observe(container);
-    applySize();
+    const debouncedApplySize = makeDebounce(() => {
+      applySize(pendingW, pendingH);
+    }, 120);
+
+    let pendingW = 1;
+    let pendingH = 1;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      let w: number;
+      let h: number;
+      const box = entry.contentBoxSize?.[0];
+      if (box) {
+        w = box.inlineSize;
+        h = box.blockSize;
+      } else {
+        w = entry.contentRect.width;
+        h = entry.contentRect.height;
+      }
+      pendingW = w;
+      pendingH = Math.max(h, 1);
+      debouncedApplySize();
+    });
+    resizeObserver.observe(container, { box: "border-box" });
 
     let animationFrameId: number;
     const clock = new Clock();

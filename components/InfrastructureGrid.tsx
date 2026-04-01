@@ -39,12 +39,12 @@ export default function InfrastructureGrid({ className }: Props) {
     const container = containerRef.current;
 
     const scene = new Scene();
-    const camera = new PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const camera = new PerspectiveCamera(60, 1, 0.1, 1000);
     camera.position.set(0, -25, 12);
     camera.lookAt(0, 0, 0);
 
     const renderer = new WebGLRenderer({ antialias: ANTIALIAS, alpha: true, powerPreference: "low-power", precision: "mediump" });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(1, 1);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     const canvas = renderer.domElement;
     Object.assign(canvas.style, { position: "absolute", left: "0", top: "0", width: "100%", height: "100%", zIndex: "0", display: "block" });
@@ -102,15 +102,33 @@ export default function InfrastructureGrid({ className }: Props) {
     };
     animate();
 
-    const handleResize = makeDebounce(() => {
-      camera.aspect = container.clientWidth / container.clientHeight;
+    let pendingW = 1;
+    let pendingH = 1;
+    const applySize = (w: number, h: number) => {
+      const hh = Math.max(h, 1);
+      if (w <= 0) return;
+      camera.aspect = w / hh;
       camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-    }, 120);
-    window.addEventListener("resize", handleResize);
+      renderer.setSize(w, hh);
+    };
+    const debouncedResize = makeDebounce(() => applySize(pendingW, pendingH), 120);
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      const box = entry.contentBoxSize?.[0];
+      if (box) {
+        pendingW = box.inlineSize;
+        pendingH = Math.max(box.blockSize, 1);
+      } else {
+        pendingW = entry.contentRect.width;
+        pendingH = Math.max(entry.contentRect.height, 1);
+      }
+      debouncedResize();
+    });
+    ro.observe(container, { box: "border-box" });
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      ro.disconnect();
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("mouseenter", onEnter);
       container.removeEventListener("mouseleave", onLeave);

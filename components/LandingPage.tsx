@@ -1,26 +1,18 @@
 "use client";
 
 import type { ReactElement, SVGProps } from "react";
-import { useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 
-import { DeferHeavyChild, MountWhenVisible } from "@/components/DeferMount";
+import { MountWhenVisible } from "@/components/DeferMount";
 import { FadeIn } from "@/components/FadeIn";
 import {
   CardVisualPlaceholder,
-  DynamicHeroVisual,
-  HeroCanvasPlaceholder,
   projectHeaderVisuals,
 } from "@/components/landing/HeavyVisuals";
 import { KDSLogo } from "@/components/Logo";
-import {
-  BRAND_NAME,
-  GITHUB_URL,
-  SITE_EMAIL,
-  SITE_MAILTO,
-} from "@/lib/site";
+import { GITHUB_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
 
 const ContactFormLazy = dynamic(
@@ -35,19 +27,6 @@ const ContactFormLazy = dynamic(
         className="min-h-[min(24rem,55vh)] rounded-xl border border-white/5 bg-slate-900/40"
         aria-hidden
       />
-    ),
-  },
-);
-
-const LanguageSwitcherLazy = dynamic(
-  () =>
-    import("@/components/LanguageSwitcher").then((m) => ({
-      default: m.LanguageSwitcher,
-    })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="min-h-11 min-w-[5.25rem] shrink-0" aria-hidden />
     ),
   },
 );
@@ -217,188 +196,6 @@ function IconProjectLock(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function SiteHeader() {
-  const { t } = useI18n();
-  const a11y = t.a11y;
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const close = useCallback(() => setMobileOpen(false), []);
-
-  useEffect(() => {
-    if (!mobileOpen) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [mobileOpen, close]);
-
-  const nav = [
-    { href: "#expertise", label: t.nav.expertise },
-    { href: "#about", label: t.nav.about },
-    { href: "#work", label: t.nav.work },
-    { href: "/demo/market-analytics", label: t.nav.liveDemo },
-    { href: "#contact", label: t.nav.contact },
-  ];
-
-  return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.08] bg-terminal-bg/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-3 pl-4 pr-[max(0.875rem,env(safe-area-inset-right))] sm:px-6 sm:pl-6 sm:pr-6 lg:px-8">
-        <Link
-          href="#hero"
-          onClick={close}
-          aria-label={`${BRAND_NAME} — ${a11y.logoToHome}`}
-          className="inline-flex min-h-[2.75rem] min-w-0 shrink items-center gap-2 rounded-md text-sm font-semibold leading-tight tracking-tight text-white sm:min-w-[2.75rem] sm:shrink-0 sm:gap-3"
-        >
-          <KDSLogo className="h-7 w-auto shrink-0 text-white sm:h-8 md:h-9" />
-          <span className="hidden min-w-0 sm:inline">{BRAND_NAME}</span>
-        </Link>
-
-        {/* Desktop nav */}
-        <nav
-          className="hidden items-center gap-8 text-sm font-medium text-slate-300 md:flex"
-          aria-label="Primary"
-        >
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex shrink-0 items-center gap-1 sm:gap-4">
-          <LanguageSwitcherLazy />
-          <Link
-            href="#contact"
-            onClick={close}
-            className="hidden min-h-[2.75rem] items-center justify-center rounded-full bg-emerald-500 px-5 text-sm font-semibold text-white shadow-sm shadow-emerald-950/30 transition hover:bg-emerald-400 sm:inline-flex"
-          >
-            {t.headerCta}
-          </Link>
-
-          {/* Mobile hamburger */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen((o) => !o)}
-            className="inline-flex min-h-[2.75rem] min-w-[2.75rem] items-center justify-center rounded-lg text-slate-300 transition-colors hover:bg-white/10 hover:text-white md:hidden"
-            aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? a11y.closeMenu : a11y.openMenu}
-          >
-            {mobileOpen ? (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M18 6 6 18M6 6l12 12" /></svg>
-            ) : (
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 6h16M4 12h16M4 18h16" /></svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile slide-down panel */}
-      {mobileOpen && (
-        <nav
-          className="border-t border-white/[0.06] bg-terminal-bg/95 px-4 pb-6 pt-3 backdrop-blur-xl md:hidden"
-          aria-label="Mobile"
-        >
-          <ul className="flex flex-col gap-1">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={close}
-                  className="flex min-h-[2.75rem] items-center rounded-lg px-3 text-base font-medium text-slate-300 transition-colors hover:bg-white/[0.06] hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="#contact"
-            onClick={close}
-            className="mt-4 flex min-h-[2.75rem] w-full items-center justify-center rounded-full bg-emerald-500 text-sm font-semibold text-white shadow-sm shadow-emerald-950/30 transition hover:bg-emerald-400"
-          >
-            {t.headerCta}
-          </Link>
-        </nav>
-      )}
-    </header>
-  );
-}
-
-function HeroSection() {
-  const { t } = useI18n();
-  const h = t.hero;
-
-  return (
-    <div className="relative z-[1] shadow-[0_32px_72px_-10px_rgba(0,0,0,0.55),0_16px_40px_-16px_rgba(0,0,0,0.35)]">
-    <section
-      id="hero"
-      className="scroll-mt-24 relative isolate flex min-h-[100dvh] flex-col overflow-x-hidden bg-transparent pb-10 pt-20 sm:pb-24 sm:pt-28 md:pb-32 md:pt-32 lg:pb-40"
-      aria-labelledby="hero-heading"
-    >
-      <DeferHeavyChild fallback={<HeroCanvasPlaceholder />}>
-        <DynamicHeroVisual />
-      </DeferHeavyChild>
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-transparent opacity-100"
-        aria-hidden
-      >
-        <div className="absolute -left-1/4 top-0 h-[480px] w-[480px] rounded-full bg-emerald-500/12 blur-3xl" />
-        <div className="absolute -right-1/4 bottom-0 h-[400px] w-[400px] rounded-full bg-violet-500/10 blur-3xl" />
-      </div>
-      {/* Meki prelaz u donju sekciju — senka + ton u terminal-bg */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[8] h-40 bg-gradient-to-b from-transparent via-black/35 to-terminal-bg sm:h-48"
-        aria-hidden
-      />
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 py-4 text-center sm:px-6 sm:py-6 md:py-8 lg:px-8">
-        <FadeIn className="flex w-full max-w-3xl flex-col items-center text-center">
-          <p className="mb-4 w-full text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400 sm:mb-6">
-            {h.kicker}
-          </p>
-          <h1
-            id="hero-heading"
-            className="relative z-10 w-full max-w-3xl text-[clamp(1.75rem,5vw,3.5rem)] font-semibold leading-[1.12] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.5rem] lg:leading-[1.08]"
-          >
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              {h.title}
-            </span>
-          </h1>
-          {/* Watermark tačno u traci između naslova i podnaslova (iznad 3D pozadine, ispod teksta) */}
-          <div
-            className="relative z-[1] flex w-full min-h-[clamp(3.25rem,14vw,5.5rem)] max-w-[100vw] items-center justify-center px-1 py-2 sm:min-h-[4rem] sm:px-2 md:min-h-[4.75rem]"
-            aria-hidden
-          >
-            <span className="pointer-events-none w-full min-w-0 overflow-hidden text-center font-mono uppercase leading-none whitespace-nowrap text-white/[0.36] text-[clamp(0.72rem,0.42rem+3.4vw,2.65rem)] tracking-[0.05em] drop-shadow-[0_0_24px_rgba(255,255,255,0.08)] sm:tracking-[0.1em] md:tracking-[0.16em] lg:tracking-[0.22em]">
-              Kresic Digital Systems
-            </span>
-          </div>
-          <p className="relative z-10 mt-1 w-full max-w-2xl text-base leading-relaxed text-slate-200 sm:mt-2 sm:text-lg md:mt-3 md:text-xl">
-            {h.sub}
-          </p>
-          <div className="mx-auto mt-16 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 md:mt-12 sm:gap-4">
-            <Link
-              href="#contact"
-              className="inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-slate-200 sm:px-8"
-            >
-              {h.ctaPrimary}
-            </Link>
-            <Link
-              href="#expertise"
-              className="inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-full border border-white/15 bg-white/[0.06] px-6 text-sm font-semibold text-slate-200 backdrop-blur-sm transition hover:border-white/25 hover:bg-white/[0.1] sm:px-8"
-            >
-              {h.ctaSecondary}
-            </Link>
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-    </div>
-  );
-}
-
 function ServicesSection() {
   const { t } = useI18n();
   const s = t.services;
@@ -539,7 +336,8 @@ function ProjectsSection() {
               </p>
               <Link
                 href="/demo/market-analytics"
-                className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+                aria-label={`${t.nav.liveDemo} — Market Analytics`}
+                className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
               >
                 {t.nav.liveDemo}
                 <span aria-hidden className="text-base leading-none">
@@ -607,10 +405,11 @@ function ProjectsSection() {
                         href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-100 shadow-[0_0_28px_-6px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-md transition hover:border-emerald-400/40 hover:bg-emerald-500/[0.12] hover:text-white hover:shadow-[0_0_36px_-6px_rgba(16,185,129,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 sm:text-xs sm:tracking-[0.14em]"
+                        aria-label={`${p.viewOnGithub}: ${project.name}`}
+                        className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_28px_-6px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md transition hover:border-emerald-400/50 hover:bg-emerald-500/20 hover:text-white hover:shadow-[0_0_36px_-6px_rgba(16,185,129,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:text-xs sm:tracking-[0.14em]"
                       >
                         {p.viewOnGithub}
-                        <span aria-hidden className="text-base leading-none text-emerald-300/90">
+                        <span aria-hidden className="text-base leading-none text-emerald-200">
                           ↗
                         </span>
                       </a>
@@ -754,7 +553,7 @@ function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.a11y.githubProfile}
-              className="text-slate-300 underline-offset-4 transition-colors hover:text-white hover:underline"
+              className="text-slate-100 underline-offset-4 transition-colors hover:text-white hover:underline"
             >
               GitHub
             </Link>
@@ -768,17 +567,10 @@ function SiteFooter() {
 export function LandingPage() {
   return (
     <>
-      <SiteHeader />
-      <main
-        id="main"
-        className="relative z-[1] min-w-0 overflow-x-hidden bg-terminal-bg"
-      >
-        <HeroSection />
-        <ServicesSection />
-        <AboutSection />
-        <ProjectsSection />
-        <ContactSection />
-      </main>
+      <ServicesSection />
+      <AboutSection />
+      <ProjectsSection />
+      <ContactSection />
       <SiteFooter />
     </>
   );

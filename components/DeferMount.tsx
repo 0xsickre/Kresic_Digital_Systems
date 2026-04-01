@@ -63,11 +63,11 @@ export function scheduleAfterHydrationIdle(
 export function DeferHeavyChild({
   children,
   fallback,
-  delayMs = 600,
+  delayMs = 650,
 }: {
   children: ReactNode;
   fallback: ReactNode;
-  /** Base delay after rAF×2; bumped on viewports ≤767px so mobile TBT stays lower. */
+  /** Base delay after rAF×2 (~500ms+ goal); bumped on narrow viewports for lower mobile TBT. */
   delayMs?: number;
 }) {
   const [show, setShow] = useState(false);
@@ -76,7 +76,7 @@ export function DeferHeavyChild({
     const isNarrow =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(max-width: 767px)").matches;
-    const effectiveDelay = isNarrow ? Math.max(delayMs, 1150) : delayMs;
+    const effectiveDelay = isNarrow ? Math.max(delayMs, 1280) : delayMs;
 
     return scheduleAfterHydrationIdle(
       () => {
