@@ -10,7 +10,7 @@ Production codebase for **Kresic Digital Systems**: a B2B-facing landing experie
 
 | Area | Description |
 |------|-------------|
-| **Marketing surface** | Single-page landing (`LandingPage`) — services, about, featured work cards, contact, legal links. |
+| **Marketing surface** | Home: **`app/page.tsx`** composes an **RSC LCP shell** (logo + hero copy from `dictionaries/de` by default) with client islands for the header chrome and WebGL; **`LandingPage.tsx`** holds the sections below the hero (services, about, work, contact) plus footer. |
 | **Featured work** | Project cards mix **public GitHub CTAs** and a **restricted (no repo)** card; copy and URLs live in `dictionaries/*.json`. |
 | **Demo** | `/demo/market-analytics` — client-side terminal UI (Framer Motion + deterministic mock data), `noindex`. |
 | **Legal** | `/impressum`, `/datenschutz` — static content, same visual baseline as the rest of the site. |
@@ -26,8 +26,8 @@ This is not a generic template; structure and copy reflect how the business is p
 | Framework | **Next.js 15** (App Router) | Server Actions for email; RSC-friendly layout; client islands where needed (`"use client"`). |
 | Runtime | **React 19**, **TypeScript** (strict) | `noEmit` typecheck in CI/local workflow; dictionaries typed via `LandingDictionary`. |
 | Styling | **Tailwind CSS 3** | `darkMode: "class"`; extended **`terminal`** colors in `tailwind.config.ts`. |
-| 3D | **Three.js** | Hero particle/visual (`HeroVisual.tsx`); sized to container + `ResizeObserver`. |
-| Motion | **Framer Motion** | Scoped to **`/demo/market-analytics`**; landing uses `FadeIn` + CSS transitions. |
+| 3D | **Three.js** | Hero particle/visual (`HeroVisual.tsx`); **`ResizeObserver`**-driven sizing (no sync layout reads on mount); card visuals use the same pattern. |
+| Motion | **Framer Motion** | Scoped to **`/demo/market-analytics`**; landing below the hero uses **`FadeIn`** + CSS; hero intro uses a small **`lcp-fade-in`** keyframe in `globals.css`. |
 | Email | **Resend** | Server Action only (`app/actions/sendEmail.ts`); API key never shipped to the client. |
 | i18n | **React Context** + JSON | `I18nProvider` / `useI18n`; `en.json` / `de.json` asserted as `LandingDictionary`. |
 | Icons | **Inline SVG** + **Lucide** | Most marketing icons are local SVG components; demo route uses `lucide-react`. |
@@ -38,7 +38,7 @@ This is not a generic template; structure and copy reflect how the business is p
 
 ## Architecture notes (senior-level)
 
-- **Client vs server boundaries** — `Providers.tsx` wraps the tree with `I18nProvider`. `app/page.tsx` is a Server Component that renders `LandingPage` (SSR’d for fast LCP); heavy **Three.js** visuals load on the client (`next/dynamic`, `ssr: false`) with deferred / viewport-gated mounting where applicable (`components/DeferMount.tsx`, `components/landing/HeavyVisuals.tsx`). Legal pages and layout metadata stay server-centric where possible.
+- **Client vs server boundaries** — `Providers.tsx` wraps the tree with `I18nProvider`. **`app/page.tsx`** is a Server Component that streams **logo + hero text** in the first HTML (`KDSLogoSsr`, `HeroCopyMarkup`, `LandingLcpHero`), wraps the interactive header in **`LandingHeaderShellClient`** (client, with a server-rendered logo slot), and mounts **`HeroBackdrop`** (deferred **Three.js** via `DeferMount` → `requestIdleCallback` after post-hydration delays). **`LandingPage`** is client-only for the rest of the scroll story. Heavy card WebGL uses `next/dynamic` (`ssr: false`) plus `MountWhenVisible` / `DeferMount` in `components/landing/HeavyVisuals.tsx`. Legal routes and root metadata stay server-centric.
 - **i18n** — No route-based `[locale]` segments: locale is UI state. All visible strings for the landing flow go through dictionaries so EN/DE stay in sync. The contact form posts a hidden `locale` field so **server-side validation errors** match the active language.
 - **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. Consent is enforced **in submit handler** (message from `form.consentError`) and **again in the Server Action** (`consent === "on" || consent === "true"`).
 - **XSS hardening in email** — Outbound HTML from user fields passes through `escapeHtml()` before being embedded in the Resend payload.
@@ -50,7 +50,7 @@ This is not a generic template; structure and copy reflect how the business is p
 
 | Path | Purpose |
 |------|---------|
-| `/` | Main landing (`LandingPage`). |
+| `/` | Main landing: RSC shell in `app/page.tsx` + `LandingPage` body sections. |
 | `/demo/market-analytics` | Interactive demo; metadata discourages indexing. |
 | `/impressum` | Imprint (TMG-oriented). |
 | `/datenschutz` | Privacy notice (DSGVO-oriented). |
@@ -69,13 +69,18 @@ This is not a generic template; structure and copy reflect how the business is p
 │   ├── impressum/ | datenschutz/
 │   ├── layout.tsx                 # Fonts, metadata, root <html className="… dark">
 │   ├── globals.css
-│   ├── page.tsx                   # Server shell; imports LandingPage (SSR + hydrate)
+│   ├── page.tsx                   # RSC: LCP logo/hero + client header & hero backdrop + LandingPage
 │   ├── robots.ts | sitemap.ts     # /robots.txt, /sitemap.xml
 │   └── …
 ├── components/
-│   ├── LandingPage.tsx            # Sections, header/footer, work grid
+│   ├── LandingPage.tsx            # Below-hero sections + footer (client)
+│   ├── KDSLogoSsr.tsx             # Server-safe logo SVG for LCP
+│   ├── LandingHeaderShellClient.tsx  # Nav, language switcher, mobile menu
+│   ├── LandingLcpHero.tsx         # RSC `<section id="hero">` wrapper
+│   ├── HeroBackdrop.tsx           # Deferred hero WebGL + gradients
+│   ├── HeroCopyMarkup.tsx | HeroTextIsland.tsx  # Hero copy; EN swap via `useI18n`
 │   ├── landing/HeavyVisuals.tsx   # dynamic() wrappers for Three.js scenes
-│   ├── DeferMount.tsx             # idle / intersection gates for heavy UI
+│   ├── DeferMount.tsx             # post-hydration idle / intersection gates
 │   ├── DeferredThirdPartyScripts.tsx  # optional next/script lazyOnload
 │   ├── HeroVisual.tsx             # Three.js hero
 │   ├── DataFlowVisual.tsx | InfrastructureGrid.tsx | MarketPulseVisual.tsx
