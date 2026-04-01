@@ -20,7 +20,8 @@ const RATE_WINDOW_MS = 60_000;
 const RATE_MAX_REQUESTS = 3;
 
 const BASIC_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const CONTROL_CHARS = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g;
+/** Strip all C0 controls + DEL so CR/LF/TAB cannot reach subject, headers, or HTML. */
+const CONTROL_CHARS = /[\u0000-\u001F\u007F]/g;
 
 const GENERIC_ERROR_EN =
   "Could not send your message. Please try again later.";
@@ -196,7 +197,9 @@ export async function sendEmail(
     // ── Input extraction & sanitisation ──────────────────────────────────────
 
     const name = stripControl(String(formData.get("name") ?? "").trim());
-    const email = String(formData.get("email") ?? "").trim().toLowerCase();
+    const email = stripControl(
+      String(formData.get("email") ?? "").trim().toLowerCase(),
+    );
     const message = stripControl(
       String(formData.get("message") ?? "").trim(),
     );
@@ -274,6 +277,9 @@ export async function sendEmail(
           RESEND_TIMEOUT_MS,
         );
       });
+
+      // If the HTTP call finishes after we time out, avoid unhandled rejections when the SDK rejects.
+      void sendPromise.catch(() => {});
 
       const { error } = await Promise.race([sendPromise, timeoutPromise]);
 
