@@ -539,26 +539,48 @@ function ContactSection() {
 
 function SiteFooter() {
   const { t } = useI18n();
+  const lf = t.legalFooter;
+  const linkClass =
+    "inline-flex min-h-11 items-center justify-center rounded-md px-2 text-sm font-medium text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline sm:min-h-[2.75rem]";
+
   return (
-    <footer className="border-t border-white/[0.08] bg-terminal-bg py-8 sm:py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 sm:gap-8 sm:px-6 lg:px-8">
+    <footer
+      className="border-t border-white/[0.08] bg-terminal-bg py-10 sm:py-12"
+      role="contentinfo"
+    >
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center sm:gap-8 sm:px-6 lg:px-8">
         <KDSLogo className="h-12 w-auto text-slate-300 sm:h-14 md:h-16" />
-        <div className="flex w-full flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-          <p className="text-sm text-slate-400">
-            © 2026 Danijel Kresic | Kresic Digital Systems
-          </p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-medium">
-            <Link
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={t.a11y.githubProfile}
-              className="text-slate-100 underline-offset-4 transition-colors hover:text-white hover:underline"
-            >
-              GitHub
-            </Link>
-          </div>
-        </div>
+        <p className="max-w-md text-sm leading-relaxed text-slate-400 sm:max-w-none">
+          © 2026 Danijel Kresic | Kresic Digital Systems
+        </p>
+        <nav
+          aria-label="Footer"
+          className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-1 sm:gap-y-2"
+        >
+          <Link
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.a11y.githubProfile}
+            className={linkClass}
+          >
+            GitHub
+          </Link>
+          <span
+            className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
+            aria-hidden
+          />
+          <Link href="/impressum" prefetch={false} className={linkClass}>
+            {lf.impressum}
+          </Link>
+          <span
+            className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
+            aria-hidden
+          />
+          <Link href="/datenschutz" prefetch={false} className={linkClass}>
+            {lf.privacy}
+          </Link>
+        </nav>
       </div>
     </footer>
   );
