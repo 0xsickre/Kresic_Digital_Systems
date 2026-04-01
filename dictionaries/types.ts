@@ -18,6 +18,8 @@ export type LandingDictionary = {
   hero: {
     kicker: string;
     title: string;
+    /** Second headline line inside the same `<h1>` (gradient). */
+    titleLine2: string;
     sub: string;
     ctaPrimary: string;
     ctaSecondary: string;

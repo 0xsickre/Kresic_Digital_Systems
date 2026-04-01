@@ -15,38 +15,39 @@
   },
   "hero": {
     "kicker": "Kresic Digital Systems",
-    "title": "Optimize and automate your business with smart digital solutions",
-    "sub": "From website maintenance and code fixes to AI integration and full process automation. Focus on your growth—we handle the technology.",
+    "title": "Engineered for Performance. Scaled for Growth.",
+    "titleLine2": "Next-Generation Digital Systems & Intelligent Automation.",
+    "sub": "From enterprise-grade Next.js architectures to seamless AI integrations and full-process automation. You focus on scaling—we build the indestructible technical foundation.",
     "ctaPrimary": "Get in touch",
     "ctaSecondary": "View services"
   },
   "services": {
     "eyebrow": "Four pillars",
     "title": "Digital, automated, measurable",
-    "body": "We combine AI, reliable web engineering, and pragmatic business automation—so you save time, reduce errors, and scale faster.",
+    "body": "Enterprise-grade engineering across AI, performance, stability, and automation—so you can scale with confidence.",
     "cards": [
       {
-        "title": "Smart AI integrations & website optimization",
-        "description": "Connecting AI tools and chatbots to automate support and sales. Implementation of smart booking systems and interactive forms."
+        "title": "Intelligent AI & UI optimization",
+        "description": "Seamlessly integrating AI agents and LLMs to automate support and sales. High-conversion booking systems and interactive interfaces with Core Web Vitals treated as a first-class quality bar."
       },
       {
-        "title": "Website maintenance & technical support",
-        "description": "Bug fixing and code analysis for smooth operations. Regular updates to protect speed, stability, and security."
+        "title": "Technical integrity & system stability",
+        "description": "Deep-dive code audits, bug squashing, and proactive performance tuning. We keep your stack fast, secure, and ready for 24/7 global traffic."
       },
       {
-        "title": "Business automation & data management",
-        "description": "Advanced Excel solutions, macros, and API integrations. Automation of financial reports and synchronization of your business apps."
+        "title": "Data engineering & process automation",
+        "description": "Moving from legacy Excel workflows to modern API-driven architectures. Synchronizing your business stack and automating financial reporting with surgical precision."
       },
       {
-        "title": "Tailored software & analytics tools",
-        "description": "Development of specific scripts and indicators for market analysis (TradingView/Pine Script). Data-driven backtesting tools for strategy validation."
+        "title": "Quantitative analysis & research tools",
+        "description": "High-performance PineScript indicators and data-driven backtesting engines for market research—turning raw data into actionable decision-support tools."
       }
     ]
   },
   "about": {
     "eyebrow": "Our approach",
-    "title": "Why us?",
-    "body": "By deploying state-of-the-art AI-assisted development systems, we solve complex technical problems faster and more precisely than traditional methods. We deliver reliable solutions in record time.",
+    "title": "Why Kresic Digital Systems?",
+    "body": "We leverage an advanced AI-assisted engineering workflow (Cursor and LLM-driven audits) to resolve complex technical debt faster and with higher precision than traditional agencies. We don't just write code—we engineer reliability in record time.",
     "altText": "Danijel Kresic, founder of Kresic Digital Systems",
     "figcaptionSub": "AI-assisted delivery · measurable outcomes",
     "pills": [
@@ -56,17 +57,17 @@
       "API integration",
       "TradingView / Pine Script",
       "Data pipelines",
-      "Website maintenance"
+      "Technical stability"
     ]
   },
   "projects": {
     "title": "Featured work & tools",
-    "intro": "Selected examples across maintenance, automation, and analytics—from stable web stacks to data-driven tooling.",
-    "tagline": "Maintenance · automation · analytics tools",
+    "intro": "Selected examples across stability engineering, automation, and quantitative research—from stable web stacks to data-driven tooling.",
+    "tagline": "Stability · automation · research tools",
     "caseStudy": "Case study",
     "viewOnGithub": "VIEW ON GITHUB",
     "restrictedAccess": "RESTRICTED ACCESS",
-    "legalNote": "Important notice: Our financial solutions are for analysis and information purposes only. We do not build systems for automated trade execution (trading bots).",
+    "legalNote": "Important notice: Our work is quantitative research and educational tooling only—not financial advice, trade signals, or automated execution services.",
     "demoIntro": "Interactive mock terminal: correlation heatmap and scanner UI—deterministic demo data only.",
     "featured": [
       {
@@ -113,20 +114,20 @@
     ]
   },
   "opSec": {
-    "title": "Security, data & confidentiality",
-    "intro": "Clear policies for sensitive data, client communication, and clean separation of production and test environments.",
+    "title": "Security & confidentiality",
+    "intro": "Sensitive engagements follow strict operational discipline: end-to-end encrypted workflows, isolated execution environments, and enforceable confidentiality.",
     "items": [
       {
-        "title": "Controlled work environments",
-        "body": "Sensitive scripts, reports, and credentials are handled in bounded environments—minimal sprawl and traceable workflows."
+        "title": "End-to-end encrypted workflow",
+        "body": "All project communications and sensitive documentation are handled via Proton Mail and E2EE channels as standard operating procedure."
       },
       {
-        "title": "Encrypted communication",
-        "body": "Project coordination and document exchange via Proton Mail and equivalent channels—end-to-end encryption by default."
+        "title": "Isolated execution environments",
+        "body": "Sensitive logic, reports, and credentials are processed in sandboxed environments to minimize data leakage and maximize traceability."
       },
       {
-        "title": "Confidentiality & NDAs",
-        "body": "Strict confidentiality for every engagement—agreed in writing, documented, and owned end to end."
+        "title": "NDAs & confidentiality",
+        "body": "We work under NDA where required. Project details, credentials, and proprietary information are compartmentalized with least-privilege access and clear data boundaries."
       }
     ]
   },

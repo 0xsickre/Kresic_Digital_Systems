@@ -17,10 +17,13 @@ export function HeroCopyMarkup({ h }: Props) {
       </p>
       <h1
         id="hero-heading"
-        className="relative z-10 w-full max-w-3xl text-[clamp(1.75rem,5vw,3.5rem)] font-semibold leading-[1.12] tracking-tight sm:text-5xl md:text-6xl lg:text-[3.5rem] lg:leading-[1.08]"
+        className="relative z-10 w-full max-w-3xl font-semibold leading-[1.12] tracking-tight"
       >
-        <span className="bg-gradient-to-r from-emerald-300 via-teal-200 to-teal-100 bg-clip-text text-transparent">
+        <span className="block bg-gradient-to-r from-emerald-300 via-teal-200 to-teal-100 bg-clip-text text-transparent text-[clamp(1.65rem,4.6vw,3.25rem)] sm:text-[clamp(1.85rem,4.2vw,3.25rem)] md:text-5xl lg:text-[3.25rem] lg:leading-[1.08]">
           {h.title}
+        </span>
+        <span className="mt-2 block bg-gradient-to-r from-teal-200 via-emerald-200 to-teal-100 bg-clip-text text-transparent text-[clamp(1.05rem,3.2vw,1.85rem)] font-semibold leading-snug sm:mt-3 sm:text-[clamp(1.15rem,2.8vw,1.95rem)] md:text-2xl lg:text-[1.75rem]">
+          {h.titleLine2}
         </span>
       </h1>
       <div
@@ -28,7 +31,7 @@ export function HeroCopyMarkup({ h }: Props) {
         aria-hidden
       >
         <span className="pointer-events-none w-full min-w-0 overflow-hidden text-center font-mono uppercase leading-none whitespace-nowrap text-white/[0.42] text-[clamp(0.72rem,0.42rem+3.4vw,2.65rem)] tracking-[0.05em] drop-shadow-[0_0_24px_rgba(255,255,255,0.08)] sm:tracking-[0.1em] md:tracking-[0.16em] lg:tracking-[0.22em]">
-          Kresic Digital Systems
+          {h.kicker}
         </span>
       </div>
       <p className="relative z-10 mt-1 w-full max-w-2xl text-base leading-relaxed text-slate-100 sm:mt-2 sm:text-lg md:mt-3 md:text-xl">

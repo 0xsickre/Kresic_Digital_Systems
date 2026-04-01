@@ -15,38 +15,39 @@
   },
   "hero": {
     "kicker": "Kresic Digital Systems",
-    "title": "Optimieren und automatisieren Sie Ihr Unternehmen mit smarten digitalen Lösungen",
-    "sub": "Von der Website-Wartung und Code-Reparatur bis hin zur KI-Integration und vollständigen Prozessautomatisierung. Konzentrieren Sie sich auf Ihr Wachstum – wir übernehmen die Technik.",
+    "title": "Für Performance konstruiert. Für Wachstum skaliert.",
+    "titleLine2": "Digitalsysteme der nächsten Generation & intelligente Automatisierung.",
+    "sub": "Von Enterprise-tauglichen Next.js-Architekturen über nahtlose KI-Integrationen bis zur vollständigen Prozessautomatisierung. Sie skalieren das Geschäft — wir liefern die belastbare technische Basis.",
     "ctaPrimary": "Kontakt aufnehmen",
     "ctaSecondary": "Leistungen ansehen"
   },
   "services": {
     "eyebrow": "Vier Säulen",
     "title": "Digital, automatisiert, messbar",
-    "body": "Wir verbinden KI, stabile Webtechnik und pragmatische Business-Automatisierung—damit Sie Zeit sparen, Fehler reduzieren und schneller skalieren.",
+    "body": "Engineering auf Enterprise-Niveau über KI, Performance, Stabilität und Automatisierung — damit Sie mit Ruhe skalieren können.",
     "cards": [
       {
-        "title": "Smarte KI-Integrationen & Website-Optimierung",
-        "description": "Anbindung von KI-Tools und Chatbots zur Automatisierung von Support und Vertrieb. Implementierung smarter Buchungssysteme und interaktiver Formulare."
+        "title": "Intelligente KI- & UI-Optimierung",
+        "description": "Nahtlose Integration von KI-Agenten und LLMs zur Automatisierung von Support und Vertrieb. Buchungssysteme und interaktive Oberflächen mit Core Web Vitals als zentralem Qualitätskriterium."
       },
       {
-        "title": "Website-Wartung & Technischer Support",
-        "description": "Bug Fixing und Code-Analyse für einen reibungslosen Betrieb. Regelmäßige Updates zur Sicherung von Geschwindigkeit, Stabilität und Sicherheit."
+        "title": "Technische Integrität & Systemstabilität",
+        "description": "Tiefgreifende Code-Audits, gezieltes Bugfixing und proaktives Performance-Tuning. Ihr Stack bleibt schnell, sicher und bereit für globalen 24/7-Traffic."
       },
       {
-        "title": "Business-Automatisierung & Datenmanagement",
-        "description": "Fortgeschrittene Excel-Lösungen, Makros und API-Integrationen. Automatisierung von Finanzberichten und Synchronisation Ihrer Business-Apps."
+        "title": "Data Engineering & Prozessautomatisierung",
+        "description": "Übergang von Excel-Legacy zu modernen API-getriebenen Architekturen. Synchronisation Ihres Business-Stacks und präzise Automatisierung von Finanzreporting."
       },
       {
-        "title": "Maßgeschneiderte Software- & Analyse-Tools",
-        "description": "Entwicklung spezifischer Skripte und Indikatoren für die Marktanalyse (TradingView/PineScript). Datenbasierte Backtesting-Tools zur Strategieprüfung."
+        "title": "Quantitative Analyse & Research-Tools",
+        "description": "Leistungsstarke PineScript-Indikatoren und datengetriebene Backtesting-Engines für quantitative Marktforschung — von Rohdaten zu belastbaren Entscheidungshilfen."
       }
     ]
   },
   "about": {
     "eyebrow": "Unser Ansatz",
-    "title": "Warum wir?",
-    "body": "Durch den Einsatz modernster KI-gestützter Entwicklungssysteme lösen wir komplexe technische Probleme schneller und präziser als traditionelle Methoden. Wir liefern zuverlässige Lösungen in Rekordzeit.",
+    "title": "Warum Kresic Digital Systems?",
+    "body": "Wir nutzen einen fortgeschrittenen KI-gestützten Engineering-Workflow (Cursor und LLM-gestützte Audits), um komplexe technische Schulden schneller und präziser aufzulösen als klassische Agenturen. Wir schreiben nicht nur Code — wir konstruieren Zuverlässigkeit in Rekordzeit.",
     "altText": "Porträt von Danijel Kresic, Gründer von Kresic Digital Systems",
     "figcaptionSub": "KI-gestützte Entwicklung · messbare Ergebnisse",
     "pills": [
@@ -56,17 +57,17 @@
       "API-Integration",
       "TradingView / Pine Script",
       "Datenpipelines",
-      "Website-Wartung"
+      "Systemstabilität"
     ]
   },
   "projects": {
     "title": "Referenzen & Werkzeuge",
-    "intro": "Ausgewählte Beispiele aus Wartung, Automatisierung und Analyse—von stabilen Web-Stacks bis zu datengetriebenen Hilfsmitteln.",
-    "tagline": "Wartung · Automatisierung · Analyse-Tools",
+    "intro": "Ausgewählte Beispiele aus Stabilitäts-Engineering, Automatisierung und quantitativem Research — von stabilen Web-Stacks bis zu datengetriebenen Hilfsmitteln.",
+    "tagline": "Stabilität · Automatisierung · Research-Tools",
     "caseStudy": "Fallstudie",
     "viewOnGithub": "AUF GITHUB ANSEHEN",
     "restrictedAccess": "EINGESCHRÄNKTER ZUGANG",
-    "legalNote": "Wichtiger Hinweis: Unsere Finanzlösungen dienen ausschließlich Analyse- und Informationszwecken. Wir entwickeln keine Systeme für die automatische Handelsausführung (Trading Bots).",
+    "legalNote": "Wichtiger Hinweis: Unsere Arbeit umfasst ausschließlich quantitative Forschung und Bildungs-Tools — keine Anlageberatung, keine Handelssignale und keine automatisierte Ausführung.",
     "demoIntro": "Interaktives Mock-Terminal: Korrelations-Heatmap und Scanner-Oberfläche—nur deterministische Demo-Daten.",
     "featured": [
       {
@@ -113,20 +114,20 @@
     ]
   },
   "opSec": {
-    "title": "Sicherheit, Daten & Vertraulichkeit",
-    "intro": "Klare Regeln für sensible Daten, Mandantenkommunikation und saubere Trennung von Produktions- und Testumgebungen.",
+    "title": "Sicherheit & Vertraulichkeit",
+    "intro": "Sensible Mandate werden mit strenger operativer Disziplin geführt: Ende-zu-Ende-verschlüsselte Workflows, isolierte Ausführungsumgebungen und durchsetzbare Vertraulichkeit.",
     "items": [
       {
-        "title": "Kontrollierte Arbeitsumgebungen",
-        "body": "Sensible Skripte, Reports und Zugangsdaten werden in abgegrenzten Umgebungen bearbeitet—minimierte Streuung und nachvollziehbare Prozesse."
+        "title": "Ende-zu-Ende-verschlüsselter Workflow",
+        "body": "Projektkommunikation und sensible Dokumentation erfolgen standardmäßig über Proton Mail und E2EE-Kanäle als festgelegtes Verfahren."
       },
       {
-        "title": "Verschlüsselte Kommunikation",
-        "body": "Projektabstimmung und Dokumentenaustausch über Proton Mail und vergleichbare Kanäle—Ende-zu-Ende-Verschlüsselung als Standard."
+        "title": "Isolierte Ausführungsumgebungen",
+        "body": "Sensible Logik, Reports und Zugangsdaten werden in Sandbox-Umgebungen verarbeitet — minimiertes Datenleck-Risiko und maximale Nachvollziehbarkeit."
       },
       {
-        "title": "Vertraulichkeit & NDA",
-        "body": "Strikte Vertraulichkeit für jedes Mandat—vereinbart, dokumentiert und mit klaren Zuständigkeiten."
+        "title": "NDA & Vertraulichkeit",
+        "body": "Wo erforderlich, arbeiten wir unter NDA. Projektdetails, Credentials und proprietäre Informationen werden mit Least-Privilege-Zugriff und klaren Daten-Grenzen getrennt."
       }
     ]
   },

@@ -1,37 +1,72 @@
-# Zavisnosti (Dependencies) - Ovo su ogromni folderi koji se nikada ne šalju
+# --- DEPENDENCIES ---
 node_modules/
 .pnp
 .pnp.js
 
-# Next.js Build Output - Fajlovi koje Vercel sam pravi pri svakom deploymentu
+# --- NEXT.JS / REACT ---
 .next/
 out/
 build/
+dist/
+.vercel
+*.tsbuildinfo
 
-# TAJNE I KLJUČEVI (CRITICAL) - Nikada ne briši ove linije!
+# --- SECURITY & ENVIRONMENT (CRITICAL) ---
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-*.env.local
+*.pem
+*.key
 
-# Vercel specifični fajlovi
-.vercel
-
-# Debug logovi
+# --- LOGS & DEBUG ---
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.pnpm-debug.log*
+logs/
+*.log
 
-# Sistemski fajlovi (Mac/Windows smeće)
-.DS_Store
-Thumbs.db
+# --- TESTING ---
+/coverage
+.nyc_output
+.cypress/
+/playwright-report
 
-# IDE / editor (local-only; not shared via repo)
-.vscode/
+# --- IDE & EDITORS (VS Code / Cursor) ---
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 .cursor/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
 
-# Opciono: lokalni scratch fajlovi (sadržaj je u dictionaries/*.json)
+# --- OS SPECIFIC ---
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# --- DATABASE / CACHE ---
+*.db
+*.sqlite
+.cache/
+.eslintcache
+
+# Local legal HTML drafts (canonical copy lives in dictionaries / app routes)
 private-legal/*.html
+
+# --- PYTHON (If using FastAPI/Backend) ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
