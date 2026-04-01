@@ -82,7 +82,6 @@ test-results/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-.cursor/
 
 # --- OS junk ---
 .DS_Store
@@ -111,6 +110,3 @@ ENV/
 .temp/
 tmp/
 temp/
-
-# --- Local drafts (canonical legal copy lives in app / dictionaries) ---
-private-legal/*.html
