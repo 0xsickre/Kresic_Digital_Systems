@@ -6,7 +6,6 @@ export type LandingDictionary = {
     about: string;
     work: string;
     contact: string;
-    liveDemo: string;
   };
   headerCta: string;
   a11y: {
@@ -46,9 +45,6 @@ export type LandingDictionary = {
     viewOnGithub: string;
     restrictedAccess: string;
     legalNote: string;
-    demoIntro: string;
-    /** Distinct from `nav.liveDemo` to avoid redundant same-text links to `/demo/market-analytics`. */
-    demoCta: string;
     featured: readonly {
       role: string;
       name: string;

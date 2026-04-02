@@ -26,9 +26,8 @@ export function GlobalLegalFooter() {
     (seg === "de" || seg === "en") && segments.length <= 1;
   if (isLocalizedHome) return null;
 
-  let locale: LocaleCode =
+  const locale: LocaleCode =
     seg && isLocale(seg) ? seg : DEFAULT_LOCALE;
-  if (pathname.startsWith("/demo")) locale = "en";
 
   const impressumHref = withLocale(locale, "/impressum");
   const datenschutzHref = withLocale(locale, "/datenschutz");

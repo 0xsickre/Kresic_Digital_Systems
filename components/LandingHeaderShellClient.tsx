@@ -47,7 +47,6 @@ export function LandingHeaderShellClient({ logo }: Props) {
     { href: "#expertise", label: t.nav.expertise },
     { href: "#about", label: t.nav.about },
     { href: "#work", label: t.nav.work },
-    { href: "/demo/market-analytics", label: t.nav.liveDemo },
     { href: "#contact", label: t.nav.contact },
   ];
 

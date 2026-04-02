@@ -29,12 +29,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  entries.push({
-    url: `${base}/demo/market-analytics`,
-    lastModified: now,
-    changeFrequency: "monthly",
-    priority: 0.6,
-  });
-
   return entries;
 }

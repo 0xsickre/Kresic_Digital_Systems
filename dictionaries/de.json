@@ -3,8 +3,7 @@
     "expertise": "Leistungen",
     "about": "Warum wir",
     "work": "Referenzen",
-    "contact": "Kontakt",
-    "liveDemo": "Live Tech Demo"
+    "contact": "Kontakt"
   },
   "headerCta": "Projekt anfragen",
   "a11y": {
@@ -68,8 +67,6 @@
     "viewOnGithub": "AUF GITHUB ANSEHEN",
     "restrictedAccess": "EINGESCHRÄNKTER ZUGANG",
     "legalNote": "Wichtiger Hinweis: Unsere Arbeit umfasst ausschließlich quantitative Forschung und Bildungs-Tools — keine Anlageberatung, keine Handelssignale und keine automatisierte Ausführung.",
-    "demoIntro": "Interaktives Mock-Terminal: Korrelations-Heatmap und Scanner-Oberfläche—nur deterministische Demo-Daten.",
-    "demoCta": "Market Analytics Demo öffnen",
     "featured": [
       {
         "role": "Operations & Reporting",
@@ -100,17 +97,17 @@
       },
       {
         "role": "Analyse & Research",
-        "name": "Quant Market Analytics Demo",
-        "summary": "Funktionale Demo-Terminal-Oberfläche mit PIT-Engineering und Multi-Source-Data-Ingestion für Korrelations- und Scanner-Ansichten—nur deterministische Showcase-Daten.",
-        "outcome": "Im Ordner github-showcase liegt die lauffähige Demo-Anbindung; ausgerichtet auf Research und Entscheidungsunterstützung, nicht auf Live-Order-Ausführung.",
+        "name": "Headless Quant Engine & Data Infrastructure",
+        "summary": "Hochleistungs-Backend für quantitative Marktanalysen. Demonstriert Data-Quality-Gates, Multi-Source-Ingestion (CFTC) und eine duale Datenbank-Architektur (SQLite/PostgreSQL).",
+        "outcome": "Das öffentliche Repository enthält die Kernlogik und Infrastruktur-Pipelines. Es dient als \"Headless\"-Referenz für das kommende Next.js SaaS-Terminal. Ohne proprietäre Alpha-Module.",
         "tags": [
           "Quant",
-          "PIT",
-          "Data Ingestion",
-          "Next.js",
-          "Demo"
+          "Python",
+          "Data Quality",
+          "SQLite",
+          "PostgreSQL"
         ],
-        "githubUrl": "https://github.com/Kresic1998/KDS-Engineering-Showcase/tree/main/01-quant-market-analytics/github-showcase"
+        "githubUrl": "https://github.com/Kresic1998/kds-quant-engine-showcase"
       }
     ]
   },

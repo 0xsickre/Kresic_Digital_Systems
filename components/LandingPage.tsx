@@ -338,19 +338,6 @@ function ProjectsSection() {
               <p className="mt-4 text-lg leading-relaxed text-slate-300">
                 {p.intro}
               </p>
-              <Link
-                href="/demo/market-analytics"
-                aria-label={`${p.demoCta} — Market Analytics`}
-                className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
-              >
-                {p.demoCta}
-                <span aria-hidden className="text-base leading-none">
-                  →
-                </span>
-              </Link>
-              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-400">
-                {p.demoIntro}
-              </p>
             </div>
             <p className="text-sm font-medium text-slate-400">
               {p.tagline}

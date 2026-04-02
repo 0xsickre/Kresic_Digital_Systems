@@ -39,11 +39,6 @@ export function middleware(request: NextRequest) {
 
   const res = NextResponse.next();
 
-  if (pathname.startsWith("/demo")) {
-    res.headers.set(LOCALE_HEADER, "en");
-    return res;
-  }
-
   const first = pathname.split("/").filter(Boolean)[0];
 
   if (first && isLocale(first)) {

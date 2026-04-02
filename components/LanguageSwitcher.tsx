@@ -29,14 +29,10 @@ function persistLocaleCookie(locale: LocaleCode) {
 function localeFromPathname(pathname: string): LocaleCode {
   const first = pathname.split("/").filter(Boolean)[0];
   if (first && isLocale(first)) return first;
-  if (pathname.startsWith("/demo")) return "en";
   return DEFAULT_LOCALE;
 }
 
 function pathForLocale(pathname: string, next: LocaleCode): string {
-  if (pathname.startsWith("/demo")) {
-    return `/${next}`;
-  }
   const parts = pathname.split("/").filter(Boolean);
   if (parts[0] && isLocale(parts[0])) {
     parts[0] = next;
