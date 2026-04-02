@@ -1,9 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { headers } from "next/headers";
 
 import { DeferredThirdPartyScripts } from "@/components/DeferredThirdPartyScripts";
 import { GlobalLegalFooter } from "@/components/GlobalLegalFooter";
 import { Providers } from "@/components/Providers";
+import {
+  DEFAULT_LOCALE,
+  isLocale,
+  type LocaleCode,
+} from "@/lib/locale";
 import { BRAND_NAME } from "@/lib/site";
 
 import "./globals.css";
@@ -68,14 +74,24 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+const LOCALE_HEADER = "x-locale";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const h = await headers();
+  const raw = h.get(LOCALE_HEADER);
+  const locale: LocaleCode =
+    raw && isLocale(raw) ? raw : DEFAULT_LOCALE;
+  const htmlLang = locale === "de" ? "de" : "en";
+  const skipLabel =
+    locale === "de" ? "Zum Inhalt springen" : "Skip to main content";
+
   return (
     <html
-      lang="de"
+      lang={htmlLang}
       className={`${inter.variable} ${kdsLogoMono.variable} scroll-smooth dark`}
       suppressHydrationWarning
     >
@@ -84,9 +100,11 @@ export default function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-emerald-600 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
         >
-          Zum Inhalt springen
+          {skipLabel}
         </a>
-        <Providers>{children}</Providers>
+        <Providers key={locale} initialLocale={locale}>
+          {children}
+        </Providers>
         <DeferredThirdPartyScripts />
         <GlobalLegalFooter />
       </body>

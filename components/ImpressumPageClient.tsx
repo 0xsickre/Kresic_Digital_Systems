@@ -4,8 +4,9 @@ import { FileDown } from "lucide-react";
 import Link from "next/link";
 
 import { LegalPageHeader } from "@/components/LegalPageHeader";
-import { SITE_EMAIL } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
+import { withLocale } from "@/lib/locale";
+import { SITE_EMAIL } from "@/lib/site";
 
 function ImpressumPdfDownload() {
   const { t, locale } = useI18n();
@@ -35,6 +36,7 @@ function ImpressumPdfDownload() {
 export function ImpressumPageClient() {
   const { t, locale } = useI18n();
   const imp = t.impressum;
+  const home = withLocale(locale, "/");
 
   const html = imp.htmlBody.trim();
 
@@ -53,7 +55,7 @@ export function ImpressumPageClient() {
               dangerouslySetInnerHTML={{ __html: html }}
             />
             <Link
-              href="/#hero"
+              href={`${home}#hero`}
               className="mt-12 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
             >
               {imp.backHome}
@@ -134,7 +136,7 @@ export function ImpressumPageClient() {
           </p>
 
           <Link
-            href="/#hero"
+            href={`${home}#hero`}
             className="mt-10 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
           >
             {imp.backHome}

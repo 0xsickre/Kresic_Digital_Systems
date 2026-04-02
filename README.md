@@ -10,10 +10,10 @@ Production codebase for **Kresic Digital Systems**: a B2B-facing landing experie
 
 | Area | Description |
 |------|-------------|
-| **Marketing surface** | Home: **`app/page.tsx`** composes an **RSC LCP shell** (logo + hero copy from `dictionaries/de` by default) with client islands for the header chrome and WebGL; **`LandingPage.tsx`** holds the sections below the hero (services, about, work, contact) plus footer. |
+| **Marketing surface** | Home: **`app/[locale]/page.tsx`** composes an **RSC LCP shell** (logo + hero copy for **`de` or `en`**) with client islands for the header chrome and WebGL; **`LandingPage.tsx`** holds the sections below the hero (services, about, work, contact) plus footer. |
 | **Featured work** | Project cards mix **public GitHub CTAs** and a **restricted (no repo)** card; copy and URLs live in `dictionaries/*.json`. |
-| **Demo** | `/demo/market-analytics` — client-side terminal UI (Framer Motion + deterministic mock data), `noindex`. |
-| **Legal** | `/impressum`, `/datenschutz` — static content, same visual baseline as the rest of the site. |
+| **Demo** | `/demo/market-analytics` — client-side terminal UI (Framer Motion + deterministic mock data), `noindex`; **no locale prefix** (middleware treats it as English for document language). |
+| **Legal** | **`/de/impressum`**, **`/en/impressum`**, **`/de/datenschutz`**, **`/en/datenschutz`** — same visual baseline; legacy bare paths (e.g. `/impressum`) **308** to **`/de/...`**. |
 
 This is not a generic template; structure and copy reflect how the business is presented in production.
 
@@ -30,7 +30,7 @@ This is not a generic template; structure and copy reflect how the business is p
 | Motion | **Framer Motion** | Scoped to **`/demo/market-analytics`**; landing below the hero uses **`FadeIn`** + CSS; hero intro uses a small **`lcp-fade-in`** keyframe in `globals.css`. |
 | Email | **Resend** | Server Action only (`app/actions/sendEmail.ts`); API key never shipped to the client. |
 | Validation | **Zod** | Contact payload validated in the Server Action (`lib/schemas/contactForm.ts`); service area enum in `lib/contact-service.ts`. |
-| i18n | **React Context** + JSON | `I18nProvider` / `useI18n`; `en.json` / `de.json` asserted as `LandingDictionary`. |
+| i18n | **URL segments** + **React Context** + JSON | **`/de` / `/en`** prefixes; **`middleware.ts`** sets **`x-locale`** and redirects **`/`** using **`NEXT_LOCALE`** cookie or **`Accept-Language`** (default **`de`**). `I18nProvider` receives **`initialLocale`** from the root layout (from the header). Dictionaries: `en.json` / `de.json` as `LandingDictionary`. |
 | Icons | **Inline SVG** + **Lucide** | Most marketing icons are local SVG components; demo route uses `lucide-react`. |
 | Images | **`next/image`** | AVIF/WebP in `next.config.mjs`; tuned `deviceSizes`. |
 | Hosting | **Vercel** (typical) | Env-gated secrets; redeploy after changing env vars. |
@@ -39,9 +39,9 @@ This is not a generic template; structure and copy reflect how the business is p
 
 ## Architecture notes (senior-level)
 
-- **Client vs server boundaries** — `Providers.tsx` wraps the tree with `I18nProvider`. **`app/page.tsx`** is a Server Component that streams **logo + hero text** in the first HTML (`KDSLogoSsr`, `HeroCopyMarkup`, `LandingLcpHero`), wraps the interactive header in **`LandingHeaderShellClient`** (client, with a server-rendered logo slot), and mounts **`HeroBackdrop`** (deferred **Three.js** via `DeferMount` → `requestIdleCallback` after post-hydration delays). **`LandingPage`** is client-only for the rest of the scroll story. Heavy card WebGL uses `next/dynamic` (`ssr: false`) plus `MountWhenVisible` / `DeferMount` in `components/landing/HeavyVisuals.tsx`. Legal routes and root metadata stay server-centric.
-- **i18n** — No route-based `[locale]` segments: locale is UI state. All visible strings for the landing flow go through dictionaries so EN/DE stay in sync. The contact form posts a hidden `locale` field so **server-side validation errors** match the active language.
-- **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. The consent label includes an inline link to **`/datenschutz`** (`form.consentLead` / `consentPrivacyLinkText` / `consentTrail`). Consent is enforced **in submit handler** (`form.consentError`) and **again in the Server Action** (Zod `consent` enum). A required **service area** `<select>` maps to localized labels in `dictionaries/en.json` & `de.json` and short inbox tags (`[KDS][WebGL] …`) on the outbound subject.
+- **Client vs server boundaries** — `Providers.tsx` wraps the tree with **`I18nProvider`** ( **`key={locale}`** + **`initialLocale`** from the server so client copy matches the URL). **`app/[locale]/page.tsx`** is a Server Component that streams **logo + hero text** in the first HTML (`KDSLogoSsr`, `HeroCopyMarkup`, `LandingLcpHero`), wraps the interactive header in **`LandingHeaderShellClient`** (client, with a server-rendered logo slot), and mounts **`HeroBackdrop`** (deferred **Three.js** via `DeferMount` → `requestIdleCallback` after post-hydration delays). **`LandingPage`** is client-only for the rest of the scroll story. Heavy card WebGL uses `next/dynamic` (`ssr: false`) plus `MountWhenVisible` / `DeferMount` in `components/landing/HeavyVisuals.tsx`. Legal routes use **`generateMetadata`** with **hreflang** (`alternates.languages` via **`lib/seo.ts`**).
+- **i18n & SEO** — Locale is **in the path** (`/[locale]/…`). Root **`<html lang>`** and skip-link text follow **`x-locale`**. **`LanguageSwitcher`** updates **`NEXT_LOCALE`** and **`router.push`** to the same path under the other locale (from `/demo/*` it navigates to **`/de` or `/en`** home). All visible strings for the landing flow go through dictionaries; the contact form posts a hidden `locale` field so **server-side validation errors** match the active language.
+- **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. The consent label links to the **localized** privacy URL (e.g. **`/de/datenschutz`**) via **`withLocale`** in `lib/locale.ts` (`form.consentLead` / `consentPrivacyLinkText` / `consentTrail`). Consent is enforced **in submit handler** (`form.consentError`) and **again in the Server Action** (Zod `consent` enum). A required **service area** `<select>` maps to localized labels in `dictionaries/en.json` & `de.json` and short inbox tags (`[KDS][WebGL] …`) on the outbound subject.
 - **XSS hardening in email** — Outbound HTML from user fields passes through `escapeHtml()` before being embedded in the Resend payload.
 - **Security headers** — `next.config.mjs` applies CSP (with allowances for Next inline scripts/styles + Google Fonts), HSTS, frame ancestors, permissions policy, etc.
 
@@ -51,11 +51,13 @@ This is not a generic template; structure and copy reflect how the business is p
 
 | Path | Purpose |
 |------|---------|
-| `/` | Main landing: RSC shell in `app/page.tsx` + `LandingPage` body sections. |
-| `/demo/market-analytics` | Interactive demo; metadata discourages indexing. |
-| `/impressum` | Imprint (TMG-oriented). |
-| `/datenschutz` | Privacy notice (DSGVO-oriented). |
-| `/sitemap.xml` | Generated sitemap (`app/sitemap.ts`). |
+| `/` | Redirects to **`/de` or `/en`** (cookie → `Accept-Language` → default **`de`**). |
+| `/de`, `/en` | Localized landing: RSC shell in **`app/[locale]/page.tsx`** + **`LandingPage`**. |
+| `/de/impressum`, `/en/impressum` | Imprint (TMG-oriented); EN page title/metadata use “Imprint”. |
+| `/de/datenschutz`, `/en/datenschutz` | Privacy notice (DSGVO-oriented); EN uses “Privacy” in metadata. |
+| `/impressum`, `/datenschutz` (legacy) | **308** permanent redirect to **`/de/...`**. |
+| `/demo/market-analytics` | Interactive demo; metadata discourages indexing; no locale prefix. |
+| `/sitemap.xml` | Lists **`/de`**, **`/en`**, localized legal URLs, and the demo (`app/sitemap.ts`). |
 | `/robots.txt` | Crawl rules + sitemap URL (`app/robots.ts`). |
 
 ---
@@ -64,13 +66,17 @@ This is not a generic template; structure and copy reflect how the business is p
 
 ```
 .
+├── middleware.ts                  # Locale redirect, x-locale header, demo = en
 ├── app/
 │   ├── actions/sendEmail.ts       # Resend Server Action + validation
-│   ├── demo/market-analytics/     # Quant-style terminal demo
-│   ├── impressum/ | datenschutz/
-│   ├── layout.tsx                 # Fonts, metadata, root <html className="… dark">
+│   ├── [locale]/                  # Localized marketing + legal
+│   │   ├── layout.tsx             # Validates locale → notFound if unknown
+│   │   ├── page.tsx               # RSC: LCP logo/hero + header shell + LandingPage
+│   │   ├── impressum/ | datenschutz/
+│   │   └── …
+│   ├── demo/market-analytics/     # Quant-style terminal demo (no [locale])
+│   ├── layout.tsx                 # Fonts, metadata, <html lang> from x-locale
 │   ├── globals.css
-│   ├── page.tsx                   # RSC: LCP logo/hero + client header & hero backdrop + LandingPage
 │   ├── robots.ts | sitemap.ts     # /robots.txt, /sitemap.xml
 │   └── …
 ├── components/
@@ -79,7 +85,7 @@ This is not a generic template; structure and copy reflect how the business is p
 │   ├── LandingHeaderShellClient.tsx  # Nav, language switcher, mobile menu
 │   ├── LandingLcpHero.tsx         # RSC `<section id="hero">` wrapper
 │   ├── HeroBackdrop.tsx           # Deferred hero WebGL + gradients
-│   ├── HeroCopyMarkup.tsx | HeroTextIsland.tsx  # Hero copy; EN swap via `useI18n`
+│   ├── HeroCopyMarkup.tsx | HeroTextIsland.tsx  # Hero copy (RSC supplies locale-specific markup)
 │   ├── landing/HeavyVisuals.tsx   # dynamic() wrappers for Three.js scenes
 │   ├── DeferMount.tsx             # post-hydration idle / intersection gates
 │   ├── DeferredThirdPartyScripts.tsx  # optional next/script lazyOnload
@@ -89,10 +95,12 @@ This is not a generic template; structure and copy reflect how the business is p
 │   ├── Logo.tsx | LanguageSwitcher.tsx | FadeIn.tsx | Providers.tsx
 │   └── …
 ├── dictionaries/
-│   ├── types.ts                  # LandingDictionary
+│   ├── types.ts                  # LandingDictionary, LocaleCode
 │   ├── en.json | de.json
 │   └── en.ts | de.ts             # Typed re-exports
 ├── lib/
+│   ├── locale.ts                 # LOCALES, DEFAULT_LOCALE, LOCALE_COOKIE, withLocale()
+│   ├── seo.ts                    # alternates / home metadata helpers
 │   ├── i18n.tsx
 │   └── site.ts                   # BRAND_NAME, SITE_EMAIL, GITHUB_URL, legal lines
 ├── public/images/

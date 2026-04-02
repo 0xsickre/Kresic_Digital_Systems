@@ -1,9 +1,63 @@
 "use client";
 
-import { useI18n } from "@/lib/i18n";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback } from "react";
+
+import {
+  DEFAULT_LOCALE,
+  isLocale,
+  LOCALE_COOKIE,
+  type LocaleCode,
+} from "@/lib/locale";
+
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function persistLocaleCookie(locale: LocaleCode) {
+  const secure =
+    typeof window !== "undefined" && window.location.protocol === "https:";
+  document.cookie = [
+    `${LOCALE_COOKIE}=${locale}`,
+    "path=/",
+    `max-age=${COOKIE_MAX_AGE}`,
+    "SameSite=Lax",
+    secure ? "Secure" : "",
+  ]
+    .filter(Boolean)
+    .join("; ");
+}
+
+function localeFromPathname(pathname: string): LocaleCode {
+  const first = pathname.split("/").filter(Boolean)[0];
+  if (first && isLocale(first)) return first;
+  if (pathname.startsWith("/demo")) return "en";
+  return DEFAULT_LOCALE;
+}
+
+function pathForLocale(pathname: string, next: LocaleCode): string {
+  if (pathname.startsWith("/demo")) {
+    return `/${next}`;
+  }
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts[0] && isLocale(parts[0])) {
+    parts[0] = next;
+    return `/${parts.join("/")}`;
+  }
+  return `/${next}${pathname === "/" ? "" : pathname}`;
+}
 
 export function LanguageSwitcher() {
-  const { locale, setLocale } = useI18n();
+  const pathname = usePathname() ?? "/";
+  const router = useRouter();
+  const locale = localeFromPathname(pathname);
+
+  const go = useCallback(
+    (next: LocaleCode) => {
+      if (next === locale) return;
+      persistLocaleCookie(next);
+      router.push(pathForLocale(pathname, next));
+    },
+    [locale, pathname, router],
+  );
 
   return (
     <div
@@ -13,7 +67,7 @@ export function LanguageSwitcher() {
     >
       <button
         type="button"
-        onClick={() => setLocale("en")}
+        onClick={() => go("en")}
         className={[
           "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-200 [-webkit-tap-highlight-color:transparent]",
           locale === "en"
@@ -32,7 +86,7 @@ export function LanguageSwitcher() {
       </span>
       <button
         type="button"
-        onClick={() => setLocale("de")}
+        onClick={() => go("de")}
         className={[
           "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-200 [-webkit-tap-highlight-color:transparent]",
           locale === "de"

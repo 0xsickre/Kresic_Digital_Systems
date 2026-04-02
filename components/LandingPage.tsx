@@ -12,8 +12,9 @@ import {
   projectHeaderVisuals,
 } from "@/components/landing/HeavyVisuals";
 import { KDSLogo } from "@/components/Logo";
-import { GITHUB_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
 import { useI18n } from "@/lib/i18n";
+import { withLocale } from "@/lib/locale";
+import { GITHUB_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
 
 const ContactFormLazy = dynamic(
   () =>
@@ -541,7 +542,7 @@ function ContactSection() {
 }
 
 function SiteFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const lf = t.legalFooter;
   const linkClass =
     "inline-flex min-h-11 items-center justify-center rounded-md px-2 text-sm font-medium text-slate-200 underline-offset-4 transition-colors hover:text-white hover:underline sm:min-h-[2.75rem]";
@@ -573,14 +574,22 @@ function SiteFooter() {
             className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
             aria-hidden
           />
-          <Link href="/impressum" prefetch={false} className={linkClass}>
+          <Link
+            href={withLocale(locale, "/impressum")}
+            prefetch={false}
+            className={linkClass}
+          >
             {lf.impressum}
           </Link>
           <span
             className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
             aria-hidden
           />
-          <Link href="/datenschutz" prefetch={false} className={linkClass}>
+          <Link
+            href={withLocale(locale, "/datenschutz")}
+            prefetch={false}
+            className={linkClass}
+          >
             {lf.privacy}
           </Link>
         </nav>
