@@ -9,8 +9,12 @@ import {
   LineBasicMaterial,
   PerspectiveCamera,
   Scene,
-  WebGLRenderer,
 } from "three";
+
+import {
+  createWebGLRendererSafely,
+  isRendererContextUsable,
+} from "@/lib/webgl";
 
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 const SEGMENT_COUNT = IS_MOBILE ? 100 : 200;
@@ -31,7 +35,14 @@ export default function MarketPulseVisual({ className }: Props) {
     const camera = new PerspectiveCamera(50, 1, 0.1, 1000);
     camera.position.z = 50;
 
-    const renderer = new WebGLRenderer({ antialias: ANTIALIAS, alpha: true, powerPreference: "low-power", precision: "mediump" });
+    const renderer = createWebGLRendererSafely({
+      antialias: ANTIALIAS,
+      alpha: true,
+      powerPreference: "low-power",
+      precision: "mediump",
+    });
+    if (!renderer) return;
+
     renderer.setSize(1, 1);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     const canvas = renderer.domElement;
@@ -58,12 +69,12 @@ export default function MarketPulseVisual({ className }: Props) {
       geometries.push(geo);
     }
 
-    let animId: number;
+    let animId: number | undefined;
     const clock = new Clock();
 
     const animate = () => {
-      if (!alive) return;
-      animId = requestAnimationFrame(animate);
+      if (!alive || !isRendererContextUsable(renderer)) return;
+
       const elapsed = clock.getElapsedTime();
 
       waves.forEach((line, idx) => {
@@ -78,7 +89,14 @@ export default function MarketPulseVisual({ className }: Props) {
         }
         line.geometry.attributes.position.needsUpdate = true;
       });
-      renderer.render(scene, camera);
+
+      try {
+        renderer.render(scene, camera);
+      } catch {
+        return;
+      }
+
+      animId = requestAnimationFrame(animate);
     };
     animate();
 
@@ -118,7 +136,7 @@ export default function MarketPulseVisual({ className }: Props) {
       alive = false;
       window.clearTimeout(resizeDebounceT);
       ro.disconnect();
-      cancelAnimationFrame(animId);
+      if (animId !== undefined) cancelAnimationFrame(animId);
       geometries.forEach((g) => g.dispose());
       waves.forEach((w) => {
         if (Array.isArray(w.material)) w.material.forEach((m) => m.dispose());

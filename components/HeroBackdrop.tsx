@@ -5,6 +5,7 @@ import {
   DynamicHeroVisual,
   HeroCanvasPlaceholder,
 } from "@/components/landing/HeavyVisuals";
+import { WebGLErrorBoundary } from "@/components/WebGLErrorBoundary";
 
 /** Hero WebGL + gradient layers only (LCP text lives in RSC `page.tsx`). */
 export function HeroBackdrop() {
@@ -14,7 +15,9 @@ export function HeroBackdrop() {
         fallback={<HeroCanvasPlaceholder />}
         delayMs={650}
       >
-        <DynamicHeroVisual />
+        <WebGLErrorBoundary fallback={<HeroCanvasPlaceholder />}>
+          <DynamicHeroVisual />
+        </WebGLErrorBoundary>
       </DeferHeavyChild>
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-transparent opacity-100"

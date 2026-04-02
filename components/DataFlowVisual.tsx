@@ -10,8 +10,12 @@ import {
   Points,
   PointsMaterial,
   Scene,
-  WebGLRenderer,
 } from "three";
+
+import {
+  createWebGLRendererSafely,
+  isRendererContextUsable,
+} from "@/lib/webgl";
 
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 const PARTICLE_COUNT = IS_MOBILE ? 800 : 1800;
@@ -32,12 +36,14 @@ export default function DataFlowVisual({ className }: DataFlowVisualProps) {
     const camera = new PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.z = 50;
 
-    const renderer = new WebGLRenderer({
+    const renderer = createWebGLRendererSafely({
       antialias: ANTIALIAS,
       alpha: true,
       powerPreference: "low-power",
       precision: "mediump",
     });
+    if (!renderer) return;
+
     renderer.setSize(1, 1);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     const canvas = renderer.domElement;
@@ -77,12 +83,12 @@ export default function DataFlowVisual({ className }: DataFlowVisualProps) {
 
     scene.add(new Points(geometry, material));
 
-    let animId: number;
+    let animId: number | undefined;
     const clock = new Clock();
 
     const animate = () => {
-      if (!alive) return;
-      animId = requestAnimationFrame(animate);
+      if (!alive || !isRendererContextUsable(renderer)) return;
+
       const time = clock.getElapsedTime();
       const posArr = geometry.attributes.position.array as Float32Array;
       const colArr = geometry.attributes.color.array as Float32Array;
@@ -114,7 +120,14 @@ export default function DataFlowVisual({ className }: DataFlowVisualProps) {
       }
       geometry.attributes.position.needsUpdate = true;
       geometry.attributes.color.needsUpdate = true;
-      renderer.render(scene, camera);
+
+      try {
+        renderer.render(scene, camera);
+      } catch {
+        return;
+      }
+
+      animId = requestAnimationFrame(animate);
     };
     animate();
 
@@ -154,7 +167,7 @@ export default function DataFlowVisual({ className }: DataFlowVisualProps) {
       alive = false;
       window.clearTimeout(resizeDebounceT);
       ro.disconnect();
-      cancelAnimationFrame(animId);
+      if (animId !== undefined) cancelAnimationFrame(animId);
       renderer.dispose();
       geometry.dispose();
       material.dispose();
