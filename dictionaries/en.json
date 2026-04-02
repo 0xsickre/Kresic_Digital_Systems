@@ -69,6 +69,7 @@
     "restrictedAccess": "RESTRICTED ACCESS",
     "legalNote": "Important notice: Our work is quantitative research and educational tooling only—not financial advice, trade signals, or automated execution services.",
     "demoIntro": "Interactive mock terminal: correlation heatmap and scanner UI—deterministic demo data only.",
+    "demoCta": "Open Market Analytics demo",
     "featured": [
       {
         "role": "Operations & reporting",

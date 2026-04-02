@@ -47,6 +47,8 @@ export type LandingDictionary = {
     restrictedAccess: string;
     legalNote: string;
     demoIntro: string;
+    /** Distinct from `nav.liveDemo` to avoid redundant same-text links to `/demo/market-analytics`. */
+    demoCta: string;
     featured: readonly {
       role: string;
       name: string;

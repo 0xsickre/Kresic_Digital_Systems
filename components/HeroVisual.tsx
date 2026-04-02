@@ -280,11 +280,11 @@ export default function HeroVisual() {
       <div className="absolute bottom-10 right-10 pointer-events-none select-none text-right hidden sm:block">
         <div className="flex items-center justify-end gap-3 mb-1">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_#10b981]" />
-          <span className="font-mono text-[10px] text-white/40 tracking-[0.3em] uppercase">
+          <span className="font-mono text-[10px] text-slate-400 tracking-[0.3em] uppercase">
             System_Core.Online
           </span>
         </div>
-        <div className="font-mono text-[8px] text-white/20 uppercase tracking-widest">
+        <div className="font-mono text-[8px] text-slate-500 uppercase tracking-widest">
           UID: {sessionUid ?? "--------"} · Protocol: Neural_Sync
         </div>
       </div>

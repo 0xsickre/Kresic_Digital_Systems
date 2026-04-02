@@ -69,6 +69,7 @@
     "restrictedAccess": "EINGESCHRÄNKTER ZUGANG",
     "legalNote": "Wichtiger Hinweis: Unsere Arbeit umfasst ausschließlich quantitative Forschung und Bildungs-Tools — keine Anlageberatung, keine Handelssignale und keine automatisierte Ausführung.",
     "demoIntro": "Interaktives Mock-Terminal: Korrelations-Heatmap und Scanner-Oberfläche—nur deterministische Demo-Daten.",
+    "demoCta": "Market Analytics Demo öffnen",
     "featured": [
       {
         "role": "Operations & Reporting",

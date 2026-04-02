@@ -184,10 +184,10 @@ export default function DataFlowVisual({ className }: DataFlowVisualProps) {
       ].filter(Boolean).join(" ")}
     >
       <div className="absolute top-4 left-4 z-10 pointer-events-none select-none">
-        <div className="font-mono text-[10px] tracking-widest text-white/40 uppercase">Data.Ingestion_v1.0</div>
+        <div className="font-mono text-[10px] tracking-widest text-slate-400 uppercase">Data.Ingestion_v1.0</div>
         <div className="flex items-center gap-2 mt-1">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-          <div className="font-mono text-[9px] text-white/40 uppercase tracking-tighter">Status: Processing_Stream</div>
+          <div className="font-mono text-[9px] text-slate-400 uppercase tracking-tighter">Status: Processing_Stream</div>
         </div>
       </div>
       <div className="absolute inset-0 z-[1] opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
