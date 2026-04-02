@@ -4,13 +4,14 @@ import { FileDown } from "lucide-react";
 import Link from "next/link";
 
 import { LegalPageHeader } from "@/components/LegalPageHeader";
+import { useI18n } from "@/lib/i18n";
+import { withLocale } from "@/lib/locale";
 import {
   BRAND_NAME,
   LEGAL_ADDRESS_LINES,
   OWNER_NAME,
   SITE_EMAIL,
 } from "@/lib/site";
-import { useI18n } from "@/lib/i18n";
 
 function DatenschutzPdfDownload() {
   const { t, locale } = useI18n();
@@ -40,6 +41,7 @@ function DatenschutzPdfDownload() {
 export function DatenschutzPageClient() {
   const { t, locale } = useI18n();
   const ds = t.datenschutz;
+  const home = withLocale(locale, "/");
 
   const s4body = ds.s4p1.replace(/\{\{email\}\}/g, SITE_EMAIL);
 
@@ -60,7 +62,7 @@ export function DatenschutzPageClient() {
               dangerouslySetInnerHTML={{ __html: html }}
             />
             <Link
-              href="/#hero"
+              href={`${home}#hero`}
               className="mt-12 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
             >
               {ds.backHome}
@@ -146,7 +148,7 @@ export function DatenschutzPageClient() {
           </div>
 
           <Link
-            href="/#hero"
+            href={`${home}#hero`}
             className="mt-12 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
           >
             {ds.backHome}

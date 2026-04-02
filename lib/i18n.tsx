@@ -13,6 +13,7 @@ import {
 import { de } from "@/dictionaries/de";
 import { en } from "@/dictionaries/en";
 import type { LandingDictionary, LocaleCode } from "@/dictionaries/types";
+import { DEFAULT_LOCALE } from "@/lib/locale";
 
 const dictionaries: Record<LocaleCode, LandingDictionary> = { en, de };
 
@@ -24,16 +25,22 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<LocaleCode>("de");
+export function I18nProvider({
+  children,
+  initialLocale = DEFAULT_LOCALE,
+}: {
+  children: ReactNode;
+  initialLocale?: LocaleCode;
+}) {
+  const [locale, setLocaleState] = useState<LocaleCode>(initialLocale);
+
+  useEffect(() => {
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
 
   const setLocale = useCallback((next: LocaleCode) => {
     setLocaleState(next);
   }, []);
-
-  useEffect(() => {
-    document.documentElement.lang = locale === "de" ? "de" : "en";
-  }, [locale]);
 
   const value = useMemo<I18nContextValue>(
     () => ({

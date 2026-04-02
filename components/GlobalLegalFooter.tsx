@@ -3,12 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { DEFAULT_LOCALE, isLocale, withLocale } from "@/lib/locale";
+import type { LocaleCode } from "@/dictionaries/types";
+
 /**
- * Pravni linkovi na dnu svih stranica osim početne — na `/` su u `SiteFooter` (jedan centriran blok).
+ * Legal links at the bottom of non-home routes. Localized home uses `SiteFooter`.
  */
 export function GlobalLegalFooter() {
-  const pathname = usePathname();
-  if (pathname === "/") return null;
+  const pathname = usePathname() ?? "/";
+  const seg = pathname.split("/").filter(Boolean)[0];
+  const isLocalizedHome =
+    (seg === "de" || seg === "en") && pathname.split("/").filter(Boolean).length <= 1;
+  if (isLocalizedHome) return null;
+
+  let locale: LocaleCode =
+    seg && isLocale(seg) ? seg : DEFAULT_LOCALE;
+  if (pathname.startsWith("/demo")) locale = "en";
+  const impressumHref = withLocale(locale, "/impressum");
+  const datenschutzHref = withLocale(locale, "/datenschutz");
 
   return (
     <footer
@@ -20,14 +32,14 @@ export function GlobalLegalFooter() {
         aria-label="Rechtliche Hinweise"
       >
         <Link
-          href="/impressum"
+          href={impressumHref}
           className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
           prefetch={false}
         >
           Impressum
         </Link>
         <Link
-          href="/datenschutz"
+          href={datenschutzHref}
           className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
           prefetch={false}
         >

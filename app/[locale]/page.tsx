@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import { HeroBackdrop } from "@/components/HeroBackdrop";
 import { HeroCopyMarkup } from "@/components/HeroCopyMarkup";
@@ -9,19 +10,33 @@ import { LandingHeaderShellClient } from "@/components/LandingHeaderShellClient"
 import { LandingLcpHero } from "@/components/LandingLcpHero";
 import { LandingPage } from "@/components/LandingPage";
 import { de } from "@/dictionaries/de";
+import { en } from "@/dictionaries/en";
+import type { LocaleCode } from "@/dictionaries/types";
+import { isLocale } from "@/lib/locale";
+import { homeMetadata } from "@/lib/seo";
 import { BRAND_NAME } from "@/lib/site";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+type Props = Readonly<{
+  params: Promise<{ locale: string }>;
+}>;
 
-const logoAriaLabel = `${BRAND_NAME} — ${de.a11y.logoToHome}`;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) return {};
+  return homeMetadata(raw);
+}
 
 /**
  * Logo + hero H1/copy are composed here as RSC children so the first HTML chunk
  * includes LCP markup. Interactive header chrome and WebGL hydrate separately.
  */
-export default function HomePage() {
+export default async function HomePage({ params }: Props) {
+  const { locale: raw } = await params;
+  if (!isLocale(raw)) notFound();
+  const locale = raw as LocaleCode;
+  const dict = locale === "de" ? de : en;
+  const logoAriaLabel = `${BRAND_NAME} — ${dict.a11y.logoToHome}`;
+
   return (
     <>
       <LandingHeaderShellClient
@@ -43,7 +58,7 @@ export default function HomePage() {
         <LandingLcpHero>
           <HeroBackdrop />
           <HeroTextIsland>
-            <HeroCopyMarkup h={de.hero} />
+            <HeroCopyMarkup h={dict.hero} />
           </HeroTextIsland>
         </LandingLcpHero>
         <LandingPage />

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { sendEmail } from "@/app/actions/sendEmail";
 import type { LandingDictionary, LocaleCode } from "@/dictionaries/types";
 import { CONTACT_SERVICE_VALUES } from "@/lib/contact-service";
+import { withLocale } from "@/lib/locale";
 
 export type ContactFormLabels = LandingDictionary["form"];
 
@@ -196,7 +197,7 @@ export function ContactFormWithConsent({
         >
           {labels.consentLead}
           <Link
-            href="/datenschutz"
+            href={withLocale(locale, "/datenschutz")}
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium text-emerald-700 underline decoration-emerald-600/40 underline-offset-2 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"

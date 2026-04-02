@@ -106,7 +106,7 @@ export default function MarketAnalyticsDemoPage() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <div className="flex min-w-0 flex-1 flex-wrap items-start gap-4">
             <Link
-              href="/#hero"
+              href="/en#hero"
               className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-terminal-border bg-terminal-bg px-2.5 py-1.5 text-[11px] font-medium text-terminal-muted transition hover:border-slate-500 hover:text-slate-200"
             >
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
