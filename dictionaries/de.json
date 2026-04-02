@@ -149,7 +149,9 @@
       "data_quant": "Datenanalyse & quantitative Tools (PineScript)",
       "other": "Sonstiges (bitte unten beschreiben)"
     },
-    "consent": "Ich willige ein, dass meine Angaben aus dem Kontaktformular zur Bearbeitung meiner Anfrage erhoben und verarbeitet werden. (Übermittlung über verschlüsselte Kanäle.)",
+    "consentLead": "Ich willige ein, dass meine Angaben zur Bearbeitung meiner Anfrage gemäß der ",
+    "consentPrivacyLinkText": "Datenschutzerklärung",
+    "consentTrail": " verarbeitet werden. Ich kann diese Einwilligung jederzeit widerrufen. (Übermittlung über verschlüsselte Kanäle.)",
     "consentError": "Bitte bestätigen Sie die Einwilligung, um die Nachricht zu senden.",
     "submit": "Nachricht senden",
     "sending": "Wird gesendet…",

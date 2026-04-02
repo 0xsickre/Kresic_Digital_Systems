@@ -3,6 +3,8 @@
 import type { FormEvent } from "react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
+import Link from "next/link";
+
 import { sendEmail } from "@/app/actions/sendEmail";
 import type { LandingDictionary, LocaleCode } from "@/dictionaries/types";
 import { CONTACT_SERVICE_VALUES } from "@/lib/contact-service";
@@ -192,7 +194,16 @@ export function ContactFormWithConsent({
           htmlFor="contact-consent"
           className="text-sm leading-relaxed text-zinc-700 dark:text-slate-300"
         >
-          {labels.consent}
+          {labels.consentLead}
+          <Link
+            href="/datenschutz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-emerald-700 underline decoration-emerald-600/40 underline-offset-2 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
+          >
+            {labels.consentPrivacyLinkText}
+          </Link>
+          {labels.consentTrail}
         </label>
       </div>
 

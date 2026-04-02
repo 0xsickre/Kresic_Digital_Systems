@@ -149,7 +149,9 @@
       "data_quant": "Data analytics & quantitative tools (PineScript)",
       "other": "Other (describe below)"
     },
-    "consent": "I agree that my details from the contact form will be collected and processed to answer my request. (Data is handled securely via encrypted channels).",
+    "consentLead": "I consent that my details may be processed to handle my enquiry in accordance with the ",
+    "consentPrivacyLinkText": "Privacy policy",
+    "consentTrail": ". I may revoke this consent at any time. (Transmission via encrypted channels.)",
     "consentError": "Consent is required to send your message.",
     "submit": "Send message",
     "sending": "Sending…",
