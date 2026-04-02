@@ -54,7 +54,7 @@ export function ImpressumPageClient() {
             />
             <Link
               href="/#hero"
-              className="mt-12 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
+              className="mt-12 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
             >
               {imp.backHome}
             </Link>
@@ -72,7 +72,7 @@ export function ImpressumPageClient() {
           className="mx-auto max-w-2xl px-4 pb-16 pt-24 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8 lg:pb-24"
           lang={locale}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             {imp.eyebrow}
           </p>
 
@@ -129,13 +129,13 @@ export function ImpressumPageClient() {
             </p>
           </aside>
 
-          <p className="mt-12 text-xs leading-relaxed text-slate-500">
+          <p className="mt-12 text-xs leading-relaxed text-slate-400">
             {imp.disclaimer}
           </p>
 
           <Link
             href="/#hero"
-            className="mt-10 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
+            className="mt-10 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
           >
             {imp.backHome}
           </Link>

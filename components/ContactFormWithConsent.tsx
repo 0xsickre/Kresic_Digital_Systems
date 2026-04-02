@@ -102,7 +102,7 @@ export function ContactFormWithConsent({
       <div>
         <label
           htmlFor="contact-name"
-          className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-slate-500"
+          className="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-slate-400"
         >
           {labels.name}
         </label>
@@ -121,7 +121,7 @@ export function ContactFormWithConsent({
       <div>
         <label
           htmlFor="contact-email"
-          className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-slate-500"
+          className="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-slate-400"
         >
           {labels.email}
         </label>
@@ -139,7 +139,7 @@ export function ContactFormWithConsent({
       <div>
         <label
           htmlFor="contact-service"
-          className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-slate-500"
+          className="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-slate-400"
         >
           {labels.serviceLabel}
         </label>
@@ -164,7 +164,7 @@ export function ContactFormWithConsent({
       <div>
         <label
           htmlFor="contact-message"
-          className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-slate-500"
+          className="block text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-slate-400"
         >
           {labels.message}
         </label>

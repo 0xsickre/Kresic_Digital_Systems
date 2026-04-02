@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+const linkClass =
+  "inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white";
+
 /**
- * Pravni linkovi na dnu svih stranica osim početne — na `/` su u `SiteFooter` (jedan centriran blok).
+ * Legal links on non-home routes. Current page is a span (avoids duplicate
+ * navigation to the same URL as redundant links).
  */
 export function GlobalLegalFooter() {
   const pathname = usePathname();
@@ -16,23 +20,35 @@ export function GlobalLegalFooter() {
       role="contentinfo"
     >
       <nav
-        className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 text-center text-sm font-medium text-slate-400 sm:gap-x-8 sm:px-6 lg:px-8"
+        className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-4 text-center text-sm font-medium text-slate-300 sm:gap-x-8 sm:px-6 lg:px-8"
         aria-label="Rechtliche Hinweise"
       >
-        <Link
-          href="/impressum"
-          className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
-          prefetch={false}
-        >
-          Impressum
-        </Link>
-        <Link
-          href="/datenschutz"
-          className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
-          prefetch={false}
-        >
-          Datenschutzerklärung
-        </Link>
+        {pathname === "/impressum" ? (
+          <span className={linkClass} aria-current="page">
+            Impressum
+          </span>
+        ) : (
+          <Link
+            href="/impressum"
+            className={linkClass}
+            prefetch={false}
+          >
+            Impressum
+          </Link>
+        )}
+        {pathname === "/datenschutz" ? (
+          <span className={linkClass} aria-current="page">
+            Datenschutzerklärung
+          </span>
+        ) : (
+          <Link
+            href="/datenschutz"
+            className={linkClass}
+            prefetch={false}
+          >
+            Datenschutzerklärung
+          </Link>
+        )}
       </nav>
     </footer>
   );

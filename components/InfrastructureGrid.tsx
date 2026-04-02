@@ -168,10 +168,10 @@ export default function InfrastructureGrid({ className }: Props) {
       style={{ cursor: "crosshair" }}
     >
       <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end select-none pointer-events-none">
-        <span className="text-[10px] text-white/30 font-mono tracking-widest uppercase">System.Arch_v2.0</span>
-        <div className="flex items-center gap-2 mt-1 opacity-20">
+        <span className="text-[10px] text-slate-400 font-mono tracking-widest uppercase">System.Arch_v2.0</span>
+        <div className="flex items-center gap-2 mt-1 text-slate-500">
           <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-          <span className="text-[8px] text-white font-mono uppercase">Online</span>
+          <span className="text-[8px] text-slate-300 font-mono uppercase">Online</span>
         </div>
       </div>
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />

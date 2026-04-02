@@ -18,14 +18,14 @@ export function LanguageSwitcher() {
           "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-200 [-webkit-tap-highlight-color:transparent]",
           locale === "en"
             ? "text-white"
-            : "text-slate-400 hover:text-slate-200",
+            : "text-slate-300 hover:text-slate-100",
         ].join(" ")}
         aria-current={locale === "en" ? "true" : undefined}
       >
         EN
       </button>
       <span
-        className="select-none px-0.5 text-slate-500"
+        className="select-none px-0.5 text-slate-400"
         aria-hidden
       >
         |
@@ -37,7 +37,7 @@ export function LanguageSwitcher() {
           "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-200 [-webkit-tap-highlight-color:transparent]",
           locale === "de"
             ? "text-white"
-            : "text-slate-400 hover:text-slate-200",
+            : "text-slate-300 hover:text-slate-100",
         ].join(" ")}
         aria-current={locale === "de" ? "true" : undefined}
       >

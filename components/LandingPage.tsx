@@ -209,7 +209,7 @@ function ServicesSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <FadeIn>
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400/90">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
               {s.eyebrow}
             </p>
             <h2
@@ -218,7 +218,7 @@ function ServicesSection() {
             >
               {s.title}
             </h2>
-            <p className="mt-3 text-base leading-relaxed text-slate-400 sm:mt-4 sm:text-lg">{s.body}</p>
+            <p className="mt-3 text-base leading-relaxed text-slate-300 sm:mt-4 sm:text-lg">{s.body}</p>
           </div>
         </FadeIn>
         <ul className="mt-10 grid grid-cols-1 gap-4 sm:mt-14 sm:gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-4">
@@ -237,7 +237,7 @@ function ServicesSection() {
                     <h3 className="mt-5 text-base font-semibold tracking-tight text-white">
                       {card.title}
                     </h3>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-300">
                       {card.description}
                     </p>
                   </article>
@@ -264,7 +264,7 @@ function AboutSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-start gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
           <FadeIn className="max-w-xl lg:max-w-none">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-400/90">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-300">
               {a.eyebrow}
             </p>
             <h2
@@ -273,7 +273,7 @@ function AboutSection() {
             >
               {a.title}
             </h2>
-            <div className="mt-8 space-y-5 text-base leading-relaxed text-slate-400 sm:text-lg sm:leading-relaxed">
+            <div className="mt-8 space-y-5 text-base leading-relaxed text-slate-300 sm:text-lg sm:leading-relaxed">
               <p className="text-slate-300">{a.body}</p>
             </div>
             <div className="mt-10 flex flex-wrap gap-2 sm:gap-2.5">
@@ -303,6 +303,9 @@ function AboutSection() {
                 sizes="(min-width: 1024px) 192px, 160px"
                 className="block h-auto w-full rounded-2xl"
               />
+              <figcaption className="mt-3 text-center text-xs leading-snug text-slate-300">
+                {a.figcaptionSub}
+              </figcaption>
             </figure>
           </FadeIn>
         </div>
@@ -331,24 +334,24 @@ function ProjectsSection() {
               >
                 {p.title}
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-slate-400">
+              <p className="mt-4 text-lg leading-relaxed text-slate-300">
                 {p.intro}
               </p>
               <Link
                 href="/demo/market-analytics"
-                aria-label={`${t.nav.liveDemo} — Market Analytics`}
+                aria-label={`${p.demoCta} — Market Analytics`}
                 className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
               >
-                {t.nav.liveDemo}
+                {p.demoCta}
                 <span aria-hidden className="text-base leading-none">
                   →
                 </span>
               </Link>
-              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-500">
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-slate-400">
                 {p.demoIntro}
               </p>
             </div>
-            <p className="text-sm font-medium text-slate-500">
+            <p className="text-sm font-medium text-slate-400">
               {p.tagline}
             </p>
           </div>
@@ -384,7 +387,7 @@ function ProjectsSection() {
                       {isRestricted ? <IconProjectLock /> : null}
                       <span className="min-w-0">{project.name}</span>
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
                       {project.summary}
                     </p>
                     <p className="mt-4 text-sm font-medium leading-relaxed text-slate-200">
@@ -429,7 +432,7 @@ function ProjectsSection() {
           })}
         </div>
         <FadeIn delay={0.2} className="mt-10 lg:mt-12">
-          <p className="max-w-4xl text-xs leading-relaxed text-slate-500">
+          <p className="max-w-4xl text-xs leading-relaxed text-slate-400">
             {p.legalNote}
           </p>
         </FadeIn>
@@ -449,24 +452,24 @@ function ContactOpSecTrustModule() {
     >
       <h3
         id="opsec-trust-heading"
-        className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500"
+        className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400"
       >
         {o.title}
       </h3>
-      <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-400">{o.intro}</p>
+      <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300">{o.intro}</p>
       <ul className="mt-8 divide-y divide-white/10 border-t border-white/10">
         {o.items.map((item, index) => {
           const Icon = opSecIcons[index];
           return (
             <li key={index} className="flex gap-4 py-6 first:pt-8">
-              <div className="mt-0.5 shrink-0 text-slate-500" aria-hidden>
+              <div className="mt-0.5 shrink-0 text-slate-400" aria-hidden>
                 <Icon className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-sm font-medium tracking-tight text-slate-300">
                   {item.title}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{item.body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">{item.body}</p>
               </div>
             </li>
           );
@@ -494,10 +497,10 @@ function ContactSection() {
             >
               {t.contact.title}
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-slate-400">
+            <p className="mt-4 text-lg leading-relaxed text-slate-300">
               {t.contact.body}
             </p>
-            <p className="mt-6 text-sm font-medium text-slate-400">
+            <p className="mt-6 text-sm font-medium text-slate-300">
               {t.contact.writtenContactLead}
             </p>
             <a
@@ -550,7 +553,7 @@ function SiteFooter() {
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 text-center sm:gap-8 sm:px-6 lg:px-8">
         <KDSLogo className="h-12 w-auto text-slate-300 sm:h-14 md:h-16" />
-        <p className="max-w-md text-sm leading-relaxed text-slate-400 sm:max-w-none">
+        <p className="max-w-md text-sm leading-relaxed text-slate-300 sm:max-w-none">
           © 2026 Danijel Kresic | Kresic Digital Systems
         </p>
         <nav

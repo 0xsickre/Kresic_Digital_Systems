@@ -61,7 +61,7 @@ export function DatenschutzPageClient() {
             />
             <Link
               href="/#hero"
-              className="mt-12 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
+              className="mt-12 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
             >
               {ds.backHome}
             </Link>
@@ -79,14 +79,14 @@ export function DatenschutzPageClient() {
           className="mx-auto max-w-2xl px-4 pb-16 pt-24 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8 lg:pb-24"
           lang={locale}
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             {ds.eyebrow}
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
             {ds.title}
           </h1>
 
-          <p className="mt-4 text-sm leading-relaxed text-slate-400">{ds.stand}</p>
+          <p className="mt-4 text-sm leading-relaxed text-slate-300">{ds.stand}</p>
 
           <DatenschutzPdfDownload />
 
@@ -147,7 +147,7 @@ export function DatenschutzPageClient() {
 
           <Link
             href="/#hero"
-            className="mt-12 inline-flex text-sm font-medium text-slate-400 transition-colors hover:text-white"
+            className="mt-12 inline-flex text-sm font-medium text-slate-300 transition-colors hover:text-white"
           >
             {ds.backHome}
           </Link>
