@@ -13,8 +13,12 @@ import {
   Scene,
   Vector2,
   Vector3,
-  WebGLRenderer,
 } from "three";
+
+import {
+  createWebGLRendererSafely,
+  isRendererContextUsable,
+} from "@/lib/webgl";
 
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 const SEGMENTS = IS_MOBILE ? 30 : 60;
@@ -36,7 +40,14 @@ export default function InfrastructureGrid({ className }: Props) {
     camera.position.set(0, -25, 12);
     camera.lookAt(0, 0, 0);
 
-    const renderer = new WebGLRenderer({ antialias: ANTIALIAS, alpha: true, powerPreference: "low-power", precision: "mediump" });
+    const renderer = createWebGLRendererSafely({
+      antialias: ANTIALIAS,
+      alpha: true,
+      powerPreference: "low-power",
+      precision: "mediump",
+    });
+    if (!renderer) return;
+
     renderer.setSize(1, 1);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     const canvas = renderer.domElement;
@@ -70,11 +81,11 @@ export default function InfrastructureGrid({ className }: Props) {
     container.addEventListener("mouseleave", onLeave);
 
     const clock = new Clock();
-    let animId: number;
+    let animId: number | undefined;
 
     const animate = () => {
-      if (!alive) return;
-      animId = requestAnimationFrame(animate);
+      if (!alive || !isRendererContextUsable(renderer)) return;
+
       const time = clock.getElapsedTime();
       const posAttr = geometry.attributes.position;
 
@@ -92,7 +103,14 @@ export default function InfrastructureGrid({ className }: Props) {
         posAttr.setZ(i, vz);
       }
       posAttr.needsUpdate = true;
-      renderer.render(scene, camera);
+
+      try {
+        renderer.render(scene, camera);
+      } catch {
+        return;
+      }
+
+      animId = requestAnimationFrame(animate);
     };
     animate();
 
@@ -135,7 +153,7 @@ export default function InfrastructureGrid({ className }: Props) {
       container.removeEventListener("mousemove", onMouseMove);
       container.removeEventListener("mouseenter", onEnter);
       container.removeEventListener("mouseleave", onLeave);
-      cancelAnimationFrame(animId);
+      if (animId !== undefined) cancelAnimationFrame(animId);
       renderer.dispose();
       geometry.dispose();
       material.dispose();

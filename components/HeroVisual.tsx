@@ -11,8 +11,12 @@ import {
   PointsMaterial,
   Scene,
   Vector2,
-  WebGLRenderer,
 } from "three";
+
+import {
+  createWebGLRendererSafely,
+  isRendererContextUsable,
+} from "@/lib/webgl";
 
 const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
 /** 4 000 on mobile (up from 2 400): still a single Points draw call, single BufferGeometry. */
@@ -50,12 +54,14 @@ export default function HeroVisual() {
       else { camera.position.z = 450; camera.fov = 75; }
     };
 
-    const renderer = new WebGLRenderer({
+    const renderer = createWebGLRendererSafely({
       antialias: ANTIALIAS,
       alpha: true,
       powerPreference: "low-power",
       precision: "mediump",
     });
+    if (!renderer) return;
+
     renderer.setSize(1, 1);
     /** Use real dPR but cap at 2 — sharp on Retina/AMOLED without killing fill rate. */
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -182,12 +188,12 @@ export default function HeroVisual() {
     });
     resizeObserver.observe(container, { box: "border-box" });
 
-    let animationFrameId: number;
+    let animationFrameId: number | undefined;
     const clock = new Clock();
 
     const animate = () => {
-      if (!alive) return;
-      animationFrameId = requestAnimationFrame(animate);
+      if (!alive || !isRendererContextUsable(renderer)) return;
+
       const elapsed = clock.getElapsedTime();
 
       pointCloud.rotation.y += (targetRotationY - pointCloud.rotation.y) * 0.04;
@@ -233,7 +239,14 @@ export default function HeroVisual() {
 
       posAttr.needsUpdate = true;
       linesGeom.attributes.position.needsUpdate = true;
-      renderer.render(scene, camera);
+
+      try {
+        renderer.render(scene, camera);
+      } catch {
+        return;
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
@@ -244,7 +257,9 @@ export default function HeroVisual() {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("click", onClick);
       resizeObserver.disconnect();
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId !== undefined) {
+        cancelAnimationFrame(animationFrameId);
+      }
       renderer.dispose();
       particlesGeom.dispose();
       particlesMat.dispose();

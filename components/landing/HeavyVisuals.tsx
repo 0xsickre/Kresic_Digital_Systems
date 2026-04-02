@@ -1,6 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { ReactNode } from "react";
+
+import { WebGLErrorBoundary } from "@/components/WebGLErrorBoundary";
 
 /** Static hero background until WebGL mounts (TBT / FCP friendly). */
 export function HeroCanvasPlaceholder() {
@@ -51,8 +54,60 @@ export const DynamicMarketPulseVisual = dynamic(
   { ssr: false, loading: () => <CardVisualPlaceholder /> },
 );
 
+function SafeCardWebGL({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <WebGLErrorBoundary
+      fallback={<CardVisualPlaceholder className={className} />}
+    >
+      {children}
+    </WebGLErrorBoundary>
+  );
+}
+
+export function SafeDynamicDataFlowVisual({
+  className,
+}: {
+  className?: string;
+}) {
+  return (
+    <SafeCardWebGL className={className}>
+      <DynamicDataFlowVisual className={className} />
+    </SafeCardWebGL>
+  );
+}
+
+export function SafeDynamicInfrastructureGrid({
+  className,
+}: {
+  className?: string;
+}) {
+  return (
+    <SafeCardWebGL className={className}>
+      <DynamicInfrastructureGrid className={className} />
+    </SafeCardWebGL>
+  );
+}
+
+export function SafeDynamicMarketPulseVisual({
+  className,
+}: {
+  className?: string;
+}) {
+  return (
+    <SafeCardWebGL className={className}>
+      <DynamicMarketPulseVisual className={className} />
+    </SafeCardWebGL>
+  );
+}
+
 export const projectHeaderVisuals = [
-  DynamicDataFlowVisual,
-  DynamicInfrastructureGrid,
-  DynamicMarketPulseVisual,
+  SafeDynamicDataFlowVisual,
+  SafeDynamicInfrastructureGrid,
+  SafeDynamicMarketPulseVisual,
 ] as const;
