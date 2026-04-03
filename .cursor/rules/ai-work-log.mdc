@@ -9,7 +9,7 @@ This project keeps a **tracked** changelog at the repo root: **`AI_WORK_LOG.md`*
 
 ### Before you write or change code
 
-1. **Read `AI_WORK_LOG.md`** — at minimum the **Current conventions** section and the **last 3–5 log entries** (newest first).
+1. **Read `AI_WORK_LOG.md`** — follow **§0 Mandatory pre-task review** in **`.cursor/rules/ai-work-log-protocol.mdc`**: full **Current conventions**, **last five** log entries (newest first), and **extra entries** when the task overlaps logged areas. Check overlap, compatibility, and regression risk against **“Do not undo”** bullets **before** planning or coding.
 2. Align new work with those conventions. If the user asks for something that conflicts, **call out the conflict** and propose an explicit trade-off instead of silently undoing prior decisions.
 
 ### After you complete a task (or a coherent batch of changes)

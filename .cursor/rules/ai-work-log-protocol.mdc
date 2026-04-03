@@ -7,10 +7,33 @@ alwaysApply: true
 
 Prevent undoing previous fixes and ensure changes align with the project's evolution.
 
+## 0. Mandatory pre-task review (do not skip)
+
+**Treat every new user request as a new task** unless they explicitly say it is a tiny continuation of the message directly above. Before you plan or write code for that task, you **must** open and read **`AI_WORK_LOG.md`** at the repo root. This is not optional for substantive work.
+
+**What to read every time**
+
+1. The full **Current conventions** section (policies you must not contradict without explicit user approval).
+2. The **Log (newest first)** — at least the **last five** `###` entries, and **more** if any entry mentions the same feature area, files, or keywords as the new task (e.g. CSP, Three.js deferral, Playwright, SEO, i18n).
+
+**What you must infer before coding**
+
+- **Overlap:** Does this task touch the same modules or behaviours as a recent log entry?
+- **Compatibility:** Would the approach you are about to take conflict with a documented decision, constraint, or **“Do not undo”** bullet?
+- **Regression risk:** Could this change **undo** or weaken something the log says was fixed (performance, security, a11y, tests, CSP, deferral timings, CTA layout, etc.)?
+
+**What you must do when there is overlap or risk**
+
+- **State it briefly in the chat** (before editing): what prior decision you are preserving, or what trade-off you need if the user’s request conflicts with the log.
+- **Do not** silently revert, re-tune, or “simplify” code that the log marks as intentional (e.g. desktop Three.js deferral floors, `mt-6 shrink-0` on cards, production CSP vs dev `unsafe-eval`).
+- **Do not** repeat a failed or abandoned approach if the log (or entry rationale) explains why it was rejected — address that reason first.
+
+**Purpose:** avoid circular rework and contradictory “fixes” across sessions. Skipping this read is a process failure, not a time save.
+
 ## 1. Read First (or Create)
 
 - If **`AI_WORK_LOG.md` does not exist** at the repository root, **create it** before substantive work: include a short purpose line, how agents should use the file, **Current conventions** (or a placeholder to fill as the project grows), and **Log (newest first)** with a separator line for new entries. Use English for structure and headings; locale-specific notes may follow team preference.
-- Before modifying existing logic, **read `AI_WORK_LOG.md`** — at minimum the **Current conventions** section and the last **3–5** dated entries.
+- Before modifying existing logic, **read `AI_WORK_LOG.md`** — at minimum the **Current conventions** section and the last **five** dated log entries (see **§0**).
 - Check for recent changes related to the files you are about to edit.
 - If a proposed solution contradicts a documented technical decision, **flag the conflict to the user before proceeding** — do not silently override.
 

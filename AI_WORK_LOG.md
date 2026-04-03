@@ -7,7 +7,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## How agents should use this file
 
-1. **Start of task** — Read this file (at least the **Current conventions** section and the last **3–5** dated entries).
+1. **Start of task** — Read this file per **§0** in `.cursor/rules/ai-work-log-protocol.mdc`: full **Current conventions**, **last five** log entries (more if the task overlaps logged areas), then assess overlap, compatibility, and regression risk before coding.
 2. **End of task** — Append a new entry under **Log** with: date (ISO), short title, what changed (files/areas), intent, and anything the next session must not undo.
 3. **Keep entries factual** — No secrets, no API keys, no paste of `.env`.
 
@@ -24,10 +24,16 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Git:** User runs commit/push locally unless they explicitly ask the agent to commit; after each completed task the agent outputs a **copy-paste** block: **`cd` to repo root** → **`git status`** → **`git add .`** → **`git commit -m …`** (see `.cursor/rules/git-commit-suggestions.mdc`).
 - **Issue drafts:** Paste-ready GitHub/GitLab text: **title** and **body** in **separate** fenced code blocks (see `.cursor/rules/github-issue-drafts.mdc`).
 - **Code language:** Identifiers, comments, and technical strings in source files must be **English**; user-facing copy stays in `dictionaries/` (see `.cursor/rules/code-language-english.mdc`).
-- **Agent rules:** `.cursor/rules/` contains 7 `.mdc` files (`alwaysApply: true`): `engineering-standards`, `security-performance`, `project-conventions`, `code-language-english`, `git-commit-suggestions`, `github-issue-drafts`, `ai-work-log-protocol`.
+- **Agent rules:** `.cursor/rules/` includes nine `.mdc` files (`alwaysApply: true` where set), including `ai-work-log.mdc`, `ai-work-log-protocol.mdc` (mandatory pre-task review **§0**), `engineering-standards`, `security-performance`, `project-conventions`, `code-language-english`, `git-commits`, `git-commit-suggestions`, `github-issue-drafts`.
 - **Logs:** **`AI_WORK_LOG.md`** — routine substantive AI/agent changes; commit and push with the repo. **`REPAIR_LOG.md`** — use **only for larger / highlighted** work (major fixes, audits, milestones worth calling out); do not duplicate every small task there.
 
 ## Log (newest first)
+
+### 2026-04-03 — Cursor rules: mandatory pre-task `AI_WORK_LOG.md` review (§0)
+
+- **What:** `.cursor/rules/ai-work-log-protocol.mdc` — new **§0 Mandatory pre-task review**: read log before each new substantive task, minimum **five** recent entries (more when overlapping), explicit overlap / compatibility / regression checks, no silent undo of **“Do not undo”** items, no repeating failed approaches without addressing logged rationale. `.cursor/rules/ai-work-log.mdc` — pre-code step points to **§0**. `AI_WORK_LOG.md` — “How agents should use” and **Agent rules** list aligned with the stricter bar.
+- **Why:** Reduce circular rework and contradictory fixes across sessions.
+- **Do not undo:** Keep **§0** as the authoritative pre-task gate; bump read depth when the task touches areas already in the log.
 
 ### 2026-04-03 — Autoreview: validate `siteBaseUrl`, pointer snapshot coords
 
