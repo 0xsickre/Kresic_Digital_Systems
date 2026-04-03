@@ -5,13 +5,13 @@ alwaysApply: true
 
 # Issue drafts (GitHub / GitLab)
 
-When you produce **draft issue content** the user will paste into GitHub or GitLab (title + body, acceptance criteria, audit findings, checklists, or any “open issue” material):
+When you produce **draft issue content** the user will paste into GitHub or GitLab (title + body, acceptance criteria, audit findings, checklists, or any "open issue" material):
 
 1. **Title and body must be separated.** Never bury the title only inside the body block. Use **two** fenced regions:
    - **First code block:** the **issue title only** — plain text, one line (GitHub/GitLab title field). Fence as ` ```text ` or bare line after a label like `Title (paste into title field):`
    - **Second code block:** the **issue body only** — markdown for the description field. Fence as ` ```markdown ` (or ` ```text ` if markdown would confuse).
 2. If there is **no** title (e.g. body-only template), a single block for the body is fine; do not invent a title.
-3. **Prefer one pair of blocks per issue** when multiple issues are suggested; label above each pair (e.g. “Issue A”).
+3. **Prefer one pair of blocks per issue** when multiple issues are suggested; label above each pair (e.g. "Issue A").
 4. Explanatory prose *around* the blocks may stay outside the fences; the **paste-ready title and body** stay inside their respective fences.
 
 This keeps the title copy-paste safe and avoids mixing it with checklist markdown in the description.

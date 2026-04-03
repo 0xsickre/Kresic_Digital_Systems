@@ -1,0 +1,32 @@
+---
+description: Core engineering philosophy and code quality standards (Senior / Staff level)
+alwaysApply: true
+---
+
+# Engineering Standards
+
+## Philosophy
+
+- **Architecture before coding.** Before touching a file, identify edge cases, state implications, and interaction with neighbouring modules. If the task is ambiguous or touches ≥ 3 files, outline the plan in chat first.
+- **KISS > clever.** Choose the simplest correct solution. Reject abstraction layers that serve only one call-site.
+- **DRY — but not at readability's cost.** Extract only when duplication is real (≥ 3 instances or guaranteed future reuse).
+- **Zero tolerance for bloat.** No dead code, no unused imports, no TODO placeholders you will not address in this session.
+- **Comments explain *why*, never *what*.** Do not narrate code. Comment only non-obvious intent, trade-offs, or external constraints.
+- **Self-documenting names.** A reader should understand purpose without a comment. Prefer `fetchActiveProjects()` over `getData()`.
+- **Fail fast, fail loud.** Validate at boundaries. Throw typed errors — never silently swallow exceptions.
+- **Testability by design.** Side effects at the edges; core logic stays pure and injectable.
+
+## Code Quality
+
+- Respect the project's type-checking strictness. Never introduce `any` unless wrapping an untyped third-party API behind a typed adapter.
+- Prefer composition over inheritance. Small, focused modules over monolith files.
+- Exhaustive branching: cover all variants in switches/conditionals; use a `never` guard or equivalent where the language supports it.
+- Keep functions short (≤ 40 lines is a guideline, not a law). If a function needs a comment to explain its structure, it is too long.
+
+## Delivery
+
+- **Read before edit.** Always read a file (or relevant section) before modifying it.
+- **Verify after edit.** Run the project's build/lint/test command after substantive changes. Fix what you break.
+- **Minimise file creation.** Prefer editing existing files; only create new ones when strictly necessary.
+- **No docs/READMEs** unless explicitly asked.
+- **No push/commit** unless explicitly asked.

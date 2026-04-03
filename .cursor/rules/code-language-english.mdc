@@ -8,11 +8,11 @@ alwaysApply: true
 **Mandatory:** Everything you write **inside the codebase** must be in **English**, including:
 
 - **Identifiers:** variables, functions, types, interfaces, enums, file names where the project already uses English.
-- **Comments** and **JSDoc** in `.ts`, `.tsx`, `.js`, `.mjs`, `.css` (and similar).
+- **Comments** and **doc-strings** in all source files.
 - **Inline technical strings** in code (e.g. `aria-label`, `data-testid`, logger messages, error messages intended for developers) — use English unless the product explicitly requires otherwise in a tracked exception.
 
-**Localized UI copy** (what end users read on the site) lives in **`dictionaries/en.json`**, **`dictionaries/de.json`**, and typed keys — do not replace that system with hardcoded Serbian/German/English in components for marketing strings. Adding or editing **locale JSON** follows each file’s language (EN/DE content); the **keys** and **TypeScript types** stay English.
+**Localized UI copy** (what end users read) should live in the project's i18n / locale system (e.g. JSON dictionaries, `.po` files, or equivalent). Do not hardcode translated strings in components. The **keys** and **type definitions** for locale entries stay in English; only the **values** follow each locale's language.
 
-**Docs inside the repo** (README, REPAIR_LOG, AI_WORK_LOG entries) may follow the team’s language preference; this rule targets **executable source and code-adjacent comments**.
+**Docs inside the repo** (README, changelogs, work logs) may follow the team's language preference; this rule targets **executable source and code-adjacent comments**.
 
 If a file already violates this, prefer fixing only when touching that file for another task, unless the task is explicitly to translate/normalize language.

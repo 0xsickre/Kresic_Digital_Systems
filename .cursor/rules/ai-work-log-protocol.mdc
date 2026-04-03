@@ -1,0 +1,38 @@
+---
+description: Maintain project memory and prevent regressions via AI_WORK_LOG.md
+alwaysApply: true
+---
+
+# Project Memory & Continuity Protocol
+
+Prevent undoing previous fixes and ensure changes align with the project's evolution.
+
+## 1. Read First (or Create)
+
+- If **`AI_WORK_LOG.md` does not exist** at the repository root, **create it** before substantive work: include a short purpose line, how agents should use the file, **Current conventions** (or a placeholder to fill as the project grows), and **Log (newest first)** with a separator line for new entries. Use English for structure and headings; locale-specific notes may follow team preference.
+- Before modifying existing logic, **read `AI_WORK_LOG.md`** — at minimum the **Current conventions** section and the last **3–5** dated entries.
+- Check for recent changes related to the files you are about to edit.
+- If a proposed solution contradicts a documented technical decision, **flag the conflict to the user before proceeding** — do not silently override.
+
+## 2. Technical Decision Tracking
+
+- Log not just *what* changed but **why** (the rationale and constraints).
+- Include explicit "do not undo" notes when a fix depends on a specific approach.
+- Example: *"Fixed CTA margin collapse by switching from `mt-auto` to `mt-6 shrink-0`; do not revert to `mt-auto` without a guaranteed minimum gap."*
+
+## 3. Post-Task Logging
+
+After every substantive change, append a `###` entry to `AI_WORK_LOG.md` with:
+
+- **Date (ISO) & short task title**
+- **What:** files/areas touched and concrete changes.
+- **Why:** technical decisions and architectural choices that must be preserved.
+- **Do not undo:** guardrails for future sessions (when applicable).
+- **Potential debt:** anything deliberately left for later (when applicable).
+
+Keep entries factual. Never put secrets, `.env` values, or API keys in the log.
+
+## 4. Conflict Prevention
+
+- Before applying a change, verify it does not regress issues marked as fixed in the log.
+- If the user asks for something that would break a previous fix, **explain the conflict and propose an alternative** before writing code.

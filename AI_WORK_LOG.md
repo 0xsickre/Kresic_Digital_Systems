@@ -19,11 +19,23 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
 - **Licence:** Root **`LICENSE`** is MIT; README licence section matches (do not revert to "all rights reserved" on the codebase without user decision).
-- **Git:** User runs commit/push locally unless they explicitly ask the agent to commit; after each completed task the agent outputs a **copy-paste** block: **`cd` to repo root** → **`git status`** → **`git add .`** → **`git commit -m …`** (see `.cursor/rules/git-commit-suggestions.mdc`). Broader git SOP: `.cursor/rules/git-commits.mdc` if present.
+- **Git:** User runs commit/push locally unless they explicitly ask the agent to commit; after each completed task the agent outputs a **copy-paste** block: **`cd` to repo root** → **`git status`** → **`git add .`** → **`git commit -m …`** (see `.cursor/rules/git-commit-suggestions.mdc`).
 - **Issue drafts:** Paste-ready GitHub/GitLab text: **title** and **body** in **separate** fenced code blocks (see `.cursor/rules/github-issue-drafts.mdc`).
 - **Code language:** Identifiers, comments, and technical strings in source files must be **English**; user-facing copy stays in `dictionaries/` (see `.cursor/rules/code-language-english.mdc`).
+- **Agent rules:** `.cursor/rules/` contains 7 `.mdc` files (`alwaysApply: true`): `engineering-standards`, `security-performance`, `project-conventions`, `code-language-english`, `git-commit-suggestions`, `github-issue-drafts`, `ai-work-log-protocol`.
 
 ## Log (newest first)
+
+### 2026-04-03 — ai-work-log-protocol: create `AI_WORK_LOG.md` if missing
+
+- **What:** `.cursor/rules/ai-work-log-protocol.mdc` — if `AI_WORK_LOG.md` is absent at repo root, create it before substantive work (minimal template: purpose, how-to, Current conventions placeholder, Log section).
+- **Why:** Universal projects may not have the log yet; agents must bootstrap continuity without skipping the protocol.
+
+### 2026-04-03 — Cursor rules overhaul (Senior / Staff level)
+
+- **What:** Reorganised `.cursor/rules/` into multiple focused `.mdc` files, including `engineering-standards`, `security-performance`, `project-conventions`, `code-language-english`, `git-commit-suggestions`, `github-issue-drafts`, and later `ai-work-log-protocol`. All `alwaysApply: true`.
+- **Why:** Previous 3 rules covered only formatting/git; no architecture, security, or performance guidance existed as enforced rules.
+- **Do not undo:** Removing `engineering-standards` or `security-performance` would drop the baseline quality bar below Senior level.
 
 ### 2026-04-03 — Git: version `.cursor/rules/*.mdc` (stop ignoring whole `.cursor/`)
 
@@ -67,12 +79,6 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **What:** `lib/seo.ts` — `homeMetadata()` sets `title: { absolute: h.title }` because root layout uses `metadata.title.template` (`%s · ${BRAND_NAME}`) and `h.title` already ends with the brand.
 - **Why:** Tab title was `… · Kresic Digital Systems · Kresic Digital Systems` on `/en` and `/de`.
 - **Do not undo:** Removing `absolute` on home without changing root template or `h.title` will regress duplicate suffix.
-
-### 2026-04-03 — Project cards: spacing above CTA buttons
-
-- **What:** `components/LandingPage.tsx` — featured work cards: wrap body (role → tags) in a `flex-1` column; move GitHub / restricted CTAs into a sibling `shrink-0` block with **`mt-6`** (replaces `mt-auto` on the button alone, which collapsed to ~0 when card content was tall).
-- **Why:** Tags (especially two rows) sat flush against the bottom button on mobile and desktop.
-- **Do not undo:** Do not remove the `mt-6` gap wrapper without replacing with another minimum vertical rhythm between tags and actions.
 
 ### 2026-04-03 — PageSpeed / Lighthouse (perf + a11y)
 

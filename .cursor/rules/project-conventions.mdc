@@ -1,0 +1,34 @@
+---
+description: Project-specific stack, architecture, and i18n conventions
+alwaysApply: true
+---
+
+# Project Conventions — kresicds.com
+
+## Stack
+
+| Layer | Tech | Detail |
+|-------|------|--------|
+| Framework | Next.js 15 App Router | RSC-first; `"use client"` only when needed |
+| UI | React 19, Tailwind | Utility classes; no CSS-in-JS |
+| Language | TypeScript strict | `tsconfig` target **ES2022** |
+| i18n | `app/[locale]/…` routes | `middleware.ts` sets `x-locale`; `withLocale()` for links |
+| SEO | `generateMetadata` + `lib/seo.ts` | Canonical / hreflang via `alternatesForLocale` |
+| Content | `dictionaries/en.json` + `de.json` | Typed via `dictionaries/types.ts` |
+| Deploy | Vercel edge | `poweredByHeader: false`; `optimizePackageImports` for `lucide-react` |
+| Browsers | browserslist in `package.json` | `chrome ≥ 92, edge ≥ 92, firefox ≥ 92, safari ≥ 15.4` |
+| Licence | MIT | Root `LICENSE`; do not revert to "all rights reserved" without user decision |
+
+## Architectural Constraints (do not violate without explicit approval)
+
+- Hero LCP path stays **server-rendered**. Heavy WebGL behind `dynamic()` + `MountWhenVisible` (`components/landing/HeavyVisuals.tsx`, `HeroBackdrop`).
+- `/demo/market-analytics` is **removed**. Third card → `kds-quant-engine-showcase`. No `liveDemo` / `demoCta` keys in dictionaries.
+- Home `<title>` uses `title: { absolute: … }` in `homeMetadata()` to avoid double-branding from root `title.template`.
+- Primary green CTAs: **`emerald-700`** fill / **`emerald-600`** hover, white text. Do not lighten without WCAG contrast check.
+- Featured work card CTAs use **`mt-6 shrink-0`**, not `mt-auto`. Content above (role → tags) lives in a `flex-1` wrapper. Do not revert without a guaranteed minimum gap.
+
+## i18n
+
+- Locale routes: `app/[locale]/…`. Middleware resolves locale from path/header.
+- Marketing copy in `dictionaries/` JSON. Keys and TS types are English. Values follow file language (EN/DE).
+- Do not hardcode locale strings in components — always go through the dictionary system.

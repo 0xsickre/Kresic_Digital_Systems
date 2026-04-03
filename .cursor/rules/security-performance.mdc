@@ -1,0 +1,38 @@
+---
+description: Security and performance guardrails — apply automatically without being asked
+alwaysApply: true
+---
+
+# Security & Performance
+
+Apply these on every change. The user should never have to ask.
+
+## Security
+
+- **Injection / XSS:** Never render unsanitised user input as HTML. Escape or sanitise at the boundary.
+- **Auth / CSRF:** API endpoints must validate session, origin, and apply rate-limiting where applicable.
+- **Secrets:** Never commit `.env`, credentials, API keys, or private key files. Warn the user if a staged file looks sensitive.
+- **Dependencies:** Prefer well-maintained packages with minimal transitive deps. Pin major versions.
+
+## Performance
+
+- **Measure before optimising.** When a change may affect performance, check bundle size, render cost, or network impact.
+- **Lazy-load heavy code.** Use dynamic imports or code-splitting for libraries and components not needed on initial render.
+- **Optimise assets.** Use the framework's image component (if available) with correct sizing and formats. No unoptimised raw assets.
+- **Minimise client-side work.** Prefer server-side data loading where the framework supports it. Cache stable data aggressively.
+- **Clean up side effects.** Always dispose subscriptions, timers, and listeners when a component unmounts or an effect re-runs.
+- **Avoid layout thrash.** Do not animate properties that trigger layout recalculation (prefer `transform`, `opacity`).
+
+## Self-Review (automatic after every substantive change)
+
+Before presenting the result, mentally audit:
+
+| Area | Check |
+|------|-------|
+| Security | Injection vectors, missing validation, exposed secrets, unprotected routes |
+| Performance | Unnecessary re-renders, missing cleanup, layout shift, bundle bloat |
+| Architecture | Missing error boundaries, happy-path-only logic, tight coupling |
+| Accessibility | Missing `alt`, broken focus order, insufficient contrast (WCAG AA) |
+| Correctness | Off-by-one, null/undefined paths, async race conditions |
+
+If flaws are found: report a brief summary (2–3 lines) and immediately fix. Do not ask — just fix.
