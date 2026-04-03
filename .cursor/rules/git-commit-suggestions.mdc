@@ -1,0 +1,24 @@
+---
+description: After each completed task, output copy-paste git commit command in a code block
+alwaysApply: true
+---
+
+# Suggested commit command (copy-paste)
+
+After every **completed** substantive task (code or config change the user will commit), **always** append a **suggested Git commit** as:
+
+1. **A single fenced code block** (use `powershell` or `bash` as appropriate for the user’s OS) containing the **full command(s)** ready to run after review — no omitted parts, no `...` placeholders except for paths the user must substitute if truly unknown.
+2. **Minimum content:** `git commit` with **Conventional-Commits-style** subject (English, imperative), and **one or more** `-m` lines for the body (what changed, why if non-obvious, files or areas touched).
+3. **Staging:** Always use **`git add .`**, never a list of individual paths. **Critical:** `git add .` only stages under the **current directory**. The block **must** start with **`cd`** to the **repository root** (use the workspace path from context when known, e.g. `d:\Projekti\moj_sajt`), then **`git status`** so the user can **see** what will be committed, then **`git add .`**, then **`git commit`**. If unrelated changes appear in `status`, the user fixes staging manually before committing — the agent does not revert to per-file `git add` in the suggested block.
+4. Do **not** include `git push` unless the user explicitly asked to push; do **not** run `git commit` in the terminal unless the user explicitly asked the agent to commit.
+
+**Example shape (PowerShell):**
+
+```powershell
+cd d:\Projekti\moj_sajt
+git status
+git add .
+git commit -m "fix(ui): short imperative subject" -m "- First concrete change." -m "- Second change; scope or intent."
+```
+
+This is **in addition** to any prose summary of the work — the block is the **paste-ready** artifact.

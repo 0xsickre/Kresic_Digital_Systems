@@ -82,7 +82,7 @@ test-results/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-# Cursor: ignore local workspace data; keep shared .mdc rules in git
+# Cursor — ignore local IDE state; track shared agent rules (.mdc) in repo
 .cursor/*
 !.cursor/rules/
 !.cursor/rules/**
