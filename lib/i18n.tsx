@@ -4,18 +4,13 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-import { de } from "@/dictionaries/de";
-import { en } from "@/dictionaries/en";
 import type { LandingDictionary, LocaleCode } from "@/dictionaries/types";
 import { DEFAULT_LOCALE } from "@/lib/locale";
-
-const dictionaries: Record<LocaleCode, LandingDictionary> = { en, de };
 
 type I18nContextValue = {
   locale: LocaleCode;
@@ -25,18 +20,23 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
+/**
+ * Dictionary is passed as a prop from the server (RSC) so only the active
+ * locale ships in the RSC payload — not as a JS chunk the client must parse.
+ * Language switching navigates to a new URL; the server re-renders with the
+ * new locale's dictionary.
+ */
 export function I18nProvider({
   children,
   initialLocale = DEFAULT_LOCALE,
+  initialDictionary,
 }: {
   children: ReactNode;
   initialLocale?: LocaleCode;
+  initialDictionary: LandingDictionary;
 }) {
   const [locale, setLocaleState] = useState<LocaleCode>(initialLocale);
-
-  useEffect(() => {
-    setLocaleState(initialLocale);
-  }, [initialLocale]);
+  const [dictionary] = useState<LandingDictionary>(initialDictionary);
 
   const setLocale = useCallback((next: LocaleCode) => {
     setLocaleState(next);
@@ -46,9 +46,9 @@ export function I18nProvider({
     () => ({
       locale,
       setLocale,
-      t: dictionaries[locale],
+      t: dictionary,
     }),
-    [locale, setLocale]
+    [locale, setLocale, dictionary]
   );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

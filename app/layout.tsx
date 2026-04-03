@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 import { DeferredThirdPartyScripts } from "@/components/DeferredThirdPartyScripts";
 import { GlobalLegalFooter } from "@/components/GlobalLegalFooter";
 import { Providers } from "@/components/Providers";
+import { de } from "@/dictionaries/de";
+import { en } from "@/dictionaries/en";
 import {
   DEFAULT_LOCALE,
   isLocale,
@@ -101,7 +103,7 @@ export default async function RootLayout({
         >
           {skipLabel}
         </a>
-        <Providers key={locale} initialLocale={locale}>
+        <Providers key={locale} initialLocale={locale} initialDictionary={locale === "de" ? de : en}>
           {children}
         </Providers>
         <DeferredThirdPartyScripts />
