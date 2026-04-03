@@ -367,29 +367,31 @@ function ProjectsSection() {
                       aria-hidden
                     />
                   </div>
-                  <div className="relative flex flex-1 flex-col border-t border-white/[0.08] bg-gradient-to-b from-slate-900/70 to-slate-900/35 p-6">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
-                      {project.role}
-                    </p>
-                    <h3 className="mt-2 flex items-center gap-2 text-lg font-semibold text-white">
-                      {isRestricted ? <IconProjectLock /> : null}
-                      <span className="min-w-0">{project.name}</span>
-                    </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                      {project.summary}
-                    </p>
-                    <p className="mt-4 text-sm font-medium leading-relaxed text-slate-200">
-                      {project.outcome}
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={`${project.name}-${tag}`}
-                          className="rounded-md border border-white/10 bg-terminal-800/50 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-slate-300"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                  <div className="relative flex min-h-0 flex-1 flex-col border-t border-white/[0.08] bg-gradient-to-b from-slate-900/70 to-slate-900/35 p-6">
+                    <div className="flex min-h-0 flex-1 flex-col">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                        {project.role}
+                      </p>
+                      <h3 className="mt-2 flex items-center gap-2 text-lg font-semibold text-white">
+                        {isRestricted ? <IconProjectLock /> : null}
+                        <span className="min-w-0">{project.name}</span>
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                        {project.summary}
+                      </p>
+                      <p className="mt-4 text-sm font-medium leading-relaxed text-slate-200">
+                        {project.outcome}
+                      </p>
+                      <div className="mt-6 flex flex-wrap gap-x-2 gap-y-2.5">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={`${project.name}-${tag}`}
+                            className="rounded-md border border-white/10 bg-terminal-800/50 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-slate-300"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                     {githubUrl ? (
                       <a
@@ -397,7 +399,7 @@ function ProjectsSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${p.viewOnGithub}: ${project.name}`}
-                        className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_28px_-6px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md transition hover:border-emerald-400/50 hover:bg-emerald-500/20 hover:text-white hover:shadow-[0_0_36px_-6px_rgba(16,185,129,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:text-xs sm:tracking-[0.14em]"
+                        className="mt-6 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.08] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_28px_-6px_rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md transition hover:border-emerald-400/50 hover:bg-emerald-500/20 hover:text-white hover:shadow-[0_0_36px_-6px_rgba(16,185,129,0.55)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300 sm:text-xs sm:tracking-[0.14em]"
                       >
                         {p.viewOnGithub}
                         <span aria-hidden className="text-base leading-none text-emerald-200">
@@ -408,7 +410,7 @@ function ProjectsSection() {
                       <div
                         role="status"
                         aria-label={p.restrictedAccess}
-                        className="mt-auto inline-flex w-full items-center justify-center rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-100/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md sm:text-xs sm:tracking-[0.14em]"
+                        className="mt-6 inline-flex w-full shrink-0 items-center justify-center rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-100/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md sm:text-xs sm:tracking-[0.14em]"
                       >
                         {p.restrictedAccess}
                       </div>

@@ -82,7 +82,10 @@ test-results/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-.cursor/
+# Cursor — ignore local IDE state; track shared agent rules (.mdc) in repo
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 
 # --- OS junk ---
 .DS_Store
