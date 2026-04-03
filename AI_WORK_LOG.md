@@ -3,6 +3,8 @@
 Chronological log of **substantive** changes driven by AI-assisted sessions on this repo.  
 **Purpose:** before starting a new task, read the latest entries so new work stays consistent with prior decisions and does not regress fixed behaviour.
 
+**Version control:** This file is **tracked in Git** and pushed with the repo so every clone has the same continuity context. **`REPAIR_LOG.md`** is reserved for **major** repairs, audits, and milestone fixes that should stand out for readers; routine agent work is logged **here only** (see Current conventions).
+
 ## How agents should use this file
 
 1. **Start of task** — Read this file (at least the **Current conventions** section and the last **3–5** dated entries).
@@ -23,8 +25,19 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Issue drafts:** Paste-ready GitHub/GitLab text: **title** and **body** in **separate** fenced code blocks (see `.cursor/rules/github-issue-drafts.mdc`).
 - **Code language:** Identifiers, comments, and technical strings in source files must be **English**; user-facing copy stays in `dictionaries/` (see `.cursor/rules/code-language-english.mdc`).
 - **Agent rules:** `.cursor/rules/` contains 7 `.mdc` files (`alwaysApply: true`): `engineering-standards`, `security-performance`, `project-conventions`, `code-language-english`, `git-commit-suggestions`, `github-issue-drafts`, `ai-work-log-protocol`.
+- **Logs:** **`AI_WORK_LOG.md`** — routine substantive AI/agent changes; commit and push with the repo. **`REPAIR_LOG.md`** — use **only for larger / highlighted** work (major fixes, audits, milestones worth calling out); do not duplicate every small task there.
 
 ## Log (newest first)
+
+### 2026-04-03 — Log split: `AI_WORK_LOG` always committed; `REPAIR_LOG` for major work only
+
+- **What:** `AI_WORK_LOG.md` — document that this file is tracked in Git; **Current conventions** — `REPAIR_LOG.md` only for larger/highlighted repairs going forward. `REPAIR_LOG.md` — forward-looking scope note at top. `.cursor/rules/ai-work-log-protocol.mdc` — version-control + `REPAIR_LOG` vs `AI_WORK_LOG` rules.
+- **Why:** One continuous agent log in Git; repair log stays a showcase for major milestones, not a duplicate of every task.
+
+### 2026-04-03 — `.gitignore`: track `.cursor/commands/` for GitHub
+
+- **What:** `.gitignore` — add `!.cursor/commands/` and `!.cursor/commands/**` alongside existing `.cursor/rules/**` exceptions so slash commands (e.g. `autoreview.md`) are not ignored.
+- **Why:** Only `rules/` was un-ignored; `commands/` stayed under `.cursor/*` and could not be committed.
 
 ### 2026-04-03 — ai-work-log-protocol: create `AI_WORK_LOG.md` if missing
 

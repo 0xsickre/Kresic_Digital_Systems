@@ -32,6 +32,9 @@ After every substantive change, append a `###` entry to `AI_WORK_LOG.md` with:
 
 Keep entries factual. Never put secrets, `.env` values, or API keys in the log.
 
+- **Version control:** Treat **`AI_WORK_LOG.md` as part of the repo** — include it in normal commits when the log is updated so clones and CI share the same history (unless the user explicitly opts out of tracking it).
+- **`REPAIR_LOG.md` (or similar):** Use **only** for **major** or **highlight-worthy** work (large audits, milestone fixes, critical remediation narratives). Routine substantive changes stay in **`AI_WORK_LOG.md`** only — do not mirror every small task in the repair log.
+
 ## 4. Conflict Prevention
 
 - Before applying a change, verify it does not regress issues marked as fixed in the log.

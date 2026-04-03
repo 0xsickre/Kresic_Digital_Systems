@@ -1,5 +1,7 @@
 # REPAIR LOG — Kresic Digital Systems
 
+> **Scope going forward:** From **2026-04**, add entries here **only for major** repairs, audits, and milestone fixes that should be **highlighted** for maintainers and readers. Ongoing AI-assisted work is recorded in **`AI_WORK_LOG.md`** (committed with the repo). Historical entries below remain the canonical audit trail.
+
 > **Original audit:** 2026-03-30  
 > **Last supplement:** 2026-04-03  
 > **Auditor / maintainer notes:** Security, performance, and compliance-oriented change log (not a penetration-test certificate).  

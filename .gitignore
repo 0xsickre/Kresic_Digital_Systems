@@ -82,10 +82,13 @@ test-results/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-# Cursor — ignore local IDE state; track shared agent rules (.mdc) in repo
+# Cursor — ignore local workspace junk; track shared rules + slash commands for GitHub
+# (still ignores anything else under .cursor/, e.g. machine-specific state not in these folders)
 .cursor/*
 !.cursor/rules/
 !.cursor/rules/**
+!.cursor/commands/
+!.cursor/commands/**
 
 # --- OS junk ---
 .DS_Store
