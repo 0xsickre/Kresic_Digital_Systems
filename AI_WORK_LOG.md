@@ -68,12 +68,6 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Why:** Tab title was `… · Kresic Digital Systems · Kresic Digital Systems` on `/en` and `/de`.
 - **Do not undo:** Removing `absolute` on home without changing root template or `h.title` will regress duplicate suffix.
 
-### 2026-04-03 — Project cards: spacing above CTA buttons
-
-- **What:** `components/LandingPage.tsx` — featured work cards: wrap body (role → tags) in a `flex-1` column; move GitHub / restricted CTAs into a sibling `shrink-0` block with **`mt-6`** (replaces `mt-auto` on the button alone, which collapsed to ~0 when card content was tall).
-- **Why:** Tags (especially two rows) sat flush against the bottom button on mobile and desktop.
-- **Do not undo:** Do not remove the `mt-6` gap wrapper without replacing with another minimum vertical rhythm between tags and actions.
-
 ### 2026-04-03 — PageSpeed / Lighthouse (perf + a11y)
 
 - **What:** WCAG contrast on primary emerald CTAs (`emerald-700` / hover `emerald-600`) in `LandingHeaderShellClient`, `LegalPageHeader`, skip link in `app/layout.tsx`. `tsconfig` → `ES2022`, `browserslist` in `package.json`, `next.config.mjs` `optimizePackageImports` + `poweredByHeader: false`. Removed unused `framer-motion`. `HeroTextIsland` + `HeroCopyMarkup` are RSC (dropped `"use client"`). README motion row simplified.
