@@ -27,7 +27,7 @@ export function LegalPageHeader() {
           <LanguageSwitcher />
           <Link
             href={`${home}#contact`}
-            className="inline-flex min-h-[2.75rem] items-center justify-center rounded-full bg-emerald-500 px-3 text-xs font-semibold text-white shadow-sm shadow-emerald-950/30 transition hover:bg-emerald-400 sm:px-5 sm:text-sm"
+            className="inline-flex min-h-[2.75rem] items-center justify-center rounded-full bg-emerald-700 px-3 text-xs font-semibold text-white shadow-sm shadow-emerald-950/30 transition hover:bg-emerald-600 sm:px-5 sm:text-sm"
           >
             {t.headerCta}
           </Link>

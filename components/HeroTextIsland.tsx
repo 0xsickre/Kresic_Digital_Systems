@@ -1,10 +1,8 @@
-"use client";
-
 import type { ReactNode } from "react";
 
 /**
  * Hero copy is server-rendered per locale in the page RSC; this shell only
- * supplies layout for LCP markup.
+ * supplies layout for LCP markup (keep as RSC to avoid extra client JS on LCP path).
  */
 export function HeroTextIsland({ children }: { children: ReactNode }) {
   return (

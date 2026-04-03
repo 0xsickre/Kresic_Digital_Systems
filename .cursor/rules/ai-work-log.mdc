@@ -1,0 +1,25 @@
+---
+description: Read and update AI_WORK_LOG.md so sessions stay consistent
+alwaysApply: true
+---
+
+## AI work log — mandatory workflow
+
+This project keeps a **tracked** changelog at the repo root: **`AI_WORK_LOG.md`**.
+
+### Before you write or change code
+
+1. **Read `AI_WORK_LOG.md`** — at minimum the **Current conventions** section and the **last 3–5 log entries** (newest first).
+2. Align new work with those conventions. If the user asks for something that conflicts, **call out the conflict** and propose an explicit trade-off instead of silently undoing prior decisions.
+
+### After you complete a task (or a coherent batch of changes)
+
+1. **Append a new entry** at the top of the **Log** section in `AI_WORK_LOG.md` (keep **newest first**).
+2. Each entry should include: **ISO date**, **short title**, **what changed** (paths or feature areas), **why** (intent), and **“Do not undo”** bullets when future work could easily regress the fix.
+3. If you introduced or changed a **long-lived convention** (routing, i18n, perf, a11y patterns, legal/licence), update the **Current conventions** section in the same file.
+4. **Never** put secrets, API keys, or `.env` contents in the log.
+
+### Relation to other docs
+
+- **`REPAIR_LOG.md`** — security / audit-oriented history; do not duplicate it verbatim in `AI_WORK_LOG.md`; cross-reference when useful.
+- **`README.md`** — user-facing architecture; update when behaviour or structure changes materially.
