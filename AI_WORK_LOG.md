@@ -17,7 +17,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header.
 - **Content:** Marketing copy in `dictionaries/de.json` + `en.json`, typed via `dictionaries/types.ts`.
 - **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc.
-- **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`.
+- **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `npm run test:watch` — **Vitest** (`vitest.config.ts`, `**/*.test.ts`).
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
 - **Licence:** Root **`LICENSE`** is MIT; README licence section matches (do not revert to "all rights reserved" on the codebase without user decision).
@@ -28,6 +28,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Logs:** **`AI_WORK_LOG.md`** — routine substantive AI/agent changes; commit and push with the repo. **`REPAIR_LOG.md`** — use **only for larger / highlighted** work (major fixes, audits, milestones worth calling out); do not duplicate every small task there.
 
 ## Log (newest first)
+
+### 2026-04-03 — Vitest + unit tests for `lib/locale.ts`
+
+- **What:** Added `vitest` devDependency, `vitest.config.ts` (`@` alias), `npm test` / `test:watch`. New `lib/locale.test.ts` — happy path, edge cases (empty, casing, tags, nullish/typed abuse), `withLocale` URL-ish paths, throws on null/undefined path.
+- **Why:** `lib/locale.ts` is pure logic with no external I/O — ideal first test target; no mocks required.
+- **Do not undo:** Keep tests co-located as `*.test.ts` next to modules or under `lib/` until a different layout is agreed.
 
 ### 2026-04-03 — CSP hardening: remove unsafe-eval, add missing directives (issue #19)
 
