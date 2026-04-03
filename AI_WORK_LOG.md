@@ -29,6 +29,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — perf: shared singleton IntersectionObserver for FadeIn (desktop TBT)
+
+- **What:** `components/FadeIn.tsx` — replaced per-instance `IntersectionObserver` + `useEffect` with a module-level shared singleton observer + `WeakMap<Element, callback>` + ref callback pattern. No `useEffect` per mount; observer is created once, all FadeIn elements register via `refCb`.
+- **Why:** Desktop TBT 240ms; 10+ FadeIn instances each ran `new IntersectionObserver()` + `useEffect` during hydration — synchronous work in the post-FCP window. Shared observer eliminates 9 of 10 observer allocations and removes all per-instance effects. Mobile unaffected (same code, fewer long tasks overall).
+- **Do not undo:** Keep the singleton observer pattern; do not revert to per-instance observers. If `rootMargin` needs to vary per instance, extend the shared observer or create one observer per unique `rootMargin` value.
+
 ### 2026-04-03 — perf: move i18n dictionaries from client JS to RSC props (−21 kB first-load)
 
 - **What:** `lib/i18n.tsx` — `I18nProvider` no longer imports `de`/`en`; accepts `initialDictionary` prop. `components/Providers.tsx` — threads `initialDictionary` through. `app/layout.tsx` (RSC) — imports both dicts server-side, passes only the active locale's dictionary to the client `<Providers>`.

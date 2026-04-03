@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 export type FadeInProps = {
@@ -10,6 +10,31 @@ export type FadeInProps = {
   delay?: number;
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
+/**
+ * Single shared observer for every FadeIn on the page.
+ * Avoids N×IntersectionObserver + N×useEffect during hydration.
+ */
+let sharedObserver: IntersectionObserver | null = null;
+const callbacks = new WeakMap<Element, () => void>();
+
+function getSharedObserver(): IntersectionObserver {
+  if (!sharedObserver) {
+    sharedObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            callbacks.get(entry.target)?.();
+            callbacks.delete(entry.target);
+            sharedObserver!.unobserve(entry.target);
+          }
+        }
+      },
+      { rootMargin: "-100px", threshold: 0 },
+    );
+  }
+  return sharedObserver;
+}
+
 export function FadeIn({
   children,
   className,
@@ -17,28 +42,22 @@ export function FadeIn({
   style,
   ...divProps
 }: FadeInProps) {
-  const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
 
-  useEffect(() => {
-    const el = ref.current;
+  const refCb = useCallback((el: HTMLDivElement | null) => {
     if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "-100px", threshold: 0 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    if (typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = getSharedObserver();
+    callbacks.set(el, () => setInView(true));
+    io.observe(el);
   }, []);
 
   return (
     <div
-      ref={ref}
+      ref={refCb}
       className={className}
       style={{
         opacity: inView ? 1 : 0,
