@@ -9,7 +9,16 @@ export function DeferredThirdPartyScripts() {
   const src = process.env.NEXT_PUBLIC_DEFERRED_SCRIPT_SRC?.trim();
   if (!src) return null;
 
+  const integrity = process.env.NEXT_PUBLIC_DEFERRED_SCRIPT_INTEGRITY?.trim();
+
   return (
-    <Script id="deferred-third-party" src={src} strategy="lazyOnload" />
+    <Script
+      id="deferred-third-party"
+      src={src}
+      strategy="lazyOnload"
+      {...(integrity
+        ? { integrity, crossOrigin: "anonymous" as const }
+        : {})}
+    />
   );
 }
