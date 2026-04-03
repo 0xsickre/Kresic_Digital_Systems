@@ -18,15 +18,21 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`.
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
-- **Licence:** Root **`LICENSE`** is MIT; README licence section matches (do not revert to “all rights reserved” on the codebase without user decision).
+- **Licence:** Root **`LICENSE`** is MIT; README licence section matches (do not revert to "all rights reserved" on the codebase without user decision).
 - **Git:** User runs commit/push locally unless they explicitly ask the agent to commit; agent proposes commit messages only (see `.cursor/rules/git-commits.mdc`).
 
 ## Log (newest first)
 
+### 2026-04-03 — Project cards: spacing above CTA buttons
+
+- **What:** `components/LandingPage.tsx` — featured work cards: wrap body (role → tags) in a `flex-1` column; move GitHub / restricted CTAs into a sibling `shrink-0` block with **`mt-6`** (replaces `mt-auto` on the button alone, which collapsed to ~0 when card content was tall).
+- **Why:** Tags (especially two rows) sat flush against the bottom button on mobile and desktop.
+- **Do not undo:** Do not remove the `mt-6` gap wrapper without replacing with another minimum vertical rhythm between tags and actions.
+
 ### 2026-04-03 — PageSpeed / Lighthouse (perf + a11y)
 
 - **What:** WCAG contrast on primary emerald CTAs (`emerald-700` / hover `emerald-600`) in `LandingHeaderShellClient`, `LegalPageHeader`, skip link in `app/layout.tsx`. `tsconfig` → `ES2022`, `browserslist` in `package.json`, `next.config.mjs` `optimizePackageImports` + `poweredByHeader: false`. Removed unused `framer-motion`. `HeroTextIsland` + `HeroCopyMarkup` are RSC (dropped `"use client"`). README motion row simplified.
-- **Why:** PSI ~69 performance, ~96 a11y (contrast on “Request a project”); reduce legacy polyfill pressure and main-thread hydration cost on hero path.
+- **Why:** PSI ~69 performance, ~96 a11y (contrast on "Request a project"); reduce legacy polyfill pressure and main-thread hydration cost on hero path.
 - **Do not undo:** Reverting hero components to client-only without cause; lightening CTA greens without contrast check.
 
 ### 2026-04-03 — GitHub: MIT licence
