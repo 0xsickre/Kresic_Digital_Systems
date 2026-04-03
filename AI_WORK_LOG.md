@@ -29,6 +29,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — CSP hardening: remove unsafe-eval, add missing directives (issue #19)
+
+- **What:** `next.config.mjs` — removed `'unsafe-eval'` from `script-src` (not needed in Next.js 15 production). Added `object-src 'none'`, `base-uri 'self'`, `form-action 'self'`, `upgrade-insecure-requests`. Kept `'unsafe-inline'` because nonce-based CSP has a known hydration bug in Next.js 15 + React 19 (`vercel/next.js#77952`).
+- **Why:** Mozilla Observatory flagged CSP as unsafe (-20 score). These changes improve the posture without performance cost or hydration breakage.
+- **Do not undo:** Do not re-add `'unsafe-eval'` — Next.js 15 production does not need it. Do not remove `'unsafe-inline'` until the nonce hydration issue in Next.js is resolved.
+
 ### 2026-04-03 — Security: optional SRI for deferred third-party script; HSTS note
 
 - **What:** `components/DeferredThirdPartyScripts.tsx` — when `NEXT_PUBLIC_DEFERRED_SCRIPT_INTEGRITY` is set (with `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC`), pass `integrity` and `crossOrigin="anonymous"` to `next/script`. `.env.example` — document the new variable. `next.config.mjs` — comment that current HSTS is preload-eligible and points to hstspreload.org.

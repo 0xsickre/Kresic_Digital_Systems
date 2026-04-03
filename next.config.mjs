@@ -17,16 +17,18 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Next.js inline scripts + Vercel speed-insights
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      // Tailwind inline styles + Next.js CSS-in-JS
+      // Next.js hydration bootstrap requires 'unsafe-inline' (nonce-based CSP blocked by vercel/next.js#77952 on React 19).
+      // 'unsafe-eval' removed — not needed in Next.js 15 production builds.
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      // next/image serves optimised images from same origin
       "img-src 'self' data: blob:",
-      // Resend API (server action — never reaches the browser, but kept for clarity)
       "connect-src 'self'",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
       "frame-ancestors 'none'",
+      "upgrade-insecure-requests",
     ].join("; "),
   },
 ];
