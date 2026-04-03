@@ -29,6 +29,11 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — Security: optional SRI for deferred third-party script; HSTS note
+
+- **What:** `components/DeferredThirdPartyScripts.tsx` — when `NEXT_PUBLIC_DEFERRED_SCRIPT_INTEGRITY` is set (with `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC`), pass `integrity` and `crossOrigin="anonymous"` to `next/script`. `.env.example` — document the new variable. `next.config.mjs` — comment that current HSTS is preload-eligible and points to hstspreload.org.
+- **Why:** Scanners suggest SRI for external scripts; Next.js app bundles are same-origin and impractical for SRI. Optional env keeps analytics URLs verifiable when the provider documents a hash.
+
 ### 2026-04-03 — SEO: shorten site / OG titles to 50 chars (social preview)
 
 - **What:** `lib/seo.ts` — home `title` for `en` and `de` set to `Kresic Digital Systems — B2B & FinTech Engineering` (50 characters). `app/layout.tsx` — `siteTitle` and default `openGraph.title` aligned with the same string.
