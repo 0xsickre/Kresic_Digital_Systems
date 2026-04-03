@@ -355,7 +355,7 @@ function ProjectsSection() {
                   <div className="relative isolate w-full shrink-0 overflow-hidden bg-black/40">
                     <MountWhenVisible
                       className="relative block w-full min-h-48"
-                      rootMargin="100px"
+                      rootMargin="0px"
                       fallback={
                         <CardVisualPlaceholder className="w-full rounded-none border-0 shadow-none ring-0" />
                       }

@@ -13,7 +13,7 @@ export function HeroBackdrop() {
     <>
       <DeferHeavyChild
         fallback={<HeroCanvasPlaceholder />}
-        delayMs={650}
+        delayMs={1800}
       >
         <WebGLErrorBoundary fallback={<HeroCanvasPlaceholder />}>
           <DynamicHeroVisual />

@@ -29,6 +29,13 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — perf: reduce Three.js TBT on desktop (PSI 67 → targeting 90+)
+
+- **What:** Increased `DeferHeavyChild` hero delay from 650ms to 1800ms; set desktop floor to 1800ms and mobile floor to 2000ms (`DeferMount.tsx`). Reduced `MountWhenVisible` `rootMargin` from `100px` to `0px` for project card visuals (`LandingPage.tsx`). Removed `Raycaster`/`Plane`/`Vector3`/`Vector2` from `InfrastructureGrid.tsx` and `Vector2` from `HeroVisual.tsx` — replaced with simple pointer math (~6 KB raw savings). Added `"three"` to `optimizePackageImports` in `next.config.mjs`.
+- **Why:** PageSpeed Insights desktop showed TBT of 5,730ms (20 long tasks from Three.js chunk). Root cause: on desktop, `delayMs=650` let Three.js load inside the FCP→TTI window. Mobile was fine (210ms) because of the 1280ms mobile floor + 4G throttle. Pushing init past the TBT window on desktop is the primary fix.
+- **Files:** `components/DeferMount.tsx`, `components/HeroBackdrop.tsx`, `components/HeroVisual.tsx`, `components/InfrastructureGrid.tsx`, `components/LandingPage.tsx`, `next.config.mjs`.
+- **Do not undo:** Desktop deferral floor of 1800ms — reverting to 650ms re-introduces the TBT regression on desktop Lighthouse runs.
+
 ### 2026-04-03 — Log split: `AI_WORK_LOG` always committed; `REPAIR_LOG` for major work only
 
 - **What:** `AI_WORK_LOG.md` — document that this file is tracked in Git; **Current conventions** — `REPAIR_LOG.md` only for larger/highlighted repairs going forward. `REPAIR_LOG.md` — forward-looking scope note at top. `.cursor/rules/ai-work-log-protocol.mdc` — version-control + `REPAIR_LOG` vs `AI_WORK_LOG` rules.
