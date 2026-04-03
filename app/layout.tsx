@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { headers } from "next/headers";
 
 import { DebugBearRum } from "@/components/DebugBearRum";
@@ -24,9 +25,9 @@ const inter = Inter({
   preload: true,
 });
 
-/** Wordmark inside `KDSLogo` SVG — preloaded subset, swap to avoid invisible text during load. */
-const kdsLogoMono = JetBrains_Mono({
-  subsets: ["latin"],
+/** Logo wordmark renders only "KDS" — local 3-glyph subset (~0.9 KB vs ~21 KB full Latin). */
+const kdsLogoMono = localFont({
+  src: "../public/fonts/jetbrains-mono-700-kds.woff2",
   weight: "700",
   display: "swap",
   variable: "--font-kds-logo-mono",

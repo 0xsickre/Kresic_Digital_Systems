@@ -300,7 +300,6 @@ function AboutSection() {
                 alt={a.altText}
                 width={192}
                 height={240}
-                priority
                 sizes="(min-width: 1024px) 192px, 160px"
                 className="block h-auto w-full rounded-2xl"
               />

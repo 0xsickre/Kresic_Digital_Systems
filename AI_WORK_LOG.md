@@ -16,7 +16,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Stack:** Next.js 15 App Router, React 19, TypeScript strict, Tailwind, RSC-first; `"use client"` only when needed.
 - **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header. **`siteBaseUrl()`** lives in **`lib/site.ts`** (fallback **`https://kresicds.com`** when `NEXT_PUBLIC_SITE_URL` is unset); `lib/seo.ts` re-exports it for existing imports.
 - **Content:** Marketing copy in `dictionaries/de.json` + `en.json`, typed via `dictionaries/types.ts`.
-- **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc. **i18n dictionaries** are passed as RSC props (not bundled client-side); `I18nProvider` receives `initialDictionary` from server — do not re-import both dicts in the client module.
+- **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc. **i18n dictionaries** are passed as RSC props (not bundled client-side); `I18nProvider` receives `initialDictionary` from server — do not re-import both dicts in the client module. **Logo font** (`--font-kds-logo-mono`) is a **local 3-glyph subset** (`public/fonts/jetbrains-mono-700-kds.woff2`, ~0.9 KB) loaded via `next/font/local` — do not switch back to `next/font/google` JetBrains_Mono (was ~21 KB). **Portrait image** in About section has **no `priority`** (below-fold, would compete with hero LCP).
 - **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `test:unit` — **Vitest** (`vitest.config.ts`, `tests/unit/**/*.test.ts`); `test:e2e` / `test:all` — **Playwright** (`playwright.config.ts`, `tests/e2e/`). E2E starts `npm run dev` unless `PLAYWRIGHT_SKIP_WEB_SERVER=1` or `PLAYWRIGHT_BASE_URL` points at an existing server. CI: install browsers with `npx playwright install --with-deps` before `test:e2e`.
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
@@ -28,6 +28,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Logs:** **`AI_WORK_LOG.md`** — routine substantive AI/agent changes; commit and push with the repo. **`REPAIR_LOG.md`** — use **only for larger / highlighted** work (major fixes, audits, milestones worth calling out); do not duplicate every small task there.
 
 ## Log (newest first)
+
+### 2026-04-03 — perf: local font subset + CSP cleanup + portrait priority removal
+
+- **What:** `app/layout.tsx` — replaced `next/font/google` JetBrains_Mono (full Latin ~21 KB preloaded) with `next/font/local` pointing to `public/fonts/jetbrains-mono-700-kds.woff2` (3-glyph "KDS" subset, 892 bytes). Logo only renders "KDS" — full Latin charset was wasted bandwidth. `next.config.mjs` — removed dead `fonts.googleapis.com` from `style-src` and `fonts.gstatic.com` from `font-src` (both unreachable at runtime; `next/font/google` self-hosts at build time, and logo now uses local font). `components/LandingPage.tsx` — removed `priority` from portrait `<Image>` in About section (below fold, was competing with hero LCP for network priority).
+- **Why:** ~20 KB preload saving on every page load; tighter CSP (smaller attack surface); correct resource prioritization for LCP.
+- **Do not undo:** Do not switch logo font back to `next/font/google` without measuring — the local subset is 23× smaller. Do not re-add Google Fonts origins to CSP unless a runtime dependency is introduced. Do not add `priority` to below-fold images.
 
 ### 2026-04-03 — DebugBear RUM: production explicit opt-in
 
