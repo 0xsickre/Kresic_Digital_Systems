@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 
-const base =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://kresic.digital";
+import { siteBaseUrl } from "@/lib/site";
+
+const base = siteBaseUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

@@ -9,7 +9,7 @@ describe("siteBaseUrl", () => {
 
   it("returns default when NEXT_PUBLIC_SITE_URL is unset", () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", undefined);
-    expect(siteBaseUrl()).toBe("https://kresic.digital");
+    expect(siteBaseUrl()).toBe("https://kresicds.com");
   });
 
   it("strips a single trailing slash", () => {
@@ -25,6 +25,21 @@ describe("siteBaseUrl", () => {
   it("normalizes path without leading slash via env (still valid origin)", () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://example.test");
     expect(siteBaseUrl()).toBe("https://example.test");
+  });
+
+  it("uses https when the env value omits the scheme", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "kresicds.com");
+    expect(siteBaseUrl()).toBe("https://kresicds.com");
+  });
+
+  it("falls back to default when the env value is not a valid URL", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", ":::");
+    expect(siteBaseUrl()).toBe("https://kresicds.com");
+  });
+
+  it("falls back for javascript: and other non-http(s) schemes", () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "javascript:alert(1)");
+    expect(siteBaseUrl()).toBe("https://kresicds.com");
   });
 });
 

@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
 
 import type { LocaleCode } from "@/dictionaries/types";
-import { BRAND_NAME } from "@/lib/site";
+import { BRAND_NAME, siteBaseUrl } from "@/lib/site";
 
-export function siteBaseUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://kresic.digital"
-  );
-}
+export { siteBaseUrl };
 
 export function alternatesForLocale(
   locale: LocaleCode,

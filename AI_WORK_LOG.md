@@ -14,7 +14,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 ## Current conventions (do not contradict without explicit user approval)
 
 - **Stack:** Next.js 15 App Router, React 19, TypeScript strict, Tailwind, RSC-first; `"use client"` only when needed.
-- **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header.
+- **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header. **`siteBaseUrl()`** lives in **`lib/site.ts`** (fallback **`https://kresicds.com`** when `NEXT_PUBLIC_SITE_URL` is unset); `lib/seo.ts` re-exports it for existing imports.
 - **Content:** Marketing copy in `dictionaries/de.json` + `en.json`, typed via `dictionaries/types.ts`.
 - **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc.
 - **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `test:unit` — **Vitest** (`vitest.config.ts`, `tests/unit/**/*.test.ts`); `test:e2e` / `test:all` — **Playwright** (`playwright.config.ts`, `tests/e2e/`). E2E starts `npm run dev` unless `PLAYWRIGHT_SKIP_WEB_SERVER=1` or `PLAYWRIGHT_BASE_URL` points at an existing server. CI: install browsers with `npx playwright install --with-deps` before `test:e2e`.
@@ -28,6 +28,17 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Logs:** **`AI_WORK_LOG.md`** — routine substantive AI/agent changes; commit and push with the repo. **`REPAIR_LOG.md`** — use **only for larger / highlighted** work (major fixes, audits, milestones worth calling out); do not duplicate every small task there.
 
 ## Log (newest first)
+
+### 2026-04-03 — Autoreview: validate `siteBaseUrl`, pointer snapshot coords
+
+- **What:** `lib/site.ts` — `siteBaseUrl()` parses env via `URL`, allows only `http:`/`https:` (otherwise default), prepends `https://` when the scheme is omitted. `HeroVisual.tsx`, `InfrastructureGrid.tsx` — rAF batching stores `{ clientX, clientY }` instead of retaining `MouseEvent`. `tests/unit/seo.test.ts` — scheme-less host, invalid URL, and rejected `javascript:` cases.
+- **Why:** Avoid invalid canonical origins from mis-set env; avoid stale event references in rAF callbacks.
+
+### 2026-04-03 — Lighthouse: SEO default origin + batched pointer layout reads
+
+- **What:** `lib/site.ts` — `DEFAULT_PUBLIC_SITE_URL`, `siteBaseUrl()`; `lib/seo.ts` re-exports `siteBaseUrl` from site. `app/layout.tsx` (`metadataBase`), `app/robots.ts`, `app/sitemap.ts` use `siteBaseUrl()`. Fallback origin when `NEXT_PUBLIC_SITE_URL` is unset is **https://kresicds.com** (replaces **https://kresic.digital**). `components/HeroVisual.tsx`, `components/InfrastructureGrid.tsx` — coalesce `mousemove` + `getBoundingClientRect` to at most once per animation frame via `requestAnimationFrame`.
+- **Why:** Audits on **kresicds.com** with a **kresic.digital** metadata fallback produce canonical / hreflang / `metadataBase` mismatches (typical Lighthouse SEO score drop). Desktop “forced reflow” noise from a synchronous layout read on every pointer move.
+- **Do not undo:** Keep the default public origin aligned with the primary production hostname; use `NEXT_PUBLIC_SITE_URL` for previews/staging so canonicals match the deployed host.
 
 ### 2026-04-03 — Playwright webServer: force `NODE_ENV=development`
 

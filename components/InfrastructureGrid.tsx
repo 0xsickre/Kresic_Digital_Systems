@@ -59,12 +59,24 @@ export default function InfrastructureGrid({ className }: Props) {
     let pointerWorldY = 0;
     let isMouseOver = false;
 
-    const onMouseMove = (e: MouseEvent) => {
+    let pointerRaf = 0;
+    let pendingPointer: { clientX: number; clientY: number } | null = null;
+    const flushPointerFromEvent = () => {
+      pointerRaf = 0;
+      const p = pendingPointer;
+      pendingPointer = null;
+      if (!p || !alive) return;
       const rect = container.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      const nx = ((p.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+      const ny = -((p.clientY - rect.top) / (rect.height || 1)) * 2 + 1;
       pointerWorldX = nx * 40;
       pointerWorldY = ny * 25 + 5;
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      pendingPointer = { clientX: e.clientX, clientY: e.clientY };
+      if (!pointerRaf) {
+        pointerRaf = requestAnimationFrame(flushPointerFromEvent);
+      }
     };
     const onEnter = () => { isMouseOver = true; };
     const onLeave = () => { isMouseOver = false; };
@@ -141,6 +153,7 @@ export default function InfrastructureGrid({ className }: Props) {
 
     return () => {
       alive = false;
+      if (pointerRaf) cancelAnimationFrame(pointerRaf);
       window.clearTimeout(resizeDebounceT);
       ro.disconnect();
       container.removeEventListener("mousemove", onMouseMove);

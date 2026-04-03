@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
 
 import { LOCALES } from "@/lib/locale";
+import { siteBaseUrl } from "@/lib/site";
 
-const base =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://kresic.digital";
+const base = siteBaseUrl();
 
 const LEGAL_SLUGS = ["impressum", "datenschutz"] as const;
 

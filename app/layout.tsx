@@ -10,7 +10,7 @@ import {
   isLocale,
   type LocaleCode,
 } from "@/lib/locale";
-import { BRAND_NAME } from "@/lib/site";
+import { BRAND_NAME, siteBaseUrl } from "@/lib/site";
 
 import "./globals.css";
 
@@ -48,9 +48,7 @@ const siteKeywords: readonly string[] = [
 ];
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://kresic.digital"
-  ),
+  metadataBase: new URL(siteBaseUrl()),
   title: {
     default: siteTitle,
     template: `%s · ${BRAND_NAME}`,

@@ -134,12 +134,25 @@ export default function HeroVisual() {
     let targetRotationY = 0;
     let implodeFactor = 0;
 
-    const onMouseMove = (e: MouseEvent) => {
+    /** At most one layout read per frame; store coordinates only (not the event object). */
+    let pointerRaf = 0;
+    let pendingPointer: { clientX: number; clientY: number } | null = null;
+    const flushPointerFromEvent = () => {
+      pointerRaf = 0;
+      const p = pendingPointer;
+      pendingPointer = null;
+      if (!p || !alive) return;
       const rect = container.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
-      const ny = -((e.clientY - rect.top) / (rect.height || 1)) * 2 + 1;
+      const nx = ((p.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+      const ny = -((p.clientY - rect.top) / (rect.height || 1)) * 2 + 1;
       targetRotationY = nx * 0.35;
       targetRotationX = -ny * 0.35;
+    };
+    const onMouseMove = (e: MouseEvent) => {
+      pendingPointer = { clientX: e.clientX, clientY: e.clientY };
+      if (!pointerRaf) {
+        pointerRaf = requestAnimationFrame(flushPointerFromEvent);
+      }
     };
     const onClick = () => { implodeFactor = 1.1; };
 
@@ -251,6 +264,7 @@ export default function HeroVisual() {
 
     return () => {
       alive = false;
+      if (pointerRaf) cancelAnimationFrame(pointerRaf);
       window.clearTimeout(resizeDebounceT);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("click", onClick);
