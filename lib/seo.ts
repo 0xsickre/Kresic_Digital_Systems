@@ -46,7 +46,8 @@ const HOME_COPY: Record<
 export function homeMetadata(locale: LocaleCode): Metadata {
   const h = HOME_COPY[locale];
   return {
-    title: h.title,
+    /** Root layout uses `title.template` (`%s · ${BRAND_NAME}`); home titles already include the brand — use absolute to avoid "…Engineering · Kresic Digital Systems · Kresic Digital Systems". */
+    title: { absolute: h.title },
     description: h.description,
     alternates: alternatesForLocale(locale, "/"),
     openGraph: {
