@@ -10,7 +10,6 @@ import {
   Points,
   PointsMaterial,
   Scene,
-  Vector2,
 } from "three";
 
 import {
@@ -131,17 +130,16 @@ export default function HeroVisual() {
     const lineSegments = new LineSegments(linesGeom, linesMat);
     scene.add(lineSegments);
 
-    const mouse = new Vector2();
     let targetRotationX = 0;
     let targetRotationY = 0;
     let implodeFactor = 0;
 
     const onMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / (rect.height || 1)) * 2 + 1;
-      targetRotationY = mouse.x * 0.35;
-      targetRotationX = -mouse.y * 0.35;
+      const nx = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
+      const ny = -((e.clientY - rect.top) / (rect.height || 1)) * 2 + 1;
+      targetRotationY = nx * 0.35;
+      targetRotationX = -ny * 0.35;
     };
     const onClick = () => { implodeFactor = 1.1; };
 

@@ -7,12 +7,8 @@ import {
   MeshBasicMaterial,
   Mesh,
   PerspectiveCamera,
-  Plane,
   PlaneGeometry,
-  Raycaster,
   Scene,
-  Vector2,
-  Vector3,
 } from "three";
 
 import {
@@ -59,19 +55,16 @@ export default function InfrastructureGrid({ className }: Props) {
     const material = new MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15, wireframe: true, blending: AdditiveBlending });
     scene.add(new Mesh(geometry, material));
 
-    const raycaster = new Raycaster();
-    const mouse = new Vector2();
-    let intersectPoint: Vector3 | null = null;
+    let pointerWorldX = 0;
+    let pointerWorldY = 0;
     let isMouseOver = false;
 
     const onMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const target = new Vector3();
-      raycaster.ray.intersectPlane(new Plane(new Vector3(0, 0, 1), 0), target);
-      if (target) intersectPoint = target;
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      pointerWorldX = nx * 40;
+      pointerWorldY = ny * 25 + 5;
     };
     const onEnter = () => { isMouseOver = true; };
     const onLeave = () => { isMouseOver = false; };
@@ -94,9 +87,9 @@ export default function InfrastructureGrid({ className }: Props) {
         const vy = originalPositions[i * 3 + 1];
         let vz = Math.sin(vx * 0.2 + time) * 0.3 + Math.cos(vy * 0.2 + time * 0.8) * 0.3;
 
-        if (isMouseOver && intersectPoint) {
-          const dx = vx - intersectPoint.x;
-          const dy = vy - intersectPoint.y;
+        if (isMouseOver) {
+          const dx = vx - pointerWorldX;
+          const dy = vy - pointerWorldY;
           const d2 = dx * dx + dy * dy;
           if (d2 < 144) vz += Math.exp(-d2 / 24) * 4;
         }

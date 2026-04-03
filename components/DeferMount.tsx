@@ -67,7 +67,7 @@ export function DeferHeavyChild({
 }: {
   children: ReactNode;
   fallback: ReactNode;
-  /** Base delay after rAF×2 (~500ms+ goal); bumped on narrow viewports for lower mobile TBT. */
+  /** Base delay after rAF×2; floor is 1800ms desktop / 2000ms mobile to push WebGL past the TBT window. */
   delayMs?: number;
 }) {
   const [show, setShow] = useState(false);
@@ -77,7 +77,9 @@ export function DeferHeavyChild({
     const isNarrow =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(max-width: 767px)").matches;
-    const effectiveDelay = isNarrow ? Math.max(delayMs, 1280) : delayMs;
+    const effectiveDelay = isNarrow
+      ? Math.max(delayMs, 2000)
+      : Math.max(delayMs, 1800);
 
     const cancelSchedule = scheduleAfterHydrationIdle(
       () => {

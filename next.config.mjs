@@ -33,7 +33,7 @@ const securityHeaders = [
 const nextConfig = {
   poweredByHeader: false,
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "three"],
   },
   async headers() {
     return [
