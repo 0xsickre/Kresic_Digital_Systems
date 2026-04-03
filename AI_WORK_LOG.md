@@ -29,6 +29,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — fix(perf): suppress Three.js console.error + CSP worker-src
+
+- **What:** `lib/webgl.ts` — `createWebGLRendererSafely` now mutes `console.error` for the duration of `new WebGLRenderer()` and restores in `finally`. Three.js r183 calls `console.error("THREE.WebGLRenderer: …")` inside its constructor catch block **before** re-throwing; our wrapper already returns `null` on failure, so the console message is purely cosmetic noise that costs 4 Best-Practices points. `next.config.mjs` — added `worker-src 'self' blob:` to CSP (defensive: without it, any blob-URL worker — even from a dependency — would be silently blocked as a CSP violation console error).
+- **Why:** DebugBear and Lighthouse consistently reported 1 `console.error` on every page load → Best Practices 96 instead of 100. Root cause: Three.js WebGLRenderer constructor logs errors to console before throwing; our safe wrapper caught the throw but couldn't prevent the pre-throw `console.error`. Investigation ruled out: our own source code (zero `console.error` calls), DebugBear RUM script (only has `console.error` for beforeSend callbacks we don't use), Next.js `onCaughtError` (only fires for error-boundary-caught render-phase errors — our WebGL code runs in `useEffect`), React hydration mismatch (`pageerrors: 0` rules out `reportGlobalError`).
+- **Do not undo:** The `console.error` mute is scoped to the **constructor call only** via `finally` restoration — do not widen the scope or leave `console.error` muted. Do not remove `worker-src` from CSP — without it, `worker-src` falls back to `script-src` which lacks `blob:`.
+
 ### 2026-04-03 — perf: local font subset + CSP cleanup + portrait priority removal
 
 - **What:** `app/layout.tsx` — replaced `next/font/google` JetBrains_Mono (full Latin ~21 KB preloaded) with `next/font/local` pointing to `public/fonts/jetbrains-mono-700-kds.woff2` (3-glyph "KDS" subset, 892 bytes). Logo only renders "KDS" — full Latin charset was wasted bandwidth. `next.config.mjs` — removed dead `fonts.googleapis.com` from `style-src` and `fonts.gstatic.com` from `font-src` (both unreachable at runtime; `next/font/google` self-hosts at build time, and logo now uses local font). `components/LandingPage.tsx` — removed `priority` from portrait `<Image>` in About section (below fold, was competing with hero LCP for network priority).
