@@ -139,7 +139,6 @@ cp .env.example .env.local
 npm run dev
 ```
 
-- **Local:** [http://localhost:3000](http://localhost:3000)
 - **Production:** [https://kresicds.com/](https://kresicds.com/)
 
 | Command | Use |
