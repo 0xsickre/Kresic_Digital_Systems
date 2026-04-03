@@ -7,6 +7,7 @@ const scriptSrc = [
   "script-src",
   "'self'",
   "'unsafe-inline'",
+  "https://cdn.debugbear.com",
   ...(isDev ? ["'unsafe-eval'"] : []),
 ].join(" ");
 
@@ -32,7 +33,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
-      "connect-src 'self'",
+      "connect-src 'self' https://data.debugbear.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

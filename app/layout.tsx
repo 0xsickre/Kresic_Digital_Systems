@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { headers } from "next/headers";
 
+import { DebugBearRum } from "@/components/DebugBearRum";
 import { DeferredThirdPartyScripts } from "@/components/DeferredThirdPartyScripts";
 import { GlobalLegalFooter } from "@/components/GlobalLegalFooter";
 import { Providers } from "@/components/Providers";
@@ -97,6 +98,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen overflow-x-hidden bg-terminal-bg font-sans text-slate-100 antialiased">
+        <DebugBearRum />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-emerald-700 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"

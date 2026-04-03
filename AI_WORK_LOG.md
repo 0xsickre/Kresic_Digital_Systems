@@ -29,6 +29,17 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — DebugBear RUM: production explicit opt-in
+
+- **What:** `components/DebugBearRum.tsx` — production loads RUM only when `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED` is `1`/`true`/`yes`; non-production uses `NEXT_PUBLIC_DEBUGBEAR_RUM` for local tests. `.env.example` — both vars documented.
+- **Why:** Avoid silent third-party telemetry for all visitors without a deploy-time decision; aligns with GDPR/ePrivacy expectations for DACH sites (still disclose DebugBear + legal basis in privacy policy).
+
+### 2026-04-03 — DebugBear Real User Monitoring (RUM) + CSP
+
+- **What:** `components/DebugBearRum.tsx` — vendor bootstrap inline script + async load of `https://cdn.debugbear.com/UkKOIydJAjmu.js`; `next/script` `strategy="afterInteractive"`. ~~Enabled when `NODE_ENV === 'production'` or `NEXT_PUBLIC_DEBUGBEAR_RUM=1`.~~ See newer entry: production requires `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED`. `app/layout.tsx` — render `<DebugBearRum />` at top of `<body>`. `next.config.mjs` — `script-src` adds `https://cdn.debugbear.com`; `connect-src` adds `https://data.debugbear.com` (from RUM bundle `sendTo`). `.env.example` — documents env flags.
+- **Why:** Collect Web Vitals / RUM in DebugBear dashboard; CSP must allow script + beacon endpoints.
+- **Do not undo:** If RUM stops sending, check CSP and ad blockers; do not remove `data.debugbear.com` from `connect-src` without verifying a new ingest URL.
+
 ### 2026-04-03 — autoreview: FadeIn remount guard + stable transition string
 
 - **What:** `components/FadeIn.tsx` — added `triggeredRef` (`useRef<boolean>`) to guard re-animation on conditional unmount+remount (prevents CLS from re-running opacity/transform animation on already-seen content). Removed `useCallback` (not needed — ref callback only fires on mount; stable identity is irrelevant). Changed `translateY(0)` → `"none"` (avoids creating a stacking context unnecessarily). Made transition string not allocate a new template literal on every render when `delay === 0`.
