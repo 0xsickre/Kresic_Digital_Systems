@@ -26,7 +26,7 @@ This is not a generic template; structure and copy reflect how the business is p
 | Runtime | **React 19**, **TypeScript** (strict) | `noEmit` typecheck in CI/local workflow; dictionaries typed via `LandingDictionary`. |
 | Styling | **Tailwind CSS 3** | `darkMode: "class"`; extended **`terminal`** colors in `tailwind.config.ts`. |
 | 3D | **Three.js** | Hero particle/visual (`HeroVisual.tsx`); **`ResizeObserver`**-driven sizing (no sync layout reads on mount); card visuals use the same pattern. |
-| Motion | **CSS + `FadeIn`** | Scroll-driven fades via `IntersectionObserver` (`FadeIn.tsx`); hero intro uses **`lcp-fade-in`** in `globals.css`. `framer-motion` is still listed in `package.json` but has **no imports** in this tree—safe to remove when pruning dependencies. |
+| Motion | **CSS + `FadeIn`** | Scroll-driven fades via `IntersectionObserver` (`FadeIn.tsx`); hero intro uses **`lcp-fade-in`** in `globals.css`. |
 | Email | **Resend** | Server Action only (`app/actions/sendEmail.ts`); API key never shipped to the client. |
 | Validation | **Zod** | Contact payload validated in the Server Action (`lib/schemas/contactForm.ts`); service area enum in `lib/contact-service.ts`. |
 | i18n | **URL segments** + **React Context** + JSON | **`/de` / `/en`** prefixes; **`middleware.ts`** sets **`x-locale`** and redirects **`/`** using **`NEXT_LOCALE`** cookie or **`Accept-Language`** (default **`de`**). `I18nProvider` receives **`initialLocale`** from the root layout (from the header). Dictionaries: `en.json` / `de.json` as `LandingDictionary`. |

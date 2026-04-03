@@ -75,7 +75,7 @@ export function LandingHeaderShellClient({ logo }: Props) {
           <Link
             href="#contact"
             onClick={close}
-            className="hidden min-h-[2.75rem] items-center justify-center rounded-full bg-emerald-600 px-5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:bg-emerald-500 sm:inline-flex"
+            className="hidden min-h-[2.75rem] items-center justify-center rounded-full bg-emerald-700 px-5 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:bg-emerald-600 sm:inline-flex"
           >
             {t.headerCta}
           </Link>
@@ -117,7 +117,7 @@ export function LandingHeaderShellClient({ logo }: Props) {
           <Link
             href="#contact"
             onClick={close}
-            className="mt-4 flex min-h-[2.75rem] w-full items-center justify-center rounded-full bg-emerald-600 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:bg-emerald-500"
+            className="mt-4 flex min-h-[2.75rem] w-full items-center justify-center rounded-full bg-emerald-700 text-sm font-semibold text-white shadow-md shadow-emerald-950/40 transition hover:bg-emerald-600"
           >
             {t.headerCta}
           </Link>

@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "browserslist": [
+    "chrome >= 92",
+    "edge >= 92",
+    "firefox >= 92",
+    "safari >= 15.4"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +17,6 @@
     "sync:legal": "node scripts/sync-private-legal-to-dictionaries.mjs"
   },
   "dependencies": {
-    "framer-motion": "^12.38.0",
     "lucide-react": "^1.7.0",
     "next": "^15.5.14",
     "react": "^19.0.0",
