@@ -103,6 +103,7 @@ This is not a generic template; structure and copy reflect how the business is p
 ├── public/images/
 ├── next.config.mjs               # Headers + image formats
 ├── tailwind.config.ts
+├── LICENSE                       # MIT (source code in this repo)
 ├── .env.example
 └── REPAIR_LOG.md                 # Security / audit notes (if present)
 ```
@@ -184,5 +185,8 @@ For a chronological list of hardening or incident-related edits, see **`REPAIR_L
 
 ## Licence
 
-All rights reserved. © 2025–2026 Danijel Kresic / Kresic Digital Systems.  
-Unauthorised reproduction or redistribution of this codebase is prohibited unless otherwise agreed in writing.
+Source code in this repository is licensed under the **[MIT License](LICENSE)** (see `LICENSE` in the repo root). You may use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, provided the copyright notice and permission notice are included in all copies or substantial portions.
+
+**Trademarks and site content:** The names **Kresic Digital Systems**, logos, marketing copy in `dictionaries/`, and the live site content are not granted by the MIT licence alone; reuse of branding or long-form legal text may require separate permission. Third-party dependencies remain under their respective licences.
+
+© 2025–2026 Danijel Kresic / Kresic Digital Systems.
