@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
+
+const isDev = process.env.NODE_ENV !== "production";
+
+/** Production stays strict; `next dev` needs `'unsafe-eval'` for webpack/turbopack HMR — without it, client chunks may not run (breaks lazy islands + Playwright against dev). */
+const scriptSrc = [
+  "script-src",
+  "'self'",
+  "'unsafe-inline'",
+  ...(isDev ? ["'unsafe-eval'"] : []),
+].join(" ");
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -17,9 +28,7 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Next.js hydration bootstrap requires 'unsafe-inline' (nonce-based CSP blocked by vercel/next.js#77952 on React 19).
-      // 'unsafe-eval' removed — not needed in Next.js 15 production builds.
-      "script-src 'self' 'unsafe-inline'",
+      scriptSrc,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob:",
