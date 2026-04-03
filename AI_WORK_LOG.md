@@ -29,6 +29,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — SEO: shorten site / OG titles to 50 chars (social preview)
+
+- **What:** `lib/seo.ts` — home `title` for `en` and `de` set to `Kresic Digital Systems — B2B & FinTech Engineering` (50 characters). `app/layout.tsx` — `siteTitle` and default `openGraph.title` aligned with the same string.
+- **Why:** Share previews flagged titles over 60 characters (DE was 64 with “B2B Software, FinTech & Web Engineering”); optimal band is ~50–60. Shorter title avoids truncation in Facebook / WhatsApp cards.
+- **Do not undo:** Do not lengthen home `title` past ~60 characters without re-checking OG debuggers.
+
 ### 2026-04-03 — perf: reduce Three.js TBT on desktop (PSI 67 → targeting 90+)
 
 - **What:** Increased `DeferHeavyChild` hero delay from 650ms to 1800ms; set desktop floor to 1800ms and mobile floor to 2000ms (`DeferMount.tsx`). Reduced `MountWhenVisible` `rootMargin` from `100px` to `0px` for project card visuals (`LandingPage.tsx`). Removed `Raycaster`/`Plane`/`Vector3`/`Vector2` from `InfrastructureGrid.tsx` and `Vector2` from `HeroVisual.tsx` — replaced with simple pointer math (~6 KB raw savings). Added `"three"` to `optimizePackageImports` in `next.config.mjs`.

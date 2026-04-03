@@ -32,12 +32,12 @@ const HOME_COPY: Record<
   { title: string; description: string }
 > = {
   de: {
-    title: `${BRAND_NAME} — B2B Software, FinTech & Web Engineering`,
+    title: `${BRAND_NAME} — B2B & FinTech Engineering`,
     description:
       "Danijel Kresic: Senior Software Engineer. Skalierbare B2B-Webanwendungen, quantitative Datenpipelines und Enterprise-Architektur — Kresic Digital Systems.",
   },
   en: {
-    title: `${BRAND_NAME} — B2B Software & FinTech Engineering`,
+    title: `${BRAND_NAME} — B2B & FinTech Engineering`,
     description:
       "Danijel Kresic: Independent Senior Software Engineer. Scalable B2B web applications, quantitative data pipelines, and enterprise architecture — Kresic Digital Systems.",
   },

@@ -30,7 +30,8 @@ const kdsLogoMono = JetBrains_Mono({
   preload: true,
 });
 
-const siteTitle = `${BRAND_NAME} — B2B Software & FinTech Engineering` as const;
+/** Match `homeMetadata` titles: ≤60 chars for Open Graph / link previews. */
+const siteTitle = `${BRAND_NAME} — B2B & FinTech Engineering` as const;
 
 const siteDescription =
   "Danijel Kresic: Independent Senior Software Engineer. Scalable B2B web applications, quantitative data pipelines, and enterprise architecture — Kresic Digital Systems." as const;
