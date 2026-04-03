@@ -82,7 +82,10 @@ test-results/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-.cursor/
+# Cursor: ignore local workspace data; keep shared .mdc rules in git
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 
 # --- OS junk ---
 .DS_Store

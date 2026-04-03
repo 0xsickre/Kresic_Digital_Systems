@@ -105,6 +105,7 @@ This is not a generic template; structure and copy reflect how the business is p
 ├── tailwind.config.ts
 ├── LICENSE                       # MIT (source code in this repo)
 ├── .env.example
+├── AI_WORK_LOG.md               # Agent changelog + conventions (read before new work)
 └── REPAIR_LOG.md                 # Security / audit notes (if present)
 ```
 
