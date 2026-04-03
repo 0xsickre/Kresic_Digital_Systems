@@ -1,10 +1,11 @@
 # REPAIR LOG — Kresic Digital Systems
 
 > **Original audit:** 2026-03-30  
-> **Last supplement:** 2026-04-01  
+> **Last supplement:** 2026-04-03  
 > **Auditor / maintainer notes:** Security, performance, and compliance-oriented change log (not a penetration-test certificate).  
 > **Initial scope:** `/app`, `/components`, `/lib`, `/dictionaries`, `tailwind.config.ts`, `next.config.mjs`, `.gitignore`, `.env.example`  
-> **Supplement scope (through commit `57cf345`):** `app/page.tsx`, `app/actions/sendEmail.ts`, landing/LCP components, Three.js visuals, `DeferMount.tsx`, `GlobalLegalFooter.tsx`, `globals.css`, README alignment
+> **Supplement scope (through commit `57cf345`):** `app/page.tsx`, `app/actions/sendEmail.ts`, landing/LCP components, Three.js visuals, `DeferMount.tsx`, `GlobalLegalFooter.tsx`, `globals.css`, README alignment  
+> **Supplement (2026-04-03):** Removal of `/demo/market-analytics`; featured-work card copy + GitHub URL for headless quant showcase; `middleware` / `sitemap` / nav / dictionary cleanup (`README.md`, this log).
 
 ---
 
@@ -58,18 +59,36 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 ---
 
-## CRITICAL FIX — C4
+## CONTENT / ROUTE — CR1 *(2026-04-03 supplement)*
 
-**File:** `app/demo/market-analytics/page.tsx`  
+**Scope:** Marketing site content and routing  
+**Problem:** The site still promoted an in-app **Market Analytics terminal** at `/demo/market-analytics` (header nav, work-section CTA, sitemap, middleware `x-locale` exception) and linked the third project card to a **legacy** GitHub path under `KDS-Engineering-Showcase/.../github-showcase`. That contradicted the current public narrative: the showcase is the **headless** Python engine repository ([`kds-quant-engine-showcase`](https://github.com/Kresic1998/kds-quant-engine-showcase)), not a hosted Next.js terminal demo on this domain.  
+**Fix:**  
+- Removed `app/demo/market-analytics/` (page + layout) and the entire `app/demo/` tree.  
+- Dropped `/demo` handling from `middleware.ts`, `app/sitemap.ts`, `LanguageSwitcher.tsx`, and `GlobalLegalFooter.tsx`.  
+- Removed `nav.liveDemo`, `projects.demoIntro`, and `projects.demoCta` from `dictionaries/de.json`, `dictionaries/en.json`, and `dictionaries/types.ts`.  
+- Removed the demo nav item from `LandingHeaderShellClient.tsx` and the demo CTA block from `components/LandingPage.tsx` (`ProjectsSection`).  
+- Updated the third **featured** card (DE/EN) to **Headless Quant Engine & Data Infrastructure** with the agreed copy and `githubUrl` pointing to `https://github.com/Kresic1998/kds-quant-engine-showcase` (tags aligned to Python / data quality / SQLite / PostgreSQL).  
+**Verification:** `npm run build` — demo route absent from route manifest; no remaining `liveDemo` / `demoCta` / `/demo/market-analytics` references in app or dictionaries.
+
+---
+
+## CRITICAL FIX — C4 *(historical — route removed 2026-04-03)*
+
+> **Note:** The `app/demo/market-analytics` route was **removed** on 2026-04-03 (see **CR1**). The entry below records the fix that applied **while the route existed**.
+
+**File:** `app/demo/market-analytics/page.tsx` *(deleted)*  
 **Lines:** 7–8 (original imports)  
 **Problem:** The demo page (`"use client"`) imported `{ de }` and `{ en }` from the full dictionary modules to access two static strings (the legal disclaimer). Because this is a Client Component, Next.js bundles these imports directly into the JavaScript chunk for `/demo/market-analytics`. Both dictionary objects are large JSON files (~3–5 KB each after serialisation). Importing them for a single string each doubled the unnecessary bundle weight for this route and effectively bundled all UI copy into a page that only needs two sentences.  
 **Fix:** Removed the dictionary imports entirely. The two legal disclaimer strings are now declared as module-level `const` values (`LEGAL_EN`, `LEGAL_DE`) directly in the file. This eliminates ~6–10 KB of unnecessary JS from this route's bundle.
 
 ---
 
-## CRITICAL FIX — C5
+## CRITICAL FIX — C5 *(historical — route removed 2026-04-03)*
 
-**File:** `app/demo/market-analytics/layout.tsx`  
+> **Note:** Same as **C4** — route deleted; kept for audit trail.
+
+**File:** `app/demo/market-analytics/layout.tsx` *(deleted)*  
 **Lines:** metadata export (original: no `robots` field)  
 **Problem:** The demo page displays a sophisticated-looking financial terminal with ticker symbols, heatmaps, and price data — all of which is entirely mock/deterministic. Without a `robots: { index: false }` directive, search engines could index this page and surface it in results for financial or trading-related queries. This creates a real risk of users mistaking it for a live trading tool and a regulatory risk under German/EU financial marketing laws (MiFID II, BaFin guidelines).  
 **Fix:** Added `robots: { index: false, follow: false }` to the demo layout metadata. This injects `<meta name="robots" content="noindex, nofollow">` and also communicates the same directive via the `X-Robots-Tag` response header when combined with Next.js's metadata system. Added an explanatory comment in the code.
@@ -89,7 +108,7 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 ## WARNING FIX — W1
 
-**File:** `app/datenschutz/page.tsx`  
+**File:** Datenschutz route (`app/[locale]/datenschutz/`) and privacy copy in dictionaries / client renderers  
 **Lines:** Section 4 ("Kontaktformular") paragraph  
 **Problem:** The privacy policy stated: *"Sobald das Kontaktformular technisch an einen Server angebunden wird, ergänzen wir diese Erklärung…"* (Translation: "As soon as the contact form is technically connected to a server, we will supplement this declaration…"). The form has been wired to Resend since a previous development session. This stale text creates a material GDPR non-compliance: the privacy policy must accurately describe the current processing activities. Under Art. 13 DSGVO, the data subject must be informed about the actual data processor at the time of collection.  
 **Fix:** Replaced the stale paragraph with an accurate description: the form data (name, email, message) is processed via Resend (`resend.com`) as a data processor, forwarded to the owner's mailbox, not stored persistently, and not passed to third parties. Direct email communication is noted as preferably using Proton Mail with E2E encryption.
@@ -151,10 +170,10 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 ## OPTIMIZATION — O5 *(2026-04-01 supplement)*
 
-**Files:** `app/page.tsx`, `components/KDSLogoSsr.tsx`, `LandingHeaderShellClient.tsx`, `LandingLcpHero.tsx`, `HeroBackdrop.tsx`, `HeroCopyMarkup.tsx`, `HeroTextIsland.tsx`, `components/LandingPage.tsx`, `components/landing/HeavyVisuals.tsx`, `components/DeferMount.tsx`, `app/layout.tsx` (fonts), `app/globals.css`  
+**Files:** `app/[locale]/page.tsx` *(historically `app/page.tsx` before locale segments)*, `components/KDSLogoSsr.tsx`, `LandingHeaderShellClient.tsx`, `LandingLcpHero.tsx`, `HeroBackdrop.tsx`, `HeroCopyMarkup.tsx`, `HeroTextIsland.tsx`, `components/LandingPage.tsx`, `components/landing/HeavyVisuals.tsx`, `components/DeferMount.tsx`, `app/layout.tsx` (fonts), `app/globals.css`  
 **Problem:** The marketing home route previously bundled the full interactive landing (including hero and header) in ways that delayed **LCP** (notably logo + hero text) and increased **TBT** during hydration. Hero Three.js and heavy chunks competed with the main thread immediately after load. Card WebGL read `clientWidth` / `clientHeight` synchronously at effect start, contributing to **forced reflow** in Lighthouse-style traces.  
 **Fix (summary):**  
-- **RSC-first LCP path:** `app/page.tsx` composes a server-rendered **logo link** (`KDSLogoSsr`) and **default DE hero copy** (`HeroCopyMarkup` inside `HeroTextIsland`); `HeroTextIsland` swaps to EN when locale changes. Interactive chrome lives in **`LandingHeaderShellClient`** with the logo passed as a server-rendered slot.  
+- **RSC-first LCP path:** `app/[locale]/page.tsx` composes a server-rendered **logo link** (`KDSLogoSsr`) and **locale-specific hero copy** (`HeroCopyMarkup` inside `HeroTextIsland`). Interactive chrome lives in **`LandingHeaderShellClient`** with the logo passed as a server-rendered slot.  
 - **Hero WebGL:** `HeroBackdrop` wraps `DeferHeavyChild` + dynamic `HeroVisual`; `scheduleAfterHydrationIdle` waits for post-hydration frames, a configurable delay, then **`requestIdleCallback`** (with fallback), with a higher delay floor on narrow viewports. **`DeferHeavyChild`** clears its schedule on unmount and gates `setShow` with a `mounted` flag.  
 - **Below-fold WebGL:** Card scenes remain behind **`next/dynamic` (`ssr: false`)** and **`MountWhenVisible`**.  
 - **Sizing:** Hero and card Three.js components take dimensions from **`ResizeObserver`** entries (debounced where appropriate) instead of synchronous layout reads on the first effect tick.  
@@ -174,7 +193,7 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 
 **Files:** `components/LandingPage.tsx` (`SiteFooter`), `components/GlobalLegalFooter.tsx`  
 **Problem:** Footer layout used `justify-between` on desktop with legal links rendered in a **separate** global footer, producing a visually disjointed stack (logo / copyright / GitHub vs. legal row) and awkward wrapping on small viewports.  
-**Fix:** **`SiteFooter`** is a single **centred column**: logo, copyright, then a **nav** with GitHub + Impressum + Datenschutz (labels from `t.legalFooter` for EN/DE). On small screens links stack vertically; on `sm+` a horizontal row uses subtle separators. **`GlobalLegalFooter`** is a client component that **returns `null` when `usePathname() === "/"`** so the home page does not duplicate the legal strip; other routes keep the compact global legal bar.
+**Fix:** **`SiteFooter`** is a single **centred column**: logo, copyright, then a **nav** with GitHub + Impressum + Datenschutz (labels from `t.legalFooter` for EN/DE). On small screens links stack vertically; on `sm+` a horizontal row uses subtle separators. **`GlobalLegalFooter`** is a client component that **returns `null` on localized home** (`/de`, `/en` with no extra segments) so the home page does not duplicate the legal strip; other routes keep the compact global legal bar.
 
 ---
 
@@ -186,6 +205,7 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 | Observability | `f52666b`, `57dda2b`, `689ad6b` | Structured logging for Resend failures; global error boundary; dev-only noise reduction elsewhere |
 | Bundle / route performance | `25a7639`, `8e753fe`, `3548b59` | Code-splitting and lazy strategies for landing and WebGL chunks |
 | Documentation | `f95defa`, `aea7194` | README aligned with deployment env and current RSC/LCP architecture |
+| Content / routes | *(2026-04-03)* | Removed `/demo/market-analytics`; third featured card → `kds-quant-engine-showcase`; README + **CR1** in this log |
 
 ---
 
@@ -200,8 +220,8 @@ Also added `images.formats: ["image/avif", "image/webp"]` and a trimmed `deviceS
 | `components/DeferMount.tsx` | `DeferHeavyChild` cancels scheduled idle/timer work on unmount and guards `setShow` after unmount |
 | `components/ContactFormWithConsent.tsx` | `useTransition` + `isPending` prevents duplicate form submissions |
 | `components/ContactFormWithConsent.tsx` | `role="status" aria-live="polite"` on feedback `<div>` — accessible |
-| `app/impressum/page.tsx` | Kleinunternehmer notice (§ 19 UStG) present — TMG/DACH compliant |
-| `app/datenschutz/page.tsx` | User rights section (Art. 15–21 DSGVO) present and correctly addressed |
+| `app/[locale]/impressum/page.tsx` | Kleinunternehmer notice (§ 19 UStG) present — TMG/DACH compliant |
+| `app/[locale]/datenschutz/page.tsx` | User rights section (Art. 15–21 DSGVO) present and correctly addressed |
 | `lib/i18n.tsx` | No secrets, no external calls — pure client state management |
 | `tailwind.config.ts` | `darkMode: "class"` with `dark` on `<html>` — matches the project’s explicit dark-first marketing UI |
 | `next/image` | `priority` set on above-the-fold portrait — LCP optimised |
