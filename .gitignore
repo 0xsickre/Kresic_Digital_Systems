@@ -120,3 +120,6 @@ temp/
 
 # --- Local drafts (canonical legal copy lives in app / dictionaries) ---
 private-legal/*.html
+
+# --- Local résumé (keep on disk; do not publish in repo) ---
+cv.html
