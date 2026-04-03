@@ -29,11 +29,17 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
-### 2026-04-03 — perf: shared singleton IntersectionObserver for FadeIn (desktop TBT)
+### 2026-04-03 — autoreview: FadeIn remount guard + stable transition string
 
-- **What:** `components/FadeIn.tsx` — replaced per-instance `IntersectionObserver` + `useEffect` with a module-level shared singleton observer + `WeakMap<Element, callback>` + ref callback pattern. No `useEffect` per mount; observer is created once, all FadeIn elements register via `refCb`.
-- **Why:** Desktop TBT 240ms; 10+ FadeIn instances each ran `new IntersectionObserver()` + `useEffect` during hydration — synchronous work in the post-FCP window. Shared observer eliminates 9 of 10 observer allocations and removes all per-instance effects. Mobile unaffected (same code, fewer long tasks overall).
-- **Do not undo:** Keep the singleton observer pattern; do not revert to per-instance observers. If `rootMargin` needs to vary per instance, extend the shared observer or create one observer per unique `rootMargin` value.
+- **What:** `components/FadeIn.tsx` — added `triggeredRef` (`useRef<boolean>`) to guard re-animation on conditional unmount+remount (prevents CLS from re-running opacity/transform animation on already-seen content). Removed `useCallback` (not needed — ref callback only fires on mount; stable identity is irrelevant). Changed `translateY(0)` → `"none"` (avoids creating a stacking context unnecessarily). Made transition string not allocate a new template literal on every render when `delay === 0`.
+- **Why:** `useCallback([])` captured `setInView` in a closure that was theoretically safe (useState setters are stable) but fragile as a pattern; the `triggeredRef` guard is the real fix for the unmount+remount CLS edge case.
+
+### 2026-04-03 — fix: revert FadeIn to per-instance observer (singleton caused 6,630ms TBT)
+
+- **What:** `components/FadeIn.tsx` — removed singleton `IntersectionObserver` + `WeakMap`. Reverted to per-instance observer, now using React 19 **ref-callback cleanup** (return `() => io.disconnect()` from `refCb`) instead of `useEffect`.
+- **Why (root cause):** Singleton fired all `setInView(true)` calls **synchronously inside a single IntersectionObserver callback** when all visible elements were batched in the same IO tick (desktop large viewport). This flooded React 19's concurrent scheduler with simultaneous state updates from within the IO callback, producing 23,094ms of "Other" main-thread work and TBT of 6,630ms. Per-instance observers fire in separate microtask ticks → React handles each update independently, no queue flood.
+- **Do not undo:** Do **not** attempt a shared singleton FadeIn observer again. Per-instance observers + React 19 ref cleanup is the safe pattern here. If `useEffect` count becomes a real bottleneck, profile first.
+- **Approach preserved:** React 19 ref-callback cleanup replaces the old `useEffect` pattern cleanly, without `useEffect` scheduling overhead.
 
 ### 2026-04-03 — perf: move i18n dictionaries from client JS to RSC props (−21 kB first-load)
 

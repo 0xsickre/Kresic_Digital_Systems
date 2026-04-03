@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useRef, useState } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 export type FadeInProps = {
@@ -10,31 +10,6 @@ export type FadeInProps = {
   delay?: number;
 } & Omit<ComponentPropsWithoutRef<"div">, "children">;
 
-/**
- * Single shared observer for every FadeIn on the page.
- * Avoids N×IntersectionObserver + N×useEffect during hydration.
- */
-let sharedObserver: IntersectionObserver | null = null;
-const callbacks = new WeakMap<Element, () => void>();
-
-function getSharedObserver(): IntersectionObserver {
-  if (!sharedObserver) {
-    sharedObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            callbacks.get(entry.target)?.();
-            callbacks.delete(entry.target);
-            sharedObserver!.unobserve(entry.target);
-          }
-        }
-      },
-      { rootMargin: "-100px", threshold: 0 },
-    );
-  }
-  return sharedObserver;
-}
-
 export function FadeIn({
   children,
   className,
@@ -43,17 +18,46 @@ export function FadeIn({
   ...divProps
 }: FadeInProps) {
   const [inView, setInView] = useState(false);
+  /**
+   * Track whether this instance has already triggered so a conditional
+   * unmount+remount does not re-animate content the user has already seen.
+   */
+  const triggeredRef = useRef(false);
 
-  const refCb = useCallback((el: HTMLDivElement | null) => {
+  /**
+   * Per-instance IntersectionObserver via React 19 ref-callback cleanup.
+   * Plain function (not useCallback) because it is only assigned on mount via
+   * the ref prop; React only calls it once (on mount) and calls the returned
+   * cleanup on unmount. Stable identity is not required here.
+   */
+  const refCb = (el: HTMLDivElement | null) => {
     if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
+
+    /** Guard: if already triggered (e.g. remount after conditional render), skip re-animation. */
+    if (triggeredRef.current) {
       setInView(true);
       return;
     }
-    const io = getSharedObserver();
-    callbacks.set(el, () => setInView(true));
+
+    if (typeof IntersectionObserver === "undefined") {
+      triggeredRef.current = true;
+      setInView(true);
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          triggeredRef.current = true;
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "-100px", threshold: 0 },
+    );
     io.observe(el);
-  }, []);
+    return () => io.disconnect();
+  };
 
   return (
     <div
@@ -61,8 +65,10 @@ export function FadeIn({
       className={className}
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 0.6s ease-out ${delay}s, transform 0.6s ease-out ${delay}s`,
+        transform: inView ? "none" : "translateY(20px)",
+        transition: delay > 0
+          ? `opacity 0.6s ease-out ${delay}s, transform 0.6s ease-out ${delay}s`
+          : "opacity 0.6s ease-out, transform 0.6s ease-out",
         ...style,
       }}
       {...divProps}
