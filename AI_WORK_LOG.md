@@ -17,7 +17,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header.
 - **Content:** Marketing copy in `dictionaries/de.json` + `en.json`, typed via `dictionaries/types.ts`.
 - **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc.
-- **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `npm run test:watch` — **Vitest** (`vitest.config.ts`, `**/*.test.ts`).
+- **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `test:unit` — **Vitest** (`vitest.config.ts`, `tests/unit/**/*.test.ts`); `test:e2e` / `test:all` — **Playwright** (`playwright.config.ts`, `tests/e2e/`). E2E starts `npm run dev` unless `PLAYWRIGHT_SKIP_WEB_SERVER=1` or `PLAYWRIGHT_BASE_URL` points at an existing server. CI: install browsers with `npx playwright install --with-deps` before `test:e2e`.
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
 - **Licence:** Root **`LICENSE`** is MIT; README licence section matches (do not revert to "all rights reserved" on the codebase without user decision).
@@ -29,11 +29,31 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — Playwright webServer: force `NODE_ENV=development`
+
+- **What:** `playwright.config.ts` — `webServer.command` is `cross-env NODE_ENV=development npm run dev` (added `cross-env` devDependency). Prevents Edge middleware `EvalError` and timeouts when the parent shell has `NODE_ENV=production` (which also makes plain `npm install` skip devDependencies — use `npm install --include=dev` to recover).
+- **Why:** Pre-delivery `test:all` failed: inherited `NODE_ENV=production` broke `next dev` for E2E; reinstall without devDeps had removed Tailwind and broke `next build`.
+
+### 2026-04-03 — Unit tests: `lib/contact-service`, `lib/seo`
+
+- **What:** `tests/unit/contact-service.test.ts` — `CONTACT_SERVICE_VALUES`, `contactServiceSubjectTag` (all mappings + invalid key). `tests/unit/seo.test.ts` — `siteBaseUrl` (env stub), `alternatesForLocale`, `homeMetadata` (en/de).
+- **Why:** Pure helpers safe to test without browser; guards regressions in canonicals and inbox tags.
+
+### 2026-04-03 — E2E flows + dev CSP `unsafe-eval` for HMR
+
+- **What:** `tests/e2e/` — `navigation.spec.ts` (primary nav, CTA, language EN→DE), `legal-pages.spec.ts` (Impressum, Datenschutz headings), `contact-form.spec.ts` (consent validation without checkbox). `next.config.mjs` — append `'unsafe-eval'` to `script-src` **only when** `NODE_ENV !== 'production'` so `next dev` HMR works (lazy client islands + Playwright against dev); production CSP unchanged.
+- **Why:** Removing `unsafe-eval` globally broke client hydration in dev — dynamic imports never ran, so LanguageSwitcher / ContactForm never mounted; E2E timed out. Observatory/production remain strict.
+
+### 2026-04-03 — Test infrastructure: `tests/unit`, Playwright `tests/e2e`, `test:all`
+
+- **What:** `tests/unit/locale.test.ts` — moved from `lib/locale.test.ts`; `vitest.config.ts` only includes `tests/unit/**/*.{test,spec}.ts`. Added `@playwright/test`, `playwright.config.ts` (Chromium, `headless: true`, `webServer: npm run dev`, `PLAYWRIGHT_BASE_URL` / `PLAYWRIGHT_SKIP_WEB_SERVER` env overrides). `tests/e2e/smoke.spec.ts` — root locale redirect + `#main` on `/en` and `/de`. `package.json` — `test` → `test:unit`, `test:e2e`, `test:e2e:headed`, `test:e2e:ui`, `test:all` (`vitest run && playwright test`).
+- **Why:** Standard layout for unit vs E2E; one headless command for CI/local full suite.
+- **Do not undo:** Run `npx playwright install chromium` (or `install --with-deps` in CI) on fresh clones before `test:e2e`.
+
 ### 2026-04-03 — Vitest + unit tests for `lib/locale.ts`
 
-- **What:** Added `vitest` devDependency, `vitest.config.ts` (`@` alias), `npm test` / `test:watch`. New `lib/locale.test.ts` — happy path, edge cases (empty, casing, tags, nullish/typed abuse), `withLocale` URL-ish paths, throws on null/undefined path.
+- **What:** Added `vitest` devDependency, `vitest.config.ts` (`@` alias), `npm test` / `test:watch`. Initial `lib/locale.test.ts` — later **moved** to `tests/unit/locale.test.ts` (see “Test infrastructure” entry).
 - **Why:** `lib/locale.ts` is pure logic with no external I/O — ideal first test target; no mocks required.
-- **Do not undo:** Keep tests co-located as `*.test.ts` next to modules or under `lib/` until a different layout is agreed.
 
 ### 2026-04-03 — CSP hardening: remove unsafe-eval, add missing directives (issue #19)
 
