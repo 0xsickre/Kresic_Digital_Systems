@@ -13,6 +13,7 @@ export type LandingDictionary = {
     openMenu: string;
     closeMenu: string;
     githubProfile: string;
+    linkedinProfile: string;
   };
   hero: {
     kicker: string;

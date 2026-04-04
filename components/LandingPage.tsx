@@ -14,7 +14,7 @@ import {
 import { KDSLogo } from "@/components/Logo";
 import { useI18n } from "@/lib/i18n";
 import { withLocale } from "@/lib/locale";
-import { GITHUB_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
+import { GITHUB_URL, LINKEDIN_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
 
 const ContactFormLazy = dynamic(
   () =>
@@ -557,6 +557,19 @@ function SiteFooter() {
             className={linkClass}
           >
             GitHub
+          </Link>
+          <span
+            className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
+            aria-hidden
+          />
+          <Link
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.a11y.linkedinProfile}
+            className={linkClass}
+          >
+            LinkedIn
           </Link>
           <span
             className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"

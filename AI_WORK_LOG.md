@@ -29,6 +29,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-04-03 — feat: LinkedIn link in landing footer
+
+- **What:** `lib/site.ts` — `LINKEDIN_URL` (`https://www.linkedin.com/in/kresicdigitalsystems`). `components/LandingPage.tsx` — `SiteFooter` nav: LinkedIn link after GitHub with same styling, separators, `target="_blank"`, `rel="noopener noreferrer"`. `dictionaries/en.json` + `de.json` + `types.ts` — `a11y.linkedinProfile` for `aria-label`.
+- **Why:** Match GitHub as a public profile CTA; URL normalized to `https://` for consistency.
+- **Do not undo:** Keep social URLs centralized in `lib/site.ts` next to `GITHUB_URL`.
+
 ### 2026-04-03 — fix(perf): suppress Three.js console.error + CSP worker-src
 
 - **What:** `lib/webgl.ts` — `createWebGLRendererSafely` now mutes `console.error` for the duration of `new WebGLRenderer()` and restores in `finally`. Three.js r183 calls `console.error("THREE.WebGLRenderer: …")` inside its constructor catch block **before** re-throwing; our wrapper already returns `null` on failure, so the console message is purely cosmetic noise that costs 4 Best-Practices points. `next.config.mjs` — added `worker-src 'self' blob:` to CSP (defensive: without it, any blob-URL worker — even from a dependency — would be silently blocked as a CSP violation console error).
