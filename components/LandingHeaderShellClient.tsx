@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { useI18n } from "@/lib/i18n";
+import { COT_DASHBOARD_URL, MACRO_DASHBOARD_URL } from "@/lib/site";
 
 const LanguageSwitcherLazy = dynamic(
   () =>
@@ -24,10 +25,55 @@ const LanguageSwitcherLazy = dynamic(
   },
 );
 
+type NavItem =
+  | { href: string; label: string; external?: false; ariaLabel?: string }
+  | {
+      href: string;
+      label: string;
+      external: true;
+      ariaLabel: string;
+    };
+
 type Props = {
   /** Server-rendered logo + brand link (LCP). Must stay free of client-only animation wrappers. */
   logo: ReactNode;
 };
+
+const navLinkClass =
+  "inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white";
+const mobileNavLinkClass =
+  "flex min-h-[2.75rem] items-center rounded-lg px-3 text-base font-medium text-slate-200 transition-colors hover:bg-white/[0.06] hover:text-white";
+
+function NavLink({
+  item,
+  className,
+  onNavigate,
+}: {
+  item: NavItem;
+  className: string;
+  onNavigate?: () => void;
+}) {
+  if (item.external) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        aria-label={item.ariaLabel}
+        onClick={onNavigate}
+      >
+        {item.label}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={item.href} className={className} onClick={onNavigate}>
+      {item.label}
+    </Link>
+  );
+}
 
 export function LandingHeaderShellClient({ logo }: Props) {
   const { t } = useI18n();
@@ -43,10 +89,22 @@ export function LandingHeaderShellClient({ logo }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, close]);
 
-  const nav = [
+  const nav: NavItem[] = [
     { href: "#expertise", label: t.nav.expertise },
     { href: "#about", label: t.nav.about },
     { href: "#work", label: t.nav.work },
+    {
+      href: COT_DASHBOARD_URL,
+      label: t.nav.cotPositioning,
+      external: true,
+      ariaLabel: a11y.cotDashboard,
+    },
+    {
+      href: MACRO_DASHBOARD_URL,
+      label: t.nav.macroRates,
+      external: true,
+      ariaLabel: a11y.macroDashboard,
+    },
     { href: "#contact", label: t.nav.contact },
   ];
 
@@ -56,17 +114,15 @@ export function LandingHeaderShellClient({ logo }: Props) {
         {logo}
 
         <nav
-          className="hidden items-center gap-8 text-sm font-medium text-slate-200 md:flex"
+          className="hidden items-center gap-6 text-sm font-medium text-slate-200 lg:flex xl:gap-8"
           aria-label="Primary"
         >
           {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="inline-flex min-h-[2.75rem] items-center transition-colors hover:text-white"
-            >
-              {item.label}
-            </Link>
+            <NavLink
+              key={`${item.external ? "ext" : "int"}-${item.href}`}
+              item={item}
+              className={navLinkClass}
+            />
           ))}
         </nav>
 
@@ -83,7 +139,7 @@ export function LandingHeaderShellClient({ logo }: Props) {
           <button
             type="button"
             onClick={() => setMobileOpen((o) => !o)}
-            className="inline-flex min-h-[2.75rem] min-w-[2.75rem] items-center justify-center rounded-lg text-slate-200 transition-colors hover:bg-white/10 hover:text-white md:hidden"
+            className="inline-flex min-h-[2.75rem] min-w-[2.75rem] items-center justify-center rounded-lg text-slate-200 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? a11y.closeMenu : a11y.openMenu}
           >
@@ -98,19 +154,17 @@ export function LandingHeaderShellClient({ logo }: Props) {
 
       {mobileOpen && (
         <nav
-          className="border-t border-white/[0.06] bg-terminal-bg/95 px-4 pb-6 pt-3 backdrop-blur-xl md:hidden"
+          className="border-t border-white/[0.06] bg-terminal-bg/95 px-4 pb-6 pt-3 backdrop-blur-xl lg:hidden"
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-1">
             {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={close}
-                  className="flex min-h-[2.75rem] items-center rounded-lg px-3 text-base font-medium text-slate-200 transition-colors hover:bg-white/[0.06] hover:text-white"
-                >
-                  {item.label}
-                </Link>
+              <li key={`${item.external ? "ext" : "int"}-${item.href}`}>
+                <NavLink
+                  item={item}
+                  className={mobileNavLinkClass}
+                  onNavigate={close}
+                />
               </li>
             ))}
           </ul>

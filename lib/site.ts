@@ -32,6 +32,9 @@ export const GITHUB_URL = "https://github.com/Kresic1998" as const;
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/kresicdigitalsystems" as const;
 
+export const COT_DASHBOARD_URL = "https://cot.kresicds.com" as const;
+export const MACRO_DASHBOARD_URL = "https://macro.kresicds.com" as const;
+
 export const LEGAL_ADDRESS_LINES = [
   "Burggasse 3",
   "89604 Allmendingen",
