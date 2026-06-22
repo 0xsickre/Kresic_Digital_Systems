@@ -3,9 +3,7 @@
     "expertise": "Services",
     "about": "Why us",
     "work": "Work",
-    "contact": "Contact",
-    "cotPositioning": "COT Positioning",
-    "macroRates": "Macro Rates"
+    "contact": "Contact"
   },
   "headerCta": "Request a project",
   "a11y": {
@@ -13,9 +11,7 @@
     "openMenu": "Open main menu",
     "closeMenu": "Close main menu",
     "githubProfile": "Danijel Kresic on GitHub (opens in a new tab)",
-    "linkedinProfile": "Danijel Kresic on LinkedIn (opens in a new tab)",
-    "cotDashboard": "COT Positioning dashboard (opens in a new tab)",
-    "macroDashboard": "Macro Rates dashboard (opens in a new tab)"
+    "linkedinProfile": "Danijel Kresic on LinkedIn (opens in a new tab)"
   },
   "hero": {
     "kicker": "Kresic Digital Systems",

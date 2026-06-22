@@ -6,8 +6,6 @@ export type LandingDictionary = {
     about: string;
     work: string;
     contact: string;
-    cotPositioning: string;
-    macroRates: string;
   };
   headerCta: string;
   a11y: {
@@ -16,8 +14,6 @@ export type LandingDictionary = {
     closeMenu: string;
     githubProfile: string;
     linkedinProfile: string;
-    cotDashboard: string;
-    macroDashboard: string;
   };
   hero: {
     kicker: string;
