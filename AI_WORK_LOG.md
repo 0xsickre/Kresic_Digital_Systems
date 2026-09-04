@@ -29,6 +29,13 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-04 — chore: remove DebugBear RUM integration
+
+- **What:** Deleted `components/DebugBearRum.tsx`; removed its import and `<DebugBearRum />` from `app/layout.tsx`. `next.config.mjs` — dropped `https://cdn.debugbear.com` from `script-src` and reverted `connect-src` to `'self'`. `.env.example` — removed `NEXT_PUBLIC_DEBUGBEAR_RUM` and `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED`. `lib/webgl.ts` — comment no longer references DebugBear (the `console.error` mute stays; it is a Three.js r183 issue, unrelated to RUM).
+- **Why:** No third-party telemetry in the tree. This restores the "no audience measurement or comparable web analytics" claim in `datenschutz` (dictionaries `s3p1`) without further caveats, and narrows the CSP back to first-party origins.
+- **Do not undo:** Do not re-add `cdn.debugbear.com` / `data.debugbear.com` to the CSP without also updating the privacy policy and getting a legal basis decision. Older log entries below describing the DebugBear setup are historical record — they document a state that no longer exists.
+- **Note:** The Vercel env vars `NEXT_PUBLIC_DEBUGBEAR_RUM*` must be deleted in project settings; removing them from `.env.example` does not touch the deployment.
+
 ### 2026-04-03 — feat: LinkedIn link in landing footer
 
 - **What:** `lib/site.ts` — `LINKEDIN_URL` (`https://www.linkedin.com/in/kresicdigitalsystems`). `components/LandingPage.tsx` — `SiteFooter` nav: LinkedIn link after GitHub with same styling, separators, `target="_blank"`, `rel="noopener noreferrer"`. `dictionaries/en.json` + `de.json` + `types.ts` — `a11y.linkedinProfile` for `aria-label`.
