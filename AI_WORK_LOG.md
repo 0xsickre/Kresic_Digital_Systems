@@ -30,6 +30,22 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — Legal risk pass (UWG, cookie disclosure, phone removal) + first-person voice
+
+- **What:**
+  - `dictionaries/*.json` `about.body` — removed the comparative advertising claim ("schneller und präziser … als klassische Agenturen") and the "in Rekordzeit" superlative. Replaced with a description of the actual process (AI-assisted implementation + AI-assisted review pass, type check / static analysis / automated tests before release), which the repo's own CI demonstrably runs.
+  - `about.figcaptionSub` — "messbare Ergebnisse" / "measurable outcomes" replaced with a verifiable claim ("jede Änderung automatisiert geprüft"), pending real anonymised client figures.
+  - `private-legal/datenschutz.{de,en}.html.example` — new `<h3>Cookies</h3>` section in part 4 documenting the single functional `NEXT_LOCALE` cookie (value, 12-month lifetime, `SameSite=Lax`/`Secure`, set only on an active language switch), with § 25 (2) no. 2 TDDDG as the consent exemption and Art. 6 (1) (f) GDPR as the processing basis. Art. 13 GDPR transparency; no consent banner required.
+  - **Phone number removed site-wide** (user decision): `impressum`, `datenschutz` (controller block) and `widerruf` templates, the `impressum.phoneLine` dictionary key, its entry in `dictionaries/types.ts` and its render in `components/ImpressumPageClient.tsx`. The eRecht24 heading "Anfrage per E-Mail, Telefon oder Telefax" was narrowed to "Anfrage per E-Mail" so the policy does not name channels that are not offered.
+  - **Voice:** first person singular ("ich") across all marketing copy in both locales; legal documents keep the plural. `nav.about` → "Warum ich" / "Why me".
+  - **Register:** Mittelstand — anglicisms translated into business outcomes across `hero`, `services`, `about`, `projects`, `opSec` (Core Web Vitals → kurze Ladezeiten, Bugfixing → Fehlerbehebung, Stack → Systeme/Fachanwendungen, Least-Privilege → Zugriff nur für die konkrete Aufgabe, Backtesting-Engines → Auswertungen auf historischen Kursdaten).
+  - `opSec` — fourth item "KI-Werkzeuge ohne Datenabfluss": client code and data are not used to train third-party models, business tiers with training off and no provider-side retention, and an explicit opt-out for engagements that exclude AI. New `IconOpSecAiBoundary` in `components/LandingPage.tsx`; the icon array order was also corrected so lock/shield match their captions.
+  - `contact.writtenContactLead` — softened from "Schriftlicher Kontakt bevorzugt" to email-first with an explicit offer to arrange a call.
+  - `public/legal/*.pdf` regenerated from the updated `htmlBody` via `npm run sync:legal` + `npm run legal:pdf`.
+- **Why:** The comparative claim was the one live §§ 5/6 UWG exposure on the site and the cheapest to fix. The cookie disclosure closes an Art. 13 GDPR gap. The AI/confidentiality item resolves the contradiction between advertising an AI workflow and promising confidentiality in the same page.
+- **Do not undo:** Do not reintroduce comparisons against unnamed competitors ("schneller als Agenturen") or unquantified superlatives — that is what an Abmahnung attaches to. Do not re-add the phone number to any template without also restoring it in the Widerrufsbelehrung address block. The `NEXT_LOCALE` cookie section must be updated if a second cookie is ever added.
+- **Open / blocked:** AGB (phase 3) still pending external supply. Anonymised client figures for a case study still pending. No Berufshaftpflichtversicherung exists, so DL-InfoV § 2 (1) no. 11 does not apply — add the block if that changes. Lawyer review of Impressum / Datenschutz / Widerruf before production remains outstanding.
+
 ### 2026-09-16 — chore: remove third-party RUM telemetry entirely
 
 - **What:** Deleted the third-party RUM component under `components/` and its render in `app/layout.tsx`. `next.config.mjs` — dropped the vendor CDN origin from `script-src` and the beacon origin from `connect-src` (now `connect-src 'self'`). `.env.example` — removed both RUM opt-in flags. `lib/webgl.ts` — reworded a comment that referenced the vendor. `README.md` / `AI_WORK_LOG.md` — all references removed.

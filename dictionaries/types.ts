@@ -104,7 +104,6 @@ export type LandingDictionary = {
     streetLine: string;
     cityLine: string;
     contactHeading: string;
-    phoneLine: string;
     emailLabel: string;
     jobHeading: string;
     jobSubLabel: string;
