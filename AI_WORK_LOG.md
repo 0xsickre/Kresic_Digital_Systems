@@ -30,6 +30,17 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — Remove the fabricated NDA client engagement
+
+- **What:**
+  - `projects.featured[2]` — the outcome line read "Proprietäre Logik unter NDA" / "Proprietary logic under NDA", presenting the owner's own private market-data tooling as a confidential client engagement. There is no client and no NDA. The card now states what the system is: built for the owner's own research, not produced under a client engagement, not published, shown as evidence of technique rather than as a reference. `role` → "Eigenentwicklung" / "Own build"; the "NDA" tag is replaced accordingly.
+  - `projects.restrictedAccess` — the amber badge on that card said "EINGESCHRÄNKTER ZUGANG" / "RESTRICTED ACCESS", which reads as client material withheld under contract. Now "NICHT VERÖFFENTLICHT" / "NOT PUBLISHED".
+  - `projects.title` — "Referenzen & Werkzeuge" → "Projekte & Werkzeuge" ("Referenzen" means client references; all three cards are the owner's own work). `projects.intro` reframed accordingly.
+  - `opSec.intro` and `opSec.items[1]` — "Sensible Mandate führe ich …" and "getrennt von allen anderen Mandaten" implied an existing client roster. Both are now stated as rules that apply to an engagement, not as a description of past ones.
+  - `opSec.items[2]` — "Wo erforderlich, arbeite ich unter NDA" → "Auf Wunsch unterzeichne ich ein NDA, bevor Unterlagen ausgetauscht werden": an offer, which is true, rather than a claim of prior engagements.
+- **Why:** A concrete assertion of completed client work is not puffery — it is a factual claim under § 5 (1) and (2) no. 3 UWG, disprovable, and actionable by any competitor. It also fails the first time a prospect asks for the reference. Offering a capability is lawful; claiming to have already delivered it to a client is not.
+- **Do not undo:** Do not describe any project on this site as client work, under NDA, or as a reference until a real engagement exists and the client has agreed to be cited (even anonymously). The remaining two NDA mentions are forward-looking offers and must stay that way. Do not restore "Referenzen" as the section heading while every card is the owner's own project.
+
 ### 2026-09-16 — Legal risk pass (UWG, cookie disclosure, phone removal) + first-person voice
 
 - **What:**
@@ -45,7 +56,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **Why:** The comparative claim was the one live §§ 5/6 UWG exposure on the site and the cheapest to fix. The cookie disclosure closes an Art. 13 GDPR gap. The AI/confidentiality item resolves the contradiction between advertising an AI workflow and promising confidentiality in the same page.
 - **Do not undo:** Do not reintroduce comparisons against unnamed competitors ("schneller als Agenturen") or unquantified superlatives — that is what an Abmahnung attaches to. Do not re-add the phone number to any template without also restoring it in the Widerrufsbelehrung address block. The `NEXT_LOCALE` cookie section must be updated if a second cookie is ever added.
 - **Verify before deploy:** the AI item asserts training opt-out and privacy mode are active. That is a per-account setting — Cursor's Privacy Mode and the training toggle in Claude's settings must actually be on, or the sentence is itself a § 5 UWG claim that does not hold. Upgrading to business tiers (Claude Team/Enterprise, Cursor Business) is what would allow the stronger zero-retention wording.
-- **Open / blocked:** AGB (phase 3) still pending external supply. Anonymised client figures for a case study still pending. No Berufshaftpflichtversicherung exists, so DL-InfoV § 2 (1) no. 11 does not apply — add the block if that changes. Lawyer review of Impressum / Datenschutz / Widerruf before production remains outstanding.
+- **Open / blocked:** AGB (phase 3) still pending external supply. The planned "anonymised figures from the NDA project" case study is void — there is no such project (see the entry above). No Berufshaftpflichtversicherung exists, so DL-InfoV § 2 (1) no. 11 does not apply — add the block if that changes. Lawyer review of Impressum / Datenschutz / Widerruf before production remains outstanding.
 
 ### 2026-09-16 — chore: remove third-party RUM telemetry entirely
 

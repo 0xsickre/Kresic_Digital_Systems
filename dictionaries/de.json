@@ -61,12 +61,12 @@
     ]
   },
   "projects": {
-    "title": "Referenzen & Werkzeuge",
-    "intro": "Ausgewählte Beispiele aus Stabilität, Automatisierung und quantitativem Research — von belastbaren Web-Systemen bis zu datengetriebenen Hilfsmitteln.",
+    "title": "Projekte & Werkzeuge",
+    "intro": "Eigene Arbeiten aus Stabilität, Automatisierung und quantitativem Research. Die ersten beiden sind vollständig einsehbar — Quellcode offen, Prüfungen nachvollziehbar.",
     "tagline": "Stabilität · Automatisierung · Auswertungen",
     "caseStudy": "Fallstudie",
     "viewOnGithub": "AUF GITHUB ANSEHEN",
-    "restrictedAccess": "EINGESCHRÄNKTER ZUGANG",
+    "restrictedAccess": "NICHT VERÖFFENTLICHT",
     "legalNote": "Wichtiger Hinweis: Meine Arbeit umfasst ausschließlich quantitative Forschung und Bildungs-Werkzeuge — keine Anlageberatung, keine Handelssignale und keine automatisierte Ausführung.",
     "featured": [
       {
@@ -98,23 +98,23 @@
         "githubUrl": "https://github.com/0xsickre/Trading_Journal"
       },
       {
-        "role": "Operations & Reporting",
-        "name": "Automatisierte Datenpipelines & Reporting",
+        "role": "Eigenentwicklung",
+        "name": "Eigene Datenpipelines für Marktauswertungen",
         "summary": "Über Schnittstellen versorgte Abläufe, die Live-Kursdaten, Fundamentaldaten und Marktberichte (z. B. CFTC Commitment of Traders) in eine strukturierte, automatisierte Auswertung überführen.",
-        "outcome": "Proprietäre Logik unter NDA.",
+        "outcome": "Eigenes System für die eigene Research-Arbeit — nicht im Kundenauftrag entstanden und nicht veröffentlicht. Es steht hier als Beleg für die eingesetzte Technik, nicht als Kundenreferenz.",
         "tags": [
           "Schnittstellen",
           "Automatisierung",
           "Datenflüsse",
           "Auswertung",
-          "NDA"
+          "Eigenentwicklung"
         ]
       }
     ]
   },
   "opSec": {
     "title": "Sicherheit & Vertraulichkeit",
-    "intro": "Sensible Mandate führe ich nach festen Regeln: verschlüsselte Kommunikation, abgeschottete Arbeitsumgebungen und vertraglich bindende Vertraulichkeit.",
+    "intro": "Für sensible Mandate gelten feste Regeln: verschlüsselte Kommunikation, abgeschottete Arbeitsumgebungen und vertraglich bindende Vertraulichkeit.",
     "items": [
       {
         "title": "Ende-zu-Ende-verschlüsselte Kommunikation",
@@ -122,11 +122,11 @@
       },
       {
         "title": "Abgeschottete Arbeitsumgebungen",
-        "body": "Vertrauliche Logik, Auswertungen und Zugangsdaten werden in abgeschotteten Umgebungen verarbeitet — getrennt von allen anderen Mandaten und nachvollziehbar protokolliert."
+        "body": "Vertrauliche Logik, Auswertungen und Zugangsdaten werden in einer eigenen, abgeschotteten Umgebung je Mandat verarbeitet — getrennt von allem übrigen und nachvollziehbar protokolliert."
       },
       {
         "title": "NDA & Vertraulichkeit",
-        "body": "Wo erforderlich, arbeite ich unter NDA. Projektdetails, Zugangsdaten und geschützte Informationen bleiben getrennt; Zugriff erhält nur, wer ihn für die konkrete Aufgabe braucht."
+        "body": "Auf Wunsch unterzeichne ich ein NDA, bevor Unterlagen ausgetauscht werden. Projektdetails, Zugangsdaten und geschützte Informationen werden getrennt gehalten; Zugriff erhält nur, wer ihn für die konkrete Aufgabe braucht."
       },
       {
         "title": "KI-Werkzeuge mit abgeschaltetem Training",
