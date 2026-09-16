@@ -64,6 +64,7 @@ export type LandingDictionary = {
     impressum: string;
     privacy: string;
     widerruf: string;
+    agb: string;
   };
   form: {
     name: string;
@@ -118,6 +119,13 @@ export type LandingDictionary = {
     downloadPdf: string;
   };
   widerruf: {
+    htmlBody: string;
+    eyebrow: string;
+    title: string;
+    backHome: string;
+    downloadPdf: string;
+  };
+  agb: {
     htmlBody: string;
     eyebrow: string;
     title: string;

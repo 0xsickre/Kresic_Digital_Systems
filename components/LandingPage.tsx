@@ -624,6 +624,17 @@ function SiteFooter() {
           >
             {lf.widerruf}
           </Link>
+          <span
+            className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
+            aria-hidden
+          />
+          <Link
+            href={withLocale(locale, "/agb")}
+            prefetch={false}
+            className={linkClass}
+          >
+            {lf.agb}
+          </Link>
         </nav>
       </div>
     </footer>

@@ -32,6 +32,7 @@ export function GlobalLegalFooter() {
   const impressumHref = withLocale(locale, "/impressum");
   const datenschutzHref = withLocale(locale, "/datenschutz");
   const widerrufHref = withLocale(locale, "/widerruf");
+  const agbHref = withLocale(locale, "/agb");
   const here = normalizePath(pathname);
 
   return (
@@ -80,6 +81,15 @@ export function GlobalLegalFooter() {
             prefetch={false}
           >
             Widerrufsbelehrung
+          </Link>
+        )}
+        {here === normalizePath(agbHref) ? (
+          <span className={linkClass} aria-current="page">
+            AGB
+          </span>
+        ) : (
+          <Link href={agbHref} className={linkClass} prefetch={false}>
+            AGB
           </Link>
         )}
       </nav>

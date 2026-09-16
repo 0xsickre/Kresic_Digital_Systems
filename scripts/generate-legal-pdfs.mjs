@@ -26,6 +26,7 @@ const DOCS = [
   { slug: "impressum", file: "impressum" },
   { slug: "datenschutz", file: "datenschutzerklaerung" },
   { slug: "widerruf", file: "widerrufsbelehrung" },
+  { slug: "agb", file: "allgemeine_geschaeftsbedingungen" },
 ];
 
 const BRAND = "Kresic Digital Systems";

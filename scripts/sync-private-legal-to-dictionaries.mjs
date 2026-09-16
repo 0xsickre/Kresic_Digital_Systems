@@ -20,7 +20,7 @@ const enPath = join(root, "dictionaries", "en.json");
 const de = JSON.parse(readFileSync(dePath, "utf-8"));
 const en = JSON.parse(readFileSync(enPath, "utf-8"));
 
-for (const slug of ["datenschutz", "impressum", "widerruf"]) {
+for (const slug of ["datenschutz", "impressum", "widerruf", "agb"]) {
   de[slug] = { ...de[slug], htmlBody: loadHtml(slug, "de") };
   en[slug] = { ...en[slug], htmlBody: loadHtml(slug, "en") };
 }
