@@ -117,7 +117,6 @@ function messages(locale: string) {
     nameTooShort: de
       ? "Bitte geben Sie mindestens 2 Zeichen für den Namen ein."
       : "Please enter at least 2 characters for your name.",
-    consent: de ? "Einwilligung ist erforderlich." : "Consent is required.",
     invalidEmail: de
       ? "Bitte geben Sie eine gültige E-Mail-Adresse ein."
       : "Please enter a valid email address.",
@@ -206,16 +205,11 @@ export async function sendEmail(
 
     // ── Input extraction & sanitisation ──────────────────────────────────────
 
-    const rawConsent = formData.get("consent");
-    const consentField =
-      rawConsent === "on" || rawConsent === "true" ? rawConsent : undefined;
-
     const payload = {
       name: stripControl(String(formData.get("name") ?? "").trim()),
       email: stripControl(String(formData.get("email") ?? "").trim().toLowerCase()),
       message: stripControl(String(formData.get("message") ?? "").trim()),
       service: stripControl(String(formData.get("service") ?? "").trim()),
-      consent: consentField,
     };
 
     const parsed = contactFormSchema.safeParse(payload);
@@ -227,7 +221,6 @@ export async function sendEmail(
           messageTooShort: t.messageTooShort,
           nameTooShort: t.nameTooShort,
           invalidEmail: t.invalidEmail,
-          consent: t.consent,
           fillAll: t.fillAll,
         }),
       };

@@ -30,6 +30,13 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — Contact form: consent checkbox removed, Art. 13 notice kept
+
+- **What:** `components/ContactFormWithConsent.tsx` → **`components/ContactForm.tsx`** (`ContactFormWithConsent` → `ContactForm`; lazy import in `LandingPage.tsx` updated). The required consent checkbox and its client-side guard are gone, replaced by a plain Art. 13 notice above the submit button that names the legal basis and links the privacy policy. `consent` removed from `lib/schemas/contactForm.ts` (field, `ContactFormZodMessages`, `ISSUE_PATH_PRIORITY`) and from `app/actions/sendEmail.ts` (extraction, payload, error message). Dictionary keys `consentLead` / `consentPrivacyLinkText` / `consentTrail` / `consentError` → `privacyNoteLead` / `privacyPolicyLinkText` / `privacyNoteTrail`, typed in `dictionaries/types.ts`. `tests/e2e/contact-form.spec.ts` rewritten: asserts no checkbox, the legal basis in the copy, and the privacy link's href/target.
+- **Why:** Handling a contact enquiry already rests on Art. 6(1)(b) (pre-contractual) or (f) (legitimate interest) — which is what this site's own privacy policy states. Making consent a precondition for using the form made that consent non-free under Art. 7(4) and therefore most likely void, while contradicting the policy about which basis applies. Three further defects went with it: consent was never recorded anywhere (Art. 7(1) Nachweispflicht could not have been met — the outgoing email carries name, address, service and message only), the label referred wholesale to the privacy policy rather than a specific purpose (Art. 4 no. 11), and every required field costs submissions.
+- **Do not undo:** Do not reintroduce a consent checkbox as a precondition for sending. If consent is ever genuinely needed (e.g. newsletter, or storing the contact beyond the enquiry), it must be a separate, optional checkbox for that specific purpose, and its value plus a timestamp must be recorded to satisfy Art. 7(1). The Art. 13 notice itself is required and must stay.
+- **Still open on this form:** (1) Vercel Inc. and Resend Labs Inc. are named in the privacy policy as US recipients with a DPA, but no transfer mechanism is stated — Art. 13(1)(f) wants the Art. 45/46 basis named (check both against the EU-US Data Privacy Framework list before writing it in). (2) The in-memory rate limiter in `sendEmail.ts` processes the caller's IP for abuse prevention; that purpose is not described in the policy, which covers IPs only under server log files.
+
 ### 2026-09-16 — Remove the fabricated NDA client engagement
 
 - **What:**

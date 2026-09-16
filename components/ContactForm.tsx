@@ -12,7 +12,7 @@ import { withLocale } from "@/lib/locale";
 
 export type ContactFormLabels = LandingDictionary["form"];
 
-type ContactFormWithConsentProps = {
+type ContactFormProps = {
   labels: ContactFormLabels;
   locale: LocaleCode;
 };
@@ -20,10 +20,10 @@ type ContactFormWithConsentProps = {
 const fieldClassName =
   "mt-2 w-full rounded-xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 disabled:opacity-60 dark:border-white/10 dark:bg-slate-950/50 dark:text-white dark:placeholder:text-slate-600";
 
-export function ContactFormWithConsent({
+export function ContactForm({
   labels,
   locale,
-}: ContactFormWithConsentProps) {
+}: ContactFormProps) {
   const [isPending, startTransition] = useTransition();
   const [feedback, setFeedback] = useState<
     | { type: "success"; message: string }
@@ -43,12 +43,6 @@ export function ContactFormWithConsent({
     setFeedback(null);
 
     formData.set("_t", String(mountTs.current));
-
-    const consent = formData.get("consent");
-    if (consent !== "on" && consent !== "true") {
-      setFeedback({ type: "error", message: labels.consentError });
-      return;
-    }
 
     startTransition(async () => {
       const result = await sendEmail(formData);
@@ -181,32 +175,18 @@ export function ContactFormWithConsent({
         />
       </div>
 
-      <div className="flex gap-3 rounded-xl border border-white/10 bg-slate-950/40 p-4 dark:bg-slate-950/60">
-        <input
-          id="contact-consent"
-          name="consent"
-          type="checkbox"
-          value="true"
-          aria-required="true"
-          className="mt-0.5 h-5 w-5 shrink-0 rounded border-zinc-400 bg-zinc-100 text-emerald-600 focus:ring-2 focus:ring-emerald-500/30 disabled:opacity-60 dark:border-white/20 dark:bg-slate-900 dark:text-emerald-500 dark:focus:ring-emerald-400/30"
-          disabled={isPending}
-        />
-        <label
-          htmlFor="contact-consent"
-          className="text-sm leading-relaxed text-zinc-700 dark:text-slate-300"
+      <p className="text-xs leading-relaxed text-zinc-600 dark:text-slate-400">
+        {labels.privacyNoteLead}
+        <Link
+          href={withLocale(locale, "/datenschutz")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-emerald-700 underline decoration-emerald-600/40 underline-offset-2 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
         >
-          {labels.consentLead}
-          <Link
-            href={withLocale(locale, "/datenschutz")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-emerald-700 underline decoration-emerald-600/40 underline-offset-2 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300"
-          >
-            {labels.consentPrivacyLinkText}
-          </Link>
-          {labels.consentTrail}
-        </label>
-      </div>
+          {labels.privacyPolicyLinkText}
+        </Link>
+        {labels.privacyNoteTrail}
+      </p>
 
       <button
         type="submit"

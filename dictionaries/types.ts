@@ -79,13 +79,12 @@ export type LandingDictionary = {
       data_quant: string;
       other: string;
     };
-    /** Text before the privacy-policy link in the consent label. */
-    consentLead: string;
-    /** Linked phrase (e.g. Datenschutzerklärung / Privacy policy). */
-    consentPrivacyLinkText: string;
-    /** Text after the link (revocation notice, channels). */
-    consentTrail: string;
-    consentError: string;
+    /** Art. 13 GDPR notice shown above the submit button, before the link. */
+    privacyNoteLead: string;
+    /** Linked phrase (e.g. Datenschutzerklärung / Privacy Policy). */
+    privacyPolicyLinkText: string;
+    /** Text after the link (usually just the closing punctuation). */
+    privacyNoteTrail: string;
     submit: string;
     sending: string;
     success: string;
