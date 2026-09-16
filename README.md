@@ -1,5 +1,7 @@
 # Kresic Digital Systems — Portfolio & Marketing Site
 
+[![ci](https://github.com/0xsickre/kresic-digital-systems/actions/workflows/ci.yml/badge.svg)](https://github.com/0xsickre/kresic-digital-systems/actions/workflows/ci.yml)
+
 Production codebase for **Kresic Digital Systems**: a B2B-facing landing experience with EN/DE copy and a Resend-backed contact flow aligned with DACH expectations. The UI is **dark-first** (`terminal` palette, `dark` class on `<html>`), with a **Three.js** hero scene and lightweight scroll-driven motion on the main page. Public **quant / data-engineering** work is linked from the landing **featured** card to the headless showcase repo on GitHub (no in-site terminal demo).
 
 **Live site:** [https://kresicds.com/](https://kresicds.com/)
