@@ -63,8 +63,20 @@ export function middleware(request: NextRequest) {
   return NextResponse.redirect(url, 308);
 }
 
+/**
+ * Everything not excluded here gets a 308 to `/<locale>/…`, which is right for
+ * pages and wrong for anything a crawler or a browser fetches by a fixed path.
+ *
+ * `icon` is on the list because `app/icon.tsx` serves the favicon from `/icon`,
+ * at the root and with no locale of its own. Without the exclusion the browser's
+ * icon request is redirected into `/de/icon`, which does not exist — a 404 that
+ * shows up as a blank tab rather than as an error anybody notices.
+ *
+ * `opengraph-image` needs no entry: it lives under `/<locale>/`, so it already
+ * starts with a locale and passes through untouched.
+ */
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icon|robots.txt|sitemap.xml).*)",
   ],
 };

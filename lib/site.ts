@@ -28,7 +28,13 @@ export const BRAND_NAME = "Kresic Digital Systems" as const;
 export const OWNER_NAME = "Danijel Kresic" as const;
 export const SITE_EMAIL = "kresic.systems@protonmail.com" as const;
 export const SITE_MAILTO = `mailto:${SITE_EMAIL}` as const;
-export const GITHUB_URL = "https://github.com/Kresic1998" as const;
+/**
+ * The account was renamed from `Kresic1998`, and GitHub does not keep a working
+ * profile redirect for a renamed user the way it does for a renamed repository —
+ * the old URL 404s. Worse, an abandoned username can be claimed by anyone, so a
+ * stale link is not merely dead but eventually someone else's.
+ */
+export const GITHUB_URL = "https://github.com/0xsickre" as const;
 export const LINKEDIN_URL =
   "https://www.linkedin.com/in/kresicdigitalsystems" as const;
 

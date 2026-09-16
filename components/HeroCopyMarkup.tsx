@@ -24,18 +24,15 @@ export function HeroCopyMarkup({ h }: Props) {
           {h.titleLine2}
         </span>
       </h1>
-      <div
-        className="relative z-[1] flex w-full min-h-[clamp(3.25rem,14vw,5.5rem)] max-w-[100vw] items-center justify-center px-1 py-2 sm:min-h-[4rem] sm:px-2 md:min-h-[4.75rem]"
-        aria-hidden
-      >
-        <span className="pointer-events-none w-full min-w-0 overflow-hidden text-center font-mono uppercase leading-none whitespace-nowrap text-slate-400 text-[clamp(0.72rem,0.42rem+3.4vw,2.65rem)] tracking-[0.05em] drop-shadow-[0_0_24px_rgba(255,255,255,0.08)] sm:tracking-[0.1em] md:tracking-[0.16em] lg:tracking-[0.22em]">
-          {h.kicker}
-        </span>
-      </div>
-      <p className="relative z-10 mt-1 w-full max-w-2xl text-base leading-relaxed text-slate-100 sm:mt-2 sm:text-lg md:mt-3 md:text-xl">
+      {/* The decorative monospace band that stood here printed `h.kicker` a
+          second time — the same words as the eyebrow above it and as the brand
+          in the header, three renderings of one name above the fold. It was
+          `aria-hidden`, so it carried no meaning either, and it spent up to
+          5.5rem pushing the buttons down. */}
+      <p className="relative z-10 mt-5 w-full max-w-2xl text-base leading-relaxed text-slate-100 sm:mt-6 sm:text-lg md:mt-7 md:text-xl">
         {h.sub}
       </p>
-      <div className="mx-auto mt-16 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 md:mt-12 sm:gap-4">
+      <div className="mx-auto mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-10 md:mt-12 sm:gap-4">
         <Link
           href="#contact"
           className="inline-flex min-h-[2.75rem] w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-slate-950 shadow-lg transition hover:bg-slate-200 sm:px-8"

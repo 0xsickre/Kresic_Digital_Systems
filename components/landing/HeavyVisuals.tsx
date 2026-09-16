@@ -106,8 +106,17 @@ export function SafeDynamicMarketPulseVisual({
   );
 }
 
+/**
+ * Positional, and therefore tied to the order of `projects.featured` in the
+ * dictionaries: index 0 here draws the first card there.
+ *
+ * The pairing is not decorative. The grid belongs to the site's own source, the
+ * market trace to the trading journal, the data flow to the ERP pipelines — put
+ * a volatility readout on an ERP reporting card and the card argues against its
+ * own copy. Reorder the cards and this array has to move with them.
+ */
 export const projectHeaderVisuals = [
-  SafeDynamicDataFlowVisual,
   SafeDynamicInfrastructureGrid,
   SafeDynamicMarketPulseVisual,
+  SafeDynamicDataFlowVisual,
 ] as const;

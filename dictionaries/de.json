@@ -70,19 +70,6 @@
     "legalNote": "Wichtiger Hinweis: Unsere Arbeit umfasst ausschließlich quantitative Forschung und Bildungs-Tools — keine Anlageberatung, keine Handelssignale und keine automatisierte Ausführung.",
     "featured": [
       {
-        "role": "Operations & Reporting",
-        "name": "ERP-Reporting & Datenpipelines",
-        "summary": "Architektur für automatisiertes ERP-Reporting und Datenpipelines.",
-        "outcome": "Proprietäre Logik unter NDA.",
-        "tags": [
-          "ERP",
-          "Pipelines",
-          "Automatisierung",
-          "Reporting",
-          "NDA"
-        ]
-      },
-      {
         "role": "Web & Commerce",
         "name": "3D-Portfolio — Next.js & Three.js",
         "summary": "Quellcode dieser Website: immersiver 3D-Hero, Next.js App Router und ein Stack für schnelle Iteration und klare Struktur.",
@@ -94,21 +81,34 @@
           "Vercel",
           "Edge"
         ],
-        "githubUrl": "https://github.com/Kresic1998/kresic-digital-systems"
+        "githubUrl": "https://github.com/0xsickre/Kresic_Digital_Systems"
       },
       {
         "role": "Analyse & Research",
-        "name": "Headless Quant Engine & Data Infrastructure",
-        "summary": "Hochleistungs-Backend für quantitative Marktanalysen. Demonstriert Data-Quality-Gates, Multi-Source-Ingestion (CFTC) und eine duale Datenbank-Architektur (SQLite/PostgreSQL).",
-        "outcome": "Das öffentliche Repository enthält die Kernlogik und Infrastruktur-Pipelines. Es dient als \"Headless\"-Referenz für das kommende Next.js SaaS-Terminal. Ohne proprietäre Alpha-Module.",
+        "name": "Trading Journal — Prozess-Analytik über ein reales Buch",
+        "summary": "Next.js-Journal für einen einzelnen Trader: manuelle Trade-Erfassung, Bewertung der Prozesstreue, Limit-Überwachung für Prop-Konten und Reporting über den Datenbestand.",
+        "outcome": "Öffentlich unter AGPL-3.0. Über 2.300 Assertions hinter einem siebenstufigen CI-Gate, das Lint und toten Code auf null hält; die laufende App verlinkt auf genau den Commit, aus dem sie gebaut wurde.",
         "tags": [
-          "Quant",
-          "Python",
-          "Data Quality",
-          "SQLite",
-          "PostgreSQL"
+          "Next.js",
+          "TypeScript",
+          "Supabase",
+          "PostgreSQL",
+          "Vitest"
         ],
-        "githubUrl": "https://github.com/Kresic1998/kds-quant-engine-showcase"
+        "githubUrl": "https://github.com/0xsickre/Trading_Journal"
+      },
+      {
+        "role": "Operations & Reporting",
+        "name": "ERP-Reporting & Datenpipelines",
+        "summary": "Architektur für automatisiertes ERP-Reporting und Datenpipelines.",
+        "outcome": "Proprietäre Logik unter NDA.",
+        "tags": [
+          "ERP",
+          "Pipelines",
+          "Automatisierung",
+          "Reporting",
+          "NDA"
+        ]
       }
     ]
   },

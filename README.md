@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/0xsickre/Kresic_Digital_Systems/actions/workflows/ci.yml/badge.svg)](https://github.com/0xsickre/Kresic_Digital_Systems/actions/workflows/ci.yml)
 
-Production codebase for **Kresic Digital Systems**: a B2B-facing landing experience with EN/DE copy and a Resend-backed contact flow aligned with DACH expectations. The UI is **dark-first** (`terminal` palette, `dark` class on `<html>`), with a **Three.js** hero scene and lightweight scroll-driven motion on the main page. Public **quant / data-engineering** work is linked from the landing **featured** card to the headless showcase repo on GitHub (no in-site terminal demo).
+Production codebase for **Kresic Digital Systems**: a B2B-facing landing experience with EN/DE copy and a Resend-backed contact flow aligned with DACH expectations. The UI is **dark-first** (`terminal` palette, `dark` class on `<html>`), with a **Three.js** hero scene and lightweight scroll-driven motion on the main page. Public engineering work is linked from the landing **featured** cards to the repositories themselves (no in-site terminal demo).
 
 **Live site:** [https://kresicds.com/](https://kresicds.com/)
 
@@ -13,7 +13,7 @@ Production codebase for **Kresic Digital Systems**: a B2B-facing landing experie
 | Area | Description |
 |------|-------------|
 | **Marketing surface** | Home: **`app/[locale]/page.tsx`** composes an **RSC LCP shell** (logo + hero copy for **`de` or `en`**) with client islands for the header chrome and WebGL; **`LandingPage.tsx`** holds the sections below the hero (`#expertise`, `#about`, `#work` incl. an OpSec/trust note, `#contact`) plus the site footer. |
-| **Featured work** | Three project cards: one **restricted (no repo)** ERP card, and two with **public GitHub CTAs**; copy and URLs live in `dictionaries/*.json` (`projects.featured`). The third card highlights **Headless Quant Engine & Data Infrastructure** → [`kds-quant-engine-showcase`](https://github.com/Kresic1998/kds-quant-engine-showcase). |
+| **Featured work** | Three project cards: two with **public GitHub CTAs** — this site and [`Trading_Journal`](https://github.com/0xsickre/Trading_Journal) — and a **restricted (no repo)** ERP card last, because a card nobody can open is a poor way to open the row. Copy and URLs live in `dictionaries/*.json` (`projects.featured`); the header visual per card is positional in `projectHeaderVisuals`, so reordering the cards means reordering that array too. |
 | **Legal** | **`/de/impressum`**, **`/en/impressum`**, **`/de/datenschutz`**, **`/en/datenschutz`** — same visual baseline, body copy rendered from the `htmlBody` field in `dictionaries/*.json`, plus a **PDF download** per locale from `public/legal/`. Legacy bare paths (e.g. `/impressum`) **308** to **`/de/...`**. |
 | **Tests** | Unit tests with **Vitest** (`tests/unit/`) and end-to-end specs with **Playwright** (`tests/e2e/`). |
 
