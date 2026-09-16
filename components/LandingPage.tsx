@@ -165,6 +165,25 @@ function IconOpSecDiscretion(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function IconOpSecAiBoundary(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <rect x={8} y={8} width={8} height={8} rx={2} />
+      <path d="M10 8V5M14 8V5M10 19v-3M14 19v-3M8 10H5M8 14H5M19 10h-3M19 14h-3" />
+      <path d="m4 4 16 16" />
+    </svg>
+  );
+}
+
 const expertiseIcons: readonly IconComponent[] = [
   IconCustomWeb,
   IconQuantFinance,
@@ -173,9 +192,10 @@ const expertiseIcons: readonly IconComponent[] = [
 ];
 
 const opSecIcons: readonly IconComponent[] = [
-  IconOpSecIsolation,
   IconOpSecEncrypted,
+  IconOpSecIsolation,
   IconOpSecDiscretion,
+  IconOpSecAiBoundary,
 ];
 
 function IconProjectLock(props: SVGProps<SVGSVGElement>) {

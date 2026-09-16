@@ -95,8 +95,6 @@ export function ImpressumPageClient() {
 
             <h2>{imp.contactHeading}</h2>
             <p>
-              {imp.phoneLine}
-              <br />
               {imp.emailLabel}{" "}
               <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>
             </p>
