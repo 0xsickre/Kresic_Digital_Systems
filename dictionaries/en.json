@@ -99,13 +99,13 @@
       },
       {
         "role": "Operations & reporting",
-        "name": "ERP reporting & data pipelines",
-        "summary": "Architecture for automated ERP reporting and data pipelines.",
+        "name": "Automated data pipelines & reporting",
+        "summary": "API-driven pipelines pulling live price feeds, fundamental data, and market reports (e.g. CFTC Commitment of Traders) into structured, automated analysis.",
         "outcome": "Proprietary logic under NDA.",
         "tags": [
-          "ERP",
-          "Pipelines",
+          "API",
           "Automation",
+          "Data pipelines",
           "Reporting",
           "NDA"
         ]
