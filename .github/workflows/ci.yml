@@ -1,0 +1,102 @@
+# CI — the checks that used to live only on this machine.
+#
+# Order is cheapest first, so a broken commit fails in seconds rather than
+# minutes:
+#
+#   typecheck   ~20 s   catches most changes that do not stand up
+#   lint        ~15 s   ESLint via next lint, zero warnings today
+#   unit        ~10 s   45 assertions over contact-service, locale, seo
+#   build       ~60 s   the only step that runs Next's compiler
+#   e2e         ~90 s   9 Playwright specs against a real dev server
+#
+# `e2e` is a separate job because it needs a browser download that the other
+# five do not, and it `needs: checks` so that download is never paid for on a
+# commit that does not typecheck.
+#
+# NO SECRETS ARE REQUIRED, and that is a property of the tests rather than an
+# oversight. `next build` reads RESEND_API_KEY inside the server action, not at
+# module load, so the build never needs it. The contact-form spec only asserts
+# client-side validation — it never completes a send — and Playwright's
+# webServer runs `next dev`, which falls back to a Resend test sender anyway.
+# If a future spec asserts real delivery, that is the moment this comment stops
+# being true and a secret has to be added.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push on the same branch cancels the previous run. Without this three
+# commits in a minute keep three runners busy on work that is already stale.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` rather than `npm install`: a build allowed to rewrite the
+      # lockfile is not the build that ran locally.
+      - name: install
+        run: npm ci
+
+      - name: typecheck
+        run: npx tsc --noEmit
+
+      # `next lint` is deprecated and disappears in Next.js 16. It still works
+      # on 15 and reports zero problems; when the upgrade comes, this line moves
+      # to the ESLint CLI rather than being dropped.
+      - name: lint
+        run: npm run lint
+
+      - name: unit tests
+        run: npm run test:unit
+
+      - name: build
+        run: npm run build
+
+  e2e:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      # Only chromium: playwright.config.ts declares exactly one project, so
+      # fetching the other two engines would download megabytes nothing runs.
+      - name: install chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: e2e
+        run: npm run test:e2e
+
+      # The report is the only thing that explains a red e2e run after the
+      # runner is gone — traces are captured on first retry.
+      - name: upload report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
