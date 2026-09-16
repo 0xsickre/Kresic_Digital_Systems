@@ -124,6 +124,8 @@ private-legal/*.html
 # --- Interni ugovori: šabloni se prate, popunjene kopije i renderi ne ---
 private-contracts/out/
 private-contracts/*.filled.html
+# Skenirani potpis — nikad u javni repo, svako bi mogao da ga preuzme
+private-contracts/signature.*
 
 # --- Local résumé (keep on disk; do not publish in repo) ---
 cv.html
