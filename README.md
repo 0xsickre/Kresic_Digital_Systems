@@ -35,7 +35,6 @@ This is not a generic template; structure and copy reflect how the business is p
 | Fonts | **`next/font`** (self-hosted) | `Inter` via `next/font/google` (self-hosted at build time — no runtime Google Fonts request) and a 3-glyph local **JetBrains Mono 700** subset for the “KDS” wordmark (`public/fonts/`). |
 | Images | **`next/image`** | AVIF/WebP in `next.config.mjs`; tuned `deviceSizes` (portrait in `public/images/`). |
 | Testing | **Vitest** + **Playwright** | Node-environment unit tests; Chromium E2E against a locally started `next dev` (see `playwright.config.ts`). |
-| RUM | **DebugBear** (opt-in) | `DebugBearRum.tsx`; disabled unless an env flag is set — see [Environment variables](#environment-variables). |
 | Hosting | **Vercel** (typical) | Env-gated secrets; redeploy after changing env vars. |
 
 ---
@@ -48,7 +47,7 @@ This is not a generic template; structure and copy reflect how the business is p
 - **Contact-form abuse controls** — The Server Action applies an **in-memory per-IP rate limit** (3 requests / 60 s, best-effort while the function stays warm), a **honeypot** field (`website`), and a **timing gate** (submits faster than 2 s are silently dropped). Resend calls are wrapped in a **10 s timeout**.
 - **Input hardening in email** — User fields are stripped of C0 control characters (so CR/LF cannot reach the subject or headers) and passed through `escapeHtml()` before being embedded in the Resend HTML payload.
 - **Legal copy pipeline** — Long-form legal text is edited in `private-legal/*.html.example` and synced into the `htmlBody` keys of `dictionaries/de.json` / `en.json` with `npm run sync:legal`; the dictionaries are what ships (see `private-legal/README.md`). If `htmlBody` is empty, the pages fall back to the structured paragraph keys.
-- **Security headers** — `next.config.mjs` applies CSP, HSTS (2 years, `includeSubDomains; preload`), `X-Frame-Options`, `frame-ancestors 'none'`, `nosniff`, referrer and permissions policy, and disables `x-powered-by`. The CSP allows Next's inline scripts/styles, `'unsafe-eval'` **only** in `next dev` (HMR), and the DebugBear RUM origins (`cdn.debugbear.com` in `script-src`, `data.debugbear.com` in `connect-src`). Fonts are self-hosted, so `font-src` is `'self'` only.
+- **Security headers** — `next.config.mjs` applies CSP, HSTS (2 years, `includeSubDomains; preload`), `X-Frame-Options`, `frame-ancestors 'none'`, `nosniff`, referrer and permissions policy, and disables `x-powered-by`. The CSP is **first-party only** — no third-party origins are allowlisted: `default-src`/`connect-src`/`font-src` are `'self'`, and the only relaxations are Next's inline scripts/styles plus `'unsafe-eval'` **only** in `next dev` (HMR). Adding any external script or beacon requires widening the policy explicitly.
 
 ---
 
@@ -93,7 +92,6 @@ This is not a generic template; structure and copy reflect how the business is p
 │   ├── DeferMount.tsx             # DeferHeavyChild (post-hydration idle) / MountWhenVisible
 │   ├── WebGLErrorBoundary.tsx     # Falls back to a static placeholder on WebGL errors
 │   ├── DeferredThirdPartyScripts.tsx  # optional next/script lazyOnload
-│   ├── DebugBearRum.tsx           # Opt-in RUM snippet (afterInteractive)
 │   ├── HeroVisual.tsx             # Three.js hero
 │   ├── DataFlowVisual.tsx | InfrastructureGrid.tsx | MarketPulseVisual.tsx
 │   ├── ContactFormWithConsent.tsx
@@ -144,8 +142,6 @@ This is not a generic template; structure and copy reflect how the business is p
 | `RESEND_TO_EMAIL` | No | Override contact-form **recipient**; default is `SITE_EMAIL` in `lib/site.ts`. |
 | `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC` | No | Optional analytics/pixel script URL; loaded with `next/script` `lazyOnload`. Update CSP in `next.config.mjs` if the origin is not allowed. |
 | `NEXT_PUBLIC_DEFERRED_SCRIPT_INTEGRITY` | No | Optional SRI hash (e.g. `sha384-…`) for the script above; `crossOrigin="anonymous"` is set automatically when present. |
-| `NEXT_PUBLIC_DEBUGBEAR_RUM` | No | Non-production only: `1`/`true`/`yes` loads the DebugBear RUM snippet locally. |
-| `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED` | No | Production opt-in for DebugBear RUM. Without it, no RUM snippet is shipped in production. |
 
 Copy `.env.example` → `.env.local` and fill values. Never commit `.env.local`.
 
@@ -198,7 +194,7 @@ Before release: **`npm run build`** should complete cleanly, **`npx tsc --noEmit
 ## Security, privacy & compliance (summary)
 
 - **GDPR / DACH** — Imprint and privacy pages describe processing (hosting, contact via email provider), legal bases, retention, and data-subject rights. Adjust copy only with legal review.
-- **No cookie banner today** — No analytics or tracking scripts are active by default: `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC` is unset and DebugBear RUM requires an explicit opt-in flag. Re-evaluate the consent position (and update the privacy copy — the current text does not mention DebugBear) before enabling RUM in production or adding Plausible, GA, etc.
+- **No cookie banner today** — There are **no analytics, tracking, or RUM scripts in the tree**. The only hook for a third-party tag is `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC`, which is unset and ships nothing when empty. Re-evaluate the consent position — and update the privacy copy in `dictionaries/*.json` — before adding Plausible, GA, or any monitoring provider.
 - **Secrets** — `RESEND_API_KEY` exists only in server code paths.
 - **Logging** — `sendEmail` logs (rate-limit hits, honeypot triggers, Resend errors) are **development-only** by design; nothing from the contact flow is written to production logs.
 
