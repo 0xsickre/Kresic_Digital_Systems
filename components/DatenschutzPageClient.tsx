@@ -17,12 +17,12 @@ function DatenschutzPdfDownload() {
   const { t, locale } = useI18n();
   const href =
     locale === "de"
-      ? "/legal/datenschutzerklaerung_kresic_digital_system_de.pdf"
-      : "/legal/datenschutzerklaerung_kresic_digital_system_en.pdf";
+      ? "/legal/datenschutzerklaerung_kresic_digital_systems_de.pdf"
+      : "/legal/datenschutzerklaerung_kresic_digital_systems_en.pdf";
   const downloadName =
     locale === "de"
-      ? "datenschutzerklaerung_kresic_digital_system_de.pdf"
-      : "datenschutzerklaerung_kresic_digital_system_en.pdf";
+      ? "datenschutzerklaerung_kresic_digital_systems_de.pdf"
+      : "datenschutzerklaerung_kresic_digital_systems_en.pdf";
 
   return (
     <div className="mb-8 flex flex-wrap justify-end border-b border-white/10 pb-6">

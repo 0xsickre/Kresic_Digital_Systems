@@ -9,9 +9,11 @@ Iz korena projekta:
 
 ```bash
 npm run sync:legal
+npm run legal:pdf
 ```
 
-Zatim commit `dictionaries/de.json` i `dictionaries/en.json`.
+Zatim commit `dictionaries/de.json`, `dictionaries/en.json` i `public/legal/*.pdf`.
+PDF-ovi se generišu iz istog `htmlBody`, pa stranica i preuzimanje ne mogu da se raziđu.
 
 ## Fajlovi
 
