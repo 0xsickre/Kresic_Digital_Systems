@@ -62,7 +62,7 @@
   },
   "projects": {
     "title": "Projekte & Werkzeuge",
-    "intro": "Eigene Arbeiten aus Stabilität, Automatisierung und quantitativem Research. Die ersten beiden sind vollständig einsehbar — Quellcode offen, Prüfungen nachvollziehbar.",
+    "intro": "Eigene Arbeiten aus Stabilität, Automatisierung und quantitativem Research — die ersten beiden mit offenem Quellcode und nachvollziehbaren Prüfungen. Was hier läuft, baue ich in gleicher Form für Ihren Betrieb.",
     "tagline": "Stabilität · Automatisierung · Auswertungen",
     "caseStudy": "Fallstudie",
     "viewOnGithub": "AUF GITHUB ANSEHEN",
@@ -98,16 +98,16 @@
         "githubUrl": "https://github.com/0xsickre/Trading_Journal"
       },
       {
-        "role": "Eigenentwicklung",
+        "role": "Daten & Reporting",
         "name": "Eigene Datenpipelines für Marktauswertungen",
         "summary": "Über Schnittstellen versorgte Abläufe, die Live-Kursdaten, Fundamentaldaten und Marktberichte (z. B. CFTC Commitment of Traders) in eine strukturierte, automatisierte Auswertung überführen.",
-        "outcome": "Eigenes System für die eigene Research-Arbeit — nicht im Kundenauftrag entstanden und nicht veröffentlicht. Es steht hier als Beleg für die eingesetzte Technik, nicht als Kundenreferenz.",
+        "outcome": "Läuft im eigenen Betrieb — gebaut, um die Technik im Dauereinsatz zu haben, nicht als Kundenauftrag. Dieselbe Architektur richte ich auf Ihre Datenquellen und Ihr Reporting zugeschnitten ein.",
         "tags": [
           "Schnittstellen",
           "Automatisierung",
           "Datenflüsse",
-          "Auswertung",
-          "Eigenentwicklung"
+          "Reporting",
+          "Eigenbetrieb"
         ]
       }
     ]

@@ -62,7 +62,7 @@
   },
   "projects": {
     "title": "Projects & tooling",
-    "intro": "My own work in stability, automation and quantitative research. The first two are fully open — source readable, checks verifiable.",
+    "intro": "My own work in stability, automation and quantitative research — the first two with open source and verifiable checks. What runs here is what I build, in the same form, for your operation.",
     "tagline": "Stability · Automation · Analysis",
     "caseStudy": "Case study",
     "viewOnGithub": "VIEW ON GITHUB",
@@ -98,16 +98,16 @@
         "githubUrl": "https://github.com/0xsickre/Trading_Journal"
       },
       {
-        "role": "Own build",
+        "role": "Data & reporting",
         "name": "Own data pipelines for market analysis",
         "summary": "Interface-fed pipelines that turn live price data, fundamentals and market reports (e.g. CFTC Commitment of Traders) into a structured, automated analysis.",
-        "outcome": "A system I built for my own research — not produced under a client engagement and not published. It is shown here as evidence of the technique involved, not as a client reference.",
+        "outcome": "Running in my own operation — built to keep the technique in continuous use, not produced under a client engagement. I set up the same architecture around your data sources and your reporting.",
         "tags": [
           "Interfaces",
           "Automation",
           "Data flows",
-          "Analysis",
-          "Own build"
+          "Reporting",
+          "Own operation"
         ]
       }
     ]
