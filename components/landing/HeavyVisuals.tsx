@@ -111,9 +111,9 @@ export function SafeDynamicMarketPulseVisual({
  * dictionaries: index 0 here draws the first card there.
  *
  * The pairing is not decorative. The grid belongs to the site's own source, the
- * market trace to the trading journal, the data flow to the ERP pipelines — put
- * a volatility readout on an ERP reporting card and the card argues against its
- * own copy. Reorder the cards and this array has to move with them.
+ * market trace to the trading journal, the data flow to the data pipelines — put
+ * a volatility readout on a pipeline card and the card argues against its own
+ * copy. Reorder the cards and this array has to move with them.
  */
 export const projectHeaderVisuals = [
   SafeDynamicInfrastructureGrid,
