@@ -31,6 +31,7 @@ export function GlobalLegalFooter() {
 
   const impressumHref = withLocale(locale, "/impressum");
   const datenschutzHref = withLocale(locale, "/datenschutz");
+  const widerrufHref = withLocale(locale, "/widerruf");
   const here = normalizePath(pathname);
 
   return (
@@ -66,6 +67,19 @@ export function GlobalLegalFooter() {
             prefetch={false}
           >
             Datenschutzerklärung
+          </Link>
+        )}
+        {here === normalizePath(widerrufHref) ? (
+          <span className={linkClass} aria-current="page">
+            Widerrufsbelehrung
+          </span>
+        ) : (
+          <Link
+            href={widerrufHref}
+            className={linkClass}
+            prefetch={false}
+          >
+            Widerrufsbelehrung
           </Link>
         )}
       </nav>

@@ -1,7 +1,7 @@
 # Pravni HTML (šabloni)
 
 Ovde **menjaš** tekst u `*.html.example` fajlovima (lakše za paste iz editora).  
-**Šta je u produkciji:** sadržaj iz šablona mora da bude u **`dictionaries/de.json` i `en.json`** polje `htmlBody` unutar `datenschutz` / `impressum` — to ide u git i Vercel vidi isto.
+**Šta je u produkciji:** sadržaj iz šablona mora da bude u **`dictionaries/de.json` i `en.json`** polje `htmlBody` unutar `datenschutz` / `impressum` / `widerruf` — to ide u git i Vercel vidi isto.
 
 ## Nakon izmene u `.example`
 
@@ -21,7 +21,10 @@ Zatim commit `dictionaries/de.json` i `dictionaries/en.json`.
 | `datenschutz.en.html.example` |
 | `impressum.de.html.example` |
 | `impressum.en.html.example` |
+| `widerruf.de.html.example` |
+| `widerruf.en.html.example` |
 
 ## Ponašanje ako `htmlBody` u rečniku je prazan
 
 Stranica koristi ugrađeni tekst iz ostalih ključeva u `datenschutz` / `impressum` (stariji blok-paragrafi).
+`widerruf` nema taj fallback — tekst dolazi isključivo iz šablona.

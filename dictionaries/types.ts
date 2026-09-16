@@ -63,6 +63,7 @@ export type LandingDictionary = {
   legalFooter: {
     impressum: string;
     privacy: string;
+    widerruf: string;
   };
   form: {
     name: string;
@@ -117,6 +118,12 @@ export type LandingDictionary = {
     disclaimer: string;
     backHome: string;
     downloadPdf: string;
+  };
+  widerruf: {
+    htmlBody: string;
+    eyebrow: string;
+    title: string;
+    backHome: string;
   };
   datenschutz: {
     htmlBody: string;
