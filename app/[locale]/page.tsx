@@ -13,7 +13,7 @@ import { de } from "@/dictionaries/de";
 import { en } from "@/dictionaries/en";
 import type { LocaleCode } from "@/dictionaries/types";
 import { isLocale } from "@/lib/locale";
-import { homeMetadata } from "@/lib/seo";
+import { homeJsonLd, homeMetadata, jsonLdScript } from "@/lib/seo";
 import { BRAND_NAME } from "@/lib/site";
 
 type Props = Readonly<{
@@ -39,6 +39,12 @@ export default async function HomePage({ params }: Props) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdScript(homeJsonLd(locale)),
+        }}
+      />
       <LandingHeaderShellClient
         logo={(
           <Link

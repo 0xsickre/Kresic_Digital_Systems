@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { alternatesForLocale, homeMetadata, siteBaseUrl } from "@/lib/seo";
+import {
+  alternatesForLocale,
+  homeJsonLd,
+  homeMetadata,
+  jsonLdScript,
+  siteBaseUrl,
+} from "@/lib/seo";
 
 describe("siteBaseUrl", () => {
   afterEach(() => {
@@ -98,5 +104,61 @@ describe("homeMetadata", () => {
     const m = homeMetadata("de");
     expect(m.openGraph?.locale).toBe("de_DE");
     expect(m.alternates?.canonical).toBe("https://example.test/de");
+  });
+
+  it("asks for the large Twitter card, because the default crops to a square", () => {
+    // `Metadata["twitter"]` is a union across card kinds, so `card` is the
+    // discriminant rather than a property reachable on the union itself.
+    const twitter = homeMetadata("en").twitter as { card?: string } | null;
+    expect(twitter?.card).toBe("summary_large_image");
+  });
+});
+
+describe("homeJsonLd", () => {
+  beforeEach(() => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://example.test");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  function graph(locale: "de" | "en") {
+    return homeJsonLd(locale)["@graph"] as Record<string, unknown>[];
+  }
+
+  it("describes the service, the person behind it, and the site", () => {
+    expect(graph("en").map((n) => n["@type"])).toEqual([
+      "ProfessionalService",
+      "Person",
+      "WebSite",
+    ]);
+  });
+
+  it("splits the legal address into postal code and locality", () => {
+    expect(graph("de")[0].address).toEqual({
+      "@type": "PostalAddress",
+      streetAddress: "Burggasse 3",
+      postalCode: "89604",
+      addressLocality: "Allmendingen",
+      addressCountry: "DE",
+    });
+  });
+
+  /**
+   * `sameAs` is the whole point of the block — it is what ties the domain to the
+   * profiles as one identity. It pointed at `Kresic1998` for a while after that
+   * account was renamed, which is not a dead link so much as a claim about
+   * someone else's username.
+   */
+  it("claims only profiles that still belong to the owner", () => {
+    for (const node of graph("en").slice(0, 2)) {
+      expect(node.sameAs).toContain("https://github.com/0xsickre");
+      expect(JSON.stringify(node.sameAs)).not.toContain("Kresic1998");
+    }
+  });
+
+  it("escapes < so the block cannot close its own script tag", () => {
+    expect(jsonLdScript({ a: "</script><b>" })).not.toContain("</script>");
   });
 });
