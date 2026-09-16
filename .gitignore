@@ -121,12 +121,8 @@ temp/
 # --- Local drafts (canonical legal copy lives in app / dictionaries) ---
 private-legal/*.html
 
-# --- Interni ugovori: šabloni se prate, popunjene kopije i renderi ne ---
-private-contracts/out/
-private-contracts/*.filled.html
-# Potpisani i skenirani primerci — nose ime klijenta, repo je javan
-private-contracts/signature.*
-private-contracts/*.signed.*
+# --- Verträge: dieses Repository ist öffentlich, Vertragsvorlagen gehören nicht hinein ---
+private-contracts/
 
 # --- Local résumé (keep on disk; do not publish in repo) ---
 cv.html
