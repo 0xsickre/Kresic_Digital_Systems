@@ -20,10 +20,10 @@ const enPath = join(root, "dictionaries", "en.json");
 const de = JSON.parse(readFileSync(dePath, "utf-8"));
 const en = JSON.parse(readFileSync(enPath, "utf-8"));
 
-de.datenschutz = { ...de.datenschutz, htmlBody: loadHtml("datenschutz", "de") };
-de.impressum = { ...de.impressum, htmlBody: loadHtml("impressum", "de") };
-en.datenschutz = { ...en.datenschutz, htmlBody: loadHtml("datenschutz", "en") };
-en.impressum = { ...en.impressum, htmlBody: loadHtml("impressum", "en") };
+for (const slug of ["datenschutz", "impressum", "widerruf"]) {
+  de[slug] = { ...de[slug], htmlBody: loadHtml(slug, "de") };
+  en[slug] = { ...en[slug], htmlBody: loadHtml(slug, "en") };
+}
 
 writeFileSync(dePath, `${JSON.stringify(de, null, 2)}\n`, "utf-8");
 writeFileSync(enPath, `${JSON.stringify(en, null, 2)}\n`, "utf-8");

@@ -5,7 +5,7 @@ import { siteBaseUrl } from "@/lib/site";
 
 const base = siteBaseUrl();
 
-const LEGAL_SLUGS = ["impressum", "datenschutz"] as const;
+const LEGAL_SLUGS = ["impressum", "datenschutz", "widerruf"] as const;
 
 /**
  * Every URL is listed with its translations, so the two locales are indexed as

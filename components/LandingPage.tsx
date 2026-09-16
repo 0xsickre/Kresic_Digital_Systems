@@ -593,6 +593,17 @@ function SiteFooter() {
           >
             {lf.privacy}
           </Link>
+          <span
+            className="hidden h-4 w-px shrink-0 bg-white/15 sm:mx-1 sm:inline-block"
+            aria-hidden
+          />
+          <Link
+            href={withLocale(locale, "/widerruf")}
+            prefetch={false}
+            className={linkClass}
+          >
+            {lf.widerruf}
+          </Link>
         </nav>
       </div>
     </footer>
