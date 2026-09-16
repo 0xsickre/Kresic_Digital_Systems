@@ -121,5 +121,9 @@ temp/
 # --- Local drafts (canonical legal copy lives in app / dictionaries) ---
 private-legal/*.html
 
+# --- Interni ugovori: šabloni se prate, popunjene kopije i renderi ne ---
+private-contracts/out/
+private-contracts/*.filled.html
+
 # --- Local résumé (keep on disk; do not publish in repo) ---
 cv.html
