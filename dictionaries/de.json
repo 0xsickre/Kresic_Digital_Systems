@@ -129,8 +129,8 @@
         "body": "Wo erforderlich, arbeite ich unter NDA. Projektdetails, Zugangsdaten und geschützte Informationen bleiben getrennt; Zugriff erhält nur, wer ihn für die konkrete Aufgabe braucht."
       },
       {
-        "title": "KI-Werkzeuge ohne Datenabfluss",
-        "body": "Ihr Code und Ihre Daten fließen nicht in das Training fremder Modelle. Eingesetzt werden ausschließlich Geschäftszugänge mit abgeschaltetem Training und ohne dauerhafte Speicherung beim Anbieter. Wo Sie KI-Einsatz ausschließen möchten, arbeite ich ohne diese Werkzeuge."
+        "title": "KI-Werkzeuge mit abgeschaltetem Training",
+        "body": "Alle eingesetzten KI-Werkzeuge laufen mit deaktivierter Trainingsfreigabe und aktiviertem Datenschutzmodus, damit Ihre Inhalte nicht in das Training fremder Modelle einfließen. Eine vertragliche Zero-Retention-Zusage der Anbieter kann ich auf dieser Ebene nicht weitergeben — wo Ihr Mandat jede Übermittlung an Dritte ausschließt, arbeite ich ohne diese Werkzeuge."
       }
     ]
   },
