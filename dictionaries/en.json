@@ -129,8 +129,8 @@
         "body": "Where required, I work under NDA. Project details, credentials and proprietary information stay compartmentalised; access is granted only where a specific task requires it."
       },
       {
-        "title": "AI tooling without data leaving",
-        "body": "Your code and your data are not used to train third-party models. Only business accounts with training switched off and no provider-side retention are used. Where you want AI excluded entirely, I work without these tools."
+        "title": "AI tooling with training switched off",
+        "body": "Every AI tool in use runs with training opt-out and privacy mode enabled, so your content does not feed the training of third-party models. What I cannot pass on at this level is a contractual zero-retention guarantee from the providers — where your engagement rules out any transfer to third parties, I work without these tools."
       }
     ]
   },
