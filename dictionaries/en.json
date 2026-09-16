@@ -61,12 +61,12 @@
     ]
   },
   "projects": {
-    "title": "Featured work & tools",
-    "intro": "Selected examples from stability work, automation and quantitative research — from resilient web systems to data-driven tooling.",
+    "title": "Projects & tooling",
+    "intro": "My own work in stability, automation and quantitative research. The first two are fully open — source readable, checks verifiable.",
     "tagline": "Stability · Automation · Analysis",
     "caseStudy": "Case study",
     "viewOnGithub": "VIEW ON GITHUB",
-    "restrictedAccess": "RESTRICTED ACCESS",
+    "restrictedAccess": "NOT PUBLISHED",
     "legalNote": "Important note: my work covers quantitative research and educational tooling only — no investment advice, no trading signals and no automated execution.",
     "featured": [
       {
@@ -98,23 +98,23 @@
         "githubUrl": "https://github.com/0xsickre/Trading_Journal"
       },
       {
-        "role": "Operations & reporting",
-        "name": "Automated data pipelines & reporting",
+        "role": "Own build",
+        "name": "Own data pipelines for market analysis",
         "summary": "Interface-fed pipelines that turn live price data, fundamentals and market reports (e.g. CFTC Commitment of Traders) into a structured, automated analysis.",
-        "outcome": "Proprietary logic under NDA.",
+        "outcome": "A system I built for my own research — not produced under a client engagement and not published. It is shown here as evidence of the technique involved, not as a client reference.",
         "tags": [
           "Interfaces",
           "Automation",
           "Data flows",
           "Analysis",
-          "NDA"
+          "Own build"
         ]
       }
     ]
   },
   "opSec": {
     "title": "Security & confidentiality",
-    "intro": "Sensitive engagements follow fixed rules: encrypted communication, isolated working environments and contractually binding confidentiality.",
+    "intro": "Fixed rules apply to sensitive engagements: encrypted communication, isolated working environments and contractually binding confidentiality.",
     "items": [
       {
         "title": "End-to-end encrypted communication",
@@ -122,11 +122,11 @@
       },
       {
         "title": "Isolated working environments",
-        "body": "Confidential logic, reports and credentials are processed in isolated environments — separated from every other engagement and logged so the work stays auditable."
+        "body": "Confidential logic, reports and credentials are processed in a dedicated, isolated environment per engagement — separated from everything else and logged so the work stays auditable."
       },
       {
         "title": "NDAs & confidentiality",
-        "body": "Where required, I work under NDA. Project details, credentials and proprietary information stay compartmentalised; access is granted only where a specific task requires it."
+        "body": "On request I sign an NDA before any documents are exchanged. Project details, credentials and proprietary information are kept compartmentalised; access is granted only where a specific task requires it."
       },
       {
         "title": "AI tooling with training switched off",
