@@ -17,7 +17,6 @@ export const contactFormSchema = z.object({
   email: z.string().email().max(320),
   service: serviceEnum,
   message: z.string().min(10).max(8000),
-  consent: z.enum(["on", "true"]),
 });
 
 export type ContactFormParsed = z.infer<typeof contactFormSchema>;
@@ -27,12 +26,10 @@ export type ContactFormZodMessages = {
   messageTooShort: string;
   nameTooShort: string;
   invalidEmail: string;
-  consent: string;
   fillAll: string;
 };
 
 const ISSUE_PATH_PRIORITY = [
-  "consent",
   "service",
   "name",
   "email",
@@ -47,7 +44,6 @@ export function contactFormZodUserMessage(
   for (const pathKey of ISSUE_PATH_PRIORITY) {
     const hit = issues.some((i) => i.path[0] === pathKey);
     if (!hit) continue;
-    if (pathKey === "consent") return t.consent;
     if (pathKey === "service") return t.serviceRequired;
     if (pathKey === "name") return t.nameTooShort;
     if (pathKey === "email") return t.invalidEmail;

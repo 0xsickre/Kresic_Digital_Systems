@@ -160,10 +160,9 @@
       "data_quant": "Data analytics & quantitative tools (PineScript)",
       "other": "Other (describe below)"
     },
-    "consentLead": "I consent that my details may be processed to handle my enquiry in accordance with the ",
-    "consentPrivacyLinkText": "Privacy policy",
-    "consentTrail": ". I may revoke this consent at any time. (Transmission via encrypted channels.)",
-    "consentError": "Consent is required to send your message.",
+    "privacyNoteLead": "Your details are processed solely to handle this enquiry (Art. 6(1)(b) and (f) GDPR) and transmitted over encrypted channels. Details and your rights: ",
+    "privacyPolicyLinkText": "Privacy Policy",
+    "privacyNoteTrail": ".",
     "submit": "Send message",
     "sending": "Sending…",
     "success": "Thank you — your message has been sent. I usually reply within one business day."

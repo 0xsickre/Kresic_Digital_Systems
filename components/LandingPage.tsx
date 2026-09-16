@@ -18,8 +18,8 @@ import { GITHUB_URL, LINKEDIN_URL, SITE_EMAIL, SITE_MAILTO } from "@/lib/site";
 
 const ContactFormLazy = dynamic(
   () =>
-    import("@/components/ContactFormWithConsent").then((m) => ({
-      default: m.ContactFormWithConsent,
+    import("@/components/ContactForm").then((m) => ({
+      default: m.ContactForm,
     })),
   {
     ssr: false,

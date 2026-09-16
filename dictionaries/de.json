@@ -160,10 +160,9 @@
       "data_quant": "Datenanalyse & quantitative Tools (PineScript)",
       "other": "Sonstiges (bitte unten beschreiben)"
     },
-    "consentLead": "Ich willige ein, dass meine Angaben zur Bearbeitung meiner Anfrage gemäß der ",
-    "consentPrivacyLinkText": "Datenschutzerklärung",
-    "consentTrail": " verarbeitet werden. Ich kann diese Einwilligung jederzeit widerrufen. (Übermittlung über verschlüsselte Kanäle.)",
-    "consentError": "Bitte bestätigen Sie die Einwilligung, um die Nachricht zu senden.",
+    "privacyNoteLead": "Ihre Angaben verarbeite ich ausschließlich zur Bearbeitung dieser Anfrage (Art. 6 Abs. 1 lit. b und lit. f DSGVO); die Übermittlung erfolgt über verschlüsselte Kanäle. Einzelheiten und Ihre Rechte: ",
+    "privacyPolicyLinkText": "Datenschutzerklärung",
+    "privacyNoteTrail": ".",
     "submit": "Nachricht senden",
     "sending": "Wird gesendet…",
     "success": "Vielen Dank — Ihre Nachricht wurde gesendet. Ich melde mich in der Regel innerhalb eines Werktags."
