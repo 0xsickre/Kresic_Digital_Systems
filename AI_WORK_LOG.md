@@ -30,6 +30,12 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — Drop the unverified "Resend Labs Inc." entity name
+
+- **What:** `private-legal/datenschutz.{de,en}.html.example` — the processor is now named as `Resend (2261 Market Street #5039, San Francisco, CA 94114, USA)`, without a corporate suffix; dictionaries and `public/legal/*.pdf` re-synced. The same name also sat in `datenschutz.s4p1` in both dictionaries — a fallback key that only renders when `htmlBody` is empty, so it was shipping unused but shipping — and was cleaned there too.
+- **Why:** The EU-U.S. Data Privacy Framework listing records the participant as **Resend**, its corporate complaint contact as **PLUS FIVE FIVE** at the same address, and explicitly "no other covered entities". No source supports "Resend Labs Inc.", and the adequacy decision under Art. 45 attaches to the certified entity — so naming an entity that may not be the certified one weakens the very passage that cites the framework. Art. 13(1)(e) requires the recipient to be identifiable, which the service name plus address achieves without asserting a corporate identity that could not be verified.
+- **Do not undo:** Do not reinstate a corporate suffix for Resend from memory or inference. If one is ever needed, take it verbatim from the counterparty named on the signed DPA.
+
 ### 2026-09-16 — Privacy policy: US transfer basis (Art. 45) and the rate limiter's IP use
 
 - **What:** `private-legal/datenschutz.{de,en}.html.example` gained three passages, synced to the dictionaries and re-rendered into `public/legal/*.pdf`:
@@ -38,7 +44,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
   - A sentence in the contact-form section covering the in-memory rate limiter in `app/actions/sendEmail.ts`: the caller's IP is processed briefly to block bulk submissions, not stored, discarded within a minute, Art. 6(1)(f).
 - **Why:** Art. 13(1)(f) requires the transfer mechanism to be named, not merely the recipient and the fact of a DPA. Both providers were listed with US addresses and a DPA but no Art. 45/46 basis. The rate limiter's IP processing is a purpose distinct from server log files, which was the only IP-related disclosure the policy carried.
 - **Verified against the DPF list (not assumed):** Vercel Inc. — EU-U.S. DPF *Active*, HR and Non-HR Data, certified since 2019-06-20, next certification due 2027-04-29. Resend — EU-U.S. DPF *Active, re-certification under review*, Non-HR Data, certified since 2025-02-20, next due 2027-03-03. Both statuses count as active participation. **Re-check before the next legal review**: an expired or withdrawn certification removes the Art. 45 basis and the text would then have to name SCCs (Art. 46) instead.
-- **Open discrepancy, deliberately not "fixed":** the policy names the Resend entity as **Resend Labs Inc.**, while the DPF listing records the participant's corporate contact as **PLUS FIVE FIVE** (Zeno Rocha, CEO) at the same address, 2261 Market Street #5039, San Francisco. The adequacy decision covers the certified legal entity, and the listing states "no other covered entities", so the names need to match the counterparty on the signed DPA. The new paragraph says "Resend" / "der Anbieter" and asserts no legal entity, so it holds either way. Confirm the exact name against the DPA and correct the older sentence — do not guess it.
+- **Resolved in the entry above:** the unverifiable entity name was dropped rather than guessed. The DPF listing's participant name is **Resend**, its corporate complaint contact is PLUS FIVE FIVE at 2261 Market Street #5039, San Francisco, and it records no other covered entities. Nothing published anywhere supports "Resend Labs Inc."
 
 ### 2026-09-16 — Contact form: consent checkbox removed, Art. 13 notice kept
 
