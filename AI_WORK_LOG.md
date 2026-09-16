@@ -17,6 +17,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **i18n / SEO:** Locale routes under `app/[locale]/…`, `middleware.ts` sets `x-locale`, `withLocale()` for links, `generateMetadata` + `lib/seo.ts` for canonicals/hreflang; root layout sets `<html lang>` from header. **`siteBaseUrl()`** lives in **`lib/site.ts`** (fallback **`https://kresicds.com`** when `NEXT_PUBLIC_SITE_URL` is unset); `lib/seo.ts` re-exports it for existing imports.
 - **Content:** Marketing copy in `dictionaries/de.json` + `en.json`, typed via `dictionaries/types.ts`.
 - **Performance:** Hero LCP path stays server-rendered where possible; heavy WebGL behind `dynamic` + `MountWhenVisible` / defer patterns in `components/landing/HeavyVisuals.tsx`, `HeroBackdrop`, etc. **i18n dictionaries** are passed as RSC props (not bundled client-side); `I18nProvider` receives `initialDictionary` from server — do not re-import both dicts in the client module. **Logo font** (`--font-kds-logo-mono`) is a **local 3-glyph subset** (`public/fonts/jetbrains-mono-700-kds.woff2`, ~0.9 KB) loaded via `next/font/local` — do not switch back to `next/font/google` JetBrains_Mono (was ~21 KB). **Portrait image** in About section has **no `priority`** (below-fold, would compete with hero LCP).
+- **Third-party scripts:** **None.** No analytics, tracking, or RUM provider is embedded, and the CSP is **first-party only** (`connect-src 'self'`, no external `script-src` origins). `NEXT_PUBLIC_DEFERRED_SCRIPT_SRC` remains the single opt-in hook and ships nothing while unset — adding any provider requires a CSP change **and** a privacy-copy update in `dictionaries/*.json`.
 - **Tooling:** `tsconfig` target **ES2022**; `package.json` **browserslist** for modern evergreen; `next.config.mjs` includes `optimizePackageImports` for `lucide-react`, `poweredByHeader: false`. **Tests:** `npm test` / `test:unit` — **Vitest** (`vitest.config.ts`, `tests/unit/**/*.test.ts`); `test:e2e` / `test:all` — **Playwright** (`playwright.config.ts`, `tests/e2e/`). E2E starts `npm run dev` unless `PLAYWRIGHT_SKIP_WEB_SERVER=1` or `PLAYWRIGHT_BASE_URL` points at an existing server. CI: install browsers with `npx playwright install --with-deps` before `test:e2e`.
 - **Accessibility:** Primary green CTAs use **`emerald-700`** (hover **`emerald-600`**) with white text for contrast — do not revert to `emerald-500`/`emerald-600` as default fill for small text buttons without checking WCAG.
 - **Demo route:** `/demo/market-analytics` **removed**; third featured project card points to **`kds-quant-engine-showcase`**; no `liveDemo` / `demoCta` keys in dictionaries.
@@ -29,6 +30,13 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — chore: remove third-party RUM telemetry entirely
+
+- **What:** Deleted the third-party RUM component under `components/` and its render in `app/layout.tsx`. `next.config.mjs` — dropped the vendor CDN origin from `script-src` and the beacon origin from `connect-src` (now `connect-src 'self'`). `.env.example` — removed both RUM opt-in flags. `lib/webgl.ts` — reworded a comment that referenced the vendor. `README.md` / `AI_WORK_LOG.md` — all references removed.
+- **Why:** User decision: no third-party monitoring on the site or in the project. Removing it also removes the outstanding GDPR/ePrivacy obligation to disclose the provider in the privacy policy (which the Datenschutz copy never did) and restores a fully first-party CSP.
+- **Do not undo:** This **supersedes** the earlier "do not remove the beacon origin from `connect-src`" guardrail — that entry is gone and the constraint no longer applies. Do not re-add any external `script-src`/`connect-src` origin, or any monitoring snippet, without an explicit user decision plus a privacy-copy update.
+- **Potential debt:** No Web Vitals telemetry in production. Use lab tooling (Lighthouse, WebPageTest) or Vercel's built-in Speed Insights — the latter is a separate opt-in decision — if field data is needed again.
+
 ### 2026-04-03 — feat: LinkedIn link in landing footer
 
 - **What:** `lib/site.ts` — `LINKEDIN_URL` (`https://www.linkedin.com/in/kresicdigitalsystems`). `components/LandingPage.tsx` — `SiteFooter` nav: LinkedIn link after GitHub with same styling, separators, `target="_blank"`, `rel="noopener noreferrer"`. `dictionaries/en.json` + `de.json` + `types.ts` — `a11y.linkedinProfile` for `aria-label`.
@@ -38,7 +46,7 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 ### 2026-04-03 — fix(perf): suppress Three.js console.error + CSP worker-src
 
 - **What:** `lib/webgl.ts` — `createWebGLRendererSafely` now mutes `console.error` for the duration of `new WebGLRenderer()` and restores in `finally`. Three.js r183 calls `console.error("THREE.WebGLRenderer: …")` inside its constructor catch block **before** re-throwing; our wrapper already returns `null` on failure, so the console message is purely cosmetic noise that costs 4 Best-Practices points. `next.config.mjs` — added `worker-src 'self' blob:` to CSP (defensive: without it, any blob-URL worker — even from a dependency — would be silently blocked as a CSP violation console error).
-- **Why:** DebugBear and Lighthouse consistently reported 1 `console.error` on every page load → Best Practices 96 instead of 100. Root cause: Three.js WebGLRenderer constructor logs errors to console before throwing; our safe wrapper caught the throw but couldn't prevent the pre-throw `console.error`. Investigation ruled out: our own source code (zero `console.error` calls), DebugBear RUM script (only has `console.error` for beforeSend callbacks we don't use), Next.js `onCaughtError` (only fires for error-boundary-caught render-phase errors — our WebGL code runs in `useEffect`), React hydration mismatch (`pageerrors: 0` rules out `reportGlobalError`).
+- **Why:** Lighthouse consistently reported 1 `console.error` on every page load → Best Practices 96 instead of 100. Root cause: Three.js WebGLRenderer constructor logs errors to console before throwing; our safe wrapper caught the throw but couldn't prevent the pre-throw `console.error`. Investigation ruled out: our own source code (zero `console.error` calls), the third-party RUM script in use at the time (since removed), Next.js `onCaughtError` (only fires for error-boundary-caught render-phase errors — our WebGL code runs in `useEffect`), React hydration mismatch (`pageerrors: 0` rules out `reportGlobalError`).
 - **Do not undo:** The `console.error` mute is scoped to the **constructor call only** via `finally` restoration — do not widen the scope or leave `console.error` muted. Do not remove `worker-src` from CSP — without it, `worker-src` falls back to `script-src` which lacks `blob:`.
 
 ### 2026-04-03 — perf: local font subset + CSP cleanup + portrait priority removal
@@ -46,17 +54,6 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 - **What:** `app/layout.tsx` — replaced `next/font/google` JetBrains_Mono (full Latin ~21 KB preloaded) with `next/font/local` pointing to `public/fonts/jetbrains-mono-700-kds.woff2` (3-glyph "KDS" subset, 892 bytes). Logo only renders "KDS" — full Latin charset was wasted bandwidth. `next.config.mjs` — removed dead `fonts.googleapis.com` from `style-src` and `fonts.gstatic.com` from `font-src` (both unreachable at runtime; `next/font/google` self-hosts at build time, and logo now uses local font). `components/LandingPage.tsx` — removed `priority` from portrait `<Image>` in About section (below fold, was competing with hero LCP for network priority).
 - **Why:** ~20 KB preload saving on every page load; tighter CSP (smaller attack surface); correct resource prioritization for LCP.
 - **Do not undo:** Do not switch logo font back to `next/font/google` without measuring — the local subset is 23× smaller. Do not re-add Google Fonts origins to CSP unless a runtime dependency is introduced. Do not add `priority` to below-fold images.
-
-### 2026-04-03 — DebugBear RUM: production explicit opt-in
-
-- **What:** `components/DebugBearRum.tsx` — production loads RUM only when `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED` is `1`/`true`/`yes`; non-production uses `NEXT_PUBLIC_DEBUGBEAR_RUM` for local tests. `.env.example` — both vars documented.
-- **Why:** Avoid silent third-party telemetry for all visitors without a deploy-time decision; aligns with GDPR/ePrivacy expectations for DACH sites (still disclose DebugBear + legal basis in privacy policy).
-
-### 2026-04-03 — DebugBear Real User Monitoring (RUM) + CSP
-
-- **What:** `components/DebugBearRum.tsx` — vendor bootstrap inline script + async load of `https://cdn.debugbear.com/UkKOIydJAjmu.js`; `next/script` `strategy="afterInteractive"`. ~~Enabled when `NODE_ENV === 'production'` or `NEXT_PUBLIC_DEBUGBEAR_RUM=1`.~~ See newer entry: production requires `NEXT_PUBLIC_DEBUGBEAR_RUM_ENABLED`. `app/layout.tsx` — render `<DebugBearRum />` at top of `<body>`. `next.config.mjs` — `script-src` adds `https://cdn.debugbear.com`; `connect-src` adds `https://data.debugbear.com` (from RUM bundle `sendTo`). `.env.example` — documents env flags.
-- **Why:** Collect Web Vitals / RUM in DebugBear dashboard; CSP must allow script + beacon endpoints.
-- **Do not undo:** If RUM stops sending, check CSP and ad blockers; do not remove `data.debugbear.com` from `connect-src` without verifying a new ingest URL.
 
 ### 2026-04-03 — autoreview: FadeIn remount guard + stable transition string
 

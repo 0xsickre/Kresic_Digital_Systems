@@ -38,7 +38,7 @@ export function isWebGLAvailable(): boolean {
  * Three.js r183 internally calls `console.error("THREE.WebGLRenderer: …")` inside
  * the constructor's catch block **before** re-throwing. Since we already handle the
  * failure gracefully (return null), the console noise is purely cosmetic but costs
- * 4 Best-Practices points in Lighthouse / DebugBear. We mute it for the duration
+ * 4 Best-Practices points in Lighthouse. We mute it for the duration
  * of the constructor call and restore immediately in `finally`.
  */
 export function createWebGLRendererSafely(
