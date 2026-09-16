@@ -30,6 +30,14 @@ Chronological log of **substantive** changes driven by AI-assisted sessions on t
 
 ## Log (newest first)
 
+### 2026-09-16 — Business email: contact@kresicds.com replaces the Proton free address
+
+- **What:** `lib/site.ts` `SITE_EMAIL` → `contact@kresicds.com`. All six `private-legal/*.html.example` templates updated (`impressum`, `datenschutz`, `widerruf`, both locales — `agb` never listed an address, so untouched), synced into `dictionaries/*.json` via `npm run sync:legal`, and `public/legal/*.pdf` regenerated via `npm run legal:pdf` so the download matches the page again.
+- **Why:** `kresic.systems@protonmail.com` read as a personal address rather than a business one, and `kresicds.com` already existed for it to live on. `contact@` was chosen over the German `kontakt@` deliberately: the site serves both `/de` and `/en`, the B2B offer carries no territorial limit (only the B2C side is restricted to Germany per `agb.de.html.example` § 21), and `contact` reads as professional in both languages rather than German-specific. The domain stays on Proton (Mail Plus/Unlimited with a custom domain), which keeps this consistent with the E2EE claims already made in `agb.de.html.example` § 15 and the OpSec section on the landing page — switching providers would have made those sentences false.
+- **Verified before deploy:** the mailbox was live and receiving mail before this was pushed to `main` — the contact form's `RESEND_TO_EMAIL` falls back to `SITE_EMAIL` when unset, so pushing this with no mailbox behind it would have silently swallowed every enquiry the form was ever going to enable.
+- **Do not undo:** Do not revert to the Proton free address, and do not switch the mailbox provider away from Proton without also rewriting AGB § 15 and the OpSec E2EE claim. If a personal alias is added later (e.g. `danijel@kresicds.com`) for post-contact correspondence, it does not replace `contact@` in Impressum/Datenschutz/Widerruf — those are the addresses required to exist under § 5 DDG and should stay purpose-neutral.
+- **Still open:** the private contract templates in `0xsickre/kds-contracts` (AVV, Angebot) also name the old address and need the same replacement — tracked separately since that repository is not in this session's scope by default.
+
 ### 2026-09-16 — Terms of business: /[locale]/agb, contract templates moved to a private repository
 
 - **What:**

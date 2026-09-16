@@ -26,7 +26,7 @@ export function siteBaseUrl(): string {
 
 export const BRAND_NAME = "Kresic Digital Systems" as const;
 export const OWNER_NAME = "Danijel Kresic" as const;
-export const SITE_EMAIL = "kresic.systems@protonmail.com" as const;
+export const SITE_EMAIL = "contact@kresicds.com" as const;
 export const SITE_MAILTO = `mailto:${SITE_EMAIL}` as const;
 /**
  * The account was renamed from `Kresic1998`, and GitHub does not keep a working
