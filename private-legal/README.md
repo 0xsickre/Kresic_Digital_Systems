@@ -1,7 +1,7 @@
 # Pravni HTML (šabloni)
 
 Ovde **menjaš** tekst u `*.html.example` fajlovima (lakše za paste iz editora).  
-**Šta je u produkciji:** sadržaj iz šablona mora da bude u **`dictionaries/de.json` i `en.json`** polje `htmlBody` unutar `datenschutz` / `impressum` / `widerruf` — to ide u git i Vercel vidi isto.
+**Šta je u produkciji:** sadržaj iz šablona mora da bude u **`dictionaries/de.json` i `en.json`** polje `htmlBody` unutar `datenschutz` / `impressum` / `widerruf` / `agb` — to ide u git i Vercel vidi isto.
 
 ## Nakon izmene u `.example`
 
@@ -25,8 +25,23 @@ PDF-ovi se generišu iz istog `htmlBody`, pa stranica i preuzimanje ne mogu da s
 | `impressum.en.html.example` |
 | `widerruf.de.html.example` |
 | `widerruf.en.html.example` |
+| `agb.de.html.example` |
+| `agb.en.html.example` |
 
 ## Ponašanje ako `htmlBody` u rečniku je prazan
 
 Stranica koristi ugrađeni tekst iz ostalih ključeva u `datenschutz` / `impressum` (stariji blok-paragrafi).
-`widerruf` nema taj fallback — tekst dolazi isključivo iz šablona.
+**`widerruf` i `agb` nemaju taj fallback** — tekst dolazi isključivo iz šablona, pa prazan `htmlBody` znači prazna stranica.
+
+## Redosled pri dodavanju novog dokumenta
+
+Skript radi `de[slug] = { ...de[slug], htmlBody }`. Ako ključ u rečniku još ne postoji,
+`...undefined` se raširi u ništa i dobiješ objekat **samo sa `htmlBody`** — bez `title`
+za PDF generator i bez `eyebrow` za stranicu, i to tiho.
+
+Zato: **pun blok u oba rečnika ide pre prvog `sync:legal`**, sa praznim `htmlBody` koji
+skript popunjava. Tek onda se slug dodaje u niz u `scripts/sync-private-legal-to-dictionaries.mjs`
+i u `DOCS` u `scripts/generate-legal-pdfs.mjs`.
+
+`npx tsc --noEmit` hvata ako dodaš ključ u `dictionaries/types.ts` a zaboraviš ga u
+jednom od dva rečnika — `readonly` nizovi u tipu blokiraju cast koji bi to inače sakrio.

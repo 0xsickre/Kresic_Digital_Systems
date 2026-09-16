@@ -14,7 +14,7 @@ Production codebase for **Kresic Digital Systems**: a B2B-facing landing experie
 |------|-------------|
 | **Marketing surface** | Home: **`app/[locale]/page.tsx`** composes an **RSC LCP shell** (logo + hero copy for **`de` or `en`**) with client islands for the header chrome and WebGL; **`LandingPage.tsx`** holds the sections below the hero (`#expertise`, `#about`, `#work` incl. an OpSec/trust note, `#contact`) plus the site footer. |
 | **Featured work** | Three project cards: two with **public GitHub CTAs** — this site and [`Trading_Journal`](https://github.com/0xsickre/Trading_Journal) — and a **restricted (no repo)** data-pipeline card last, because a card nobody can open is a poor way to open the row. Copy and URLs live in `dictionaries/*.json` (`projects.featured`); the header visual per card is positional in `projectHeaderVisuals`, so reordering the cards means reordering that array too. |
-| **Legal** | **`/de/impressum`**, **`/en/impressum`**, **`/de/datenschutz`**, **`/en/datenschutz`** — same visual baseline, body copy rendered from the `htmlBody` field in `dictionaries/*.json`, plus a **PDF download** per locale from `public/legal/`. Legacy bare paths (e.g. `/impressum`) **308** to **`/de/...`**. |
+| **Legal** | **`impressum`**, **`datenschutz`**, **`widerruf`** and **`agb`**, each under **`/de/…`** and **`/en/…`** — same visual baseline, body copy rendered from the `htmlBody` field in `dictionaries/*.json`, plus a **PDF download** per locale from `public/legal/`. Legacy bare paths (e.g. `/impressum`) **308** to **`/de/...`**. |
 | **Tests** | Unit tests with **Vitest** (`tests/unit/`) and end-to-end specs with **Playwright** (`tests/e2e/`). |
 
 This is not a generic template; structure and copy reflect how the business is presented in production.
@@ -45,10 +45,10 @@ This is not a generic template; structure and copy reflect how the business is p
 
 - **Client vs server boundaries** — `Providers.tsx` wraps the tree with **`I18nProvider`** ( **`key={locale}`** + **`initialLocale`** from the server so client copy matches the URL). **`app/[locale]/page.tsx`** is a Server Component that streams **logo + hero text** in the first HTML (`KDSLogoSsr`, `HeroCopyMarkup`, `LandingLcpHero`), wraps the interactive header in **`LandingHeaderShellClient`** (client, with a server-rendered logo slot), and mounts **`HeroBackdrop`** (deferred **Three.js** via `DeferHeavyChild` → `requestIdleCallback` after post-hydration delays). **`LandingPage`** is client-only for the rest of the scroll story. Heavy card WebGL uses `next/dynamic` (`ssr: false`) plus `MountWhenVisible` / `DeferHeavyChild` in `components/landing/HeavyVisuals.tsx`. Legal routes use **`generateMetadata`** with **hreflang** (`alternates.languages` via **`lib/seo.ts`**).
 - **i18n & SEO** — Locale is **in the path** (`/[locale]/…`). Root **`<html lang>`** and skip-link text follow **`x-locale`**. **`LanguageSwitcher`** updates **`NEXT_LOCALE`** and **`router.push`** to the same path under the other locale. All visible strings for the landing flow go through dictionaries; the contact form posts a hidden `locale` field so **server-side validation errors** match the active language.
-- **Consent & native validation** — The form uses **`noValidate`** so the browser does not show OS-localized `required` tooltips on the consent checkbox. The consent label links to the **localized** privacy URL (e.g. **`/de/datenschutz`**) via **`withLocale`** in `lib/locale.ts` (`form.consentLead` / `consentPrivacyLinkText` / `consentTrail`). Consent is enforced **in the submit handler** (`form.consentError`) and **again in the Server Action** (Zod `consent` enum). A required **service area** `<select>` maps to localized labels in `dictionaries/en.json` & `de.json` and short inbox tags (`[KDS][WebGL] …`) on the outbound subject.
+- **Contact form and its Art. 13 notice** — There is deliberately **no consent checkbox**. Handling an enquiry rests on Art. 6(1)(b)/(f) GDPR, so gating submission on consent would have made that consent non-free under Art. 7(4) and contradicted the privacy policy. What the law does require is the notice, which sits above the submit button and links the **localized** privacy URL via **`withLocale`** in `lib/locale.ts` (`form.privacyNoteLead` / `privacyPolicyLinkText` / `privacyNoteTrail`). The form keeps **`noValidate`** so the browser does not show OS-localized `required` tooltips. A required **service area** `<select>` maps to localized labels in `dictionaries/en.json` & `de.json` and short inbox tags (`[KDS][WebGL] …`) on the outbound subject.
 - **Contact-form abuse controls** — The Server Action applies an **in-memory per-IP rate limit** (3 requests / 60 s, best-effort while the function stays warm), a **honeypot** field (`website`), and a **timing gate** (submits faster than 2 s are silently dropped). Resend calls are wrapped in a **10 s timeout**.
 - **Input hardening in email** — User fields are stripped of C0 control characters (so CR/LF cannot reach the subject or headers) and passed through `escapeHtml()` before being embedded in the Resend HTML payload.
-- **Legal copy pipeline** — Long-form legal text is edited in `private-legal/*.html.example` and synced into the `htmlBody` keys of `dictionaries/de.json` / `en.json` with `npm run sync:legal`; the dictionaries are what ships (see `private-legal/README.md`). If `htmlBody` is empty, the pages fall back to the structured paragraph keys.
+- **Legal copy pipeline** — Long-form legal text is edited in `private-legal/*.html.example` and synced into the `htmlBody` keys of `dictionaries/de.json` / `en.json` with `npm run sync:legal`, and rendered to `public/legal/*.pdf` from the same `htmlBody` with `npm run legal:pdf`, so page and download cannot drift apart; the dictionaries are what ships (see `private-legal/README.md`). `impressum` and `datenschutz` fall back to structured paragraph keys when `htmlBody` is empty — **`widerruf` and `agb` do not**, and render an empty page instead.
 - **Security headers** — `next.config.mjs` applies CSP, HSTS (2 years, `includeSubDomains; preload`), `X-Frame-Options`, `frame-ancestors 'none'`, `nosniff`, referrer and permissions policy, and disables `x-powered-by`. The CSP is **first-party only** — no third-party origins are allowlisted: `default-src`/`connect-src`/`font-src` are `'self'`, and the only relaxations are Next's inline scripts/styles plus `'unsafe-eval'` **only** in `next dev` (HMR). Adding any external script or beacon requires widening the policy explicitly.
 
 ---
@@ -61,8 +61,10 @@ This is not a generic template; structure and copy reflect how the business is p
 | `/de`, `/en` | Localized landing: RSC shell in **`app/[locale]/page.tsx`** + **`LandingPage`**. |
 | `/de/impressum`, `/en/impressum` | Imprint (TMG-oriented); EN page title/metadata use “Imprint”. |
 | `/de/datenschutz`, `/en/datenschutz` | Privacy notice (DSGVO-oriented); EN uses “Privacy” in metadata. |
+| `/de/widerruf`, `/en/widerruf` | Statutory withdrawal notice for consumers plus the model withdrawal form. |
+| `/de/agb`, `/en/agb` | Terms of business in three parts: general, consumers only, businesses only. |
 | Any other bare path (e.g. `/impressum`) | **308** permanent redirect to **`/de/...`** (`middleware.ts`). |
-| `/legal/*.pdf` | Static imprint / privacy PDFs per locale, linked from the legal pages. |
+| `/legal/*.pdf` | One PDF per legal document per locale, generated from the same copy the pages render. |
 | `/sitemap.xml` | Lists **`/de`**, **`/en`**, and localized legal URLs only (`app/sitemap.ts`). |
 | `/robots.txt` | Crawl rules + sitemap URL (`app/robots.ts`). |
 
@@ -79,7 +81,9 @@ This is not a generic template; structure and copy reflect how the business is p
 │   │   ├── layout.tsx             # Validates locale → notFound if unknown
 │   │   ├── page.tsx               # RSC: LCP logo/hero + header shell + LandingPage
 │   │   ├── impressum/page.tsx     # Metadata + ImpressumPageClient
-│   │   └── datenschutz/page.tsx   # Metadata + DatenschutzPageClient
+│   │   ├── datenschutz/page.tsx   # Metadata + DatenschutzPageClient
+│   │   ├── widerruf/page.tsx      # Metadata + WiderrufPageClient
+│   │   └── agb/page.tsx           # Metadata + AgbPageClient
 │   ├── layout.tsx                 # Fonts, metadata, <html lang> from x-locale
 │   ├── globals.css
 │   └── robots.ts | sitemap.ts     # /robots.txt, /sitemap.xml
@@ -120,7 +124,7 @@ This is not a generic template; structure and copy reflect how the business is p
 ├── public/
 │   ├── images/                    # portret.webp
 │   ├── fonts/                     # jetbrains-mono-700-kds.woff2 (logo subset)
-│   └── legal/                     # Imprint / privacy PDFs (DE + EN)
+│   └── legal/                     # One PDF per legal document, DE + EN
 ├── templates/universal.gitignore  # Starter .gitignore for new repos
 ├── .cursor/                       # Editor rules + commands (engineering conventions)
 ├── next.config.mjs                # Security headers + image formats
@@ -178,10 +182,11 @@ npm run dev
 | `npm run test:e2e` | Playwright E2E (starts `next dev` automatically; `--headed` / `--ui` variants available) |
 | `npm run test:all` | Unit + E2E |
 | `npm run sync:legal` | Sync `private-legal/*.html.example` → `htmlBody` in `dictionaries/*.json` |
+| `npm run legal:pdf` | Render the synced `htmlBody` to `public/legal/*.pdf` (needs Chromium; `CHROMIUM_PATH` overrides) |
 
 E2E notes: set `PLAYWRIGHT_BASE_URL` to test an already-running or remote deployment, and `PLAYWRIGHT_SKIP_WEB_SERVER=1` to stop Playwright from starting its own dev server. Chromium is the only configured project.
 
-Before release: **`npm run build`** should complete cleanly, **`npx tsc --noEmit`** should be green, and the unit suite should pass. There is no CI workflow in this repo — these checks are run locally.
+Before release: **`npm run build`** should complete cleanly, **`npx tsc --noEmit`** should be green, and both suites should pass. **`.github/workflows/ci.yml`** runs the same checks on every push — typecheck, lint, unit tests and build in one job, then Playwright in a second that depends on it, so a browser download is never paid for on a commit that does not compile.
 
 ---
 

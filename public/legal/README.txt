@@ -6,6 +6,8 @@ Generated PDFs (committed to git)
   datenschutzerklaerung_kresic_digital_systems_en.pdf
   widerrufsbelehrung_kresic_digital_systems_de.pdf
   widerrufsbelehrung_kresic_digital_systems_en.pdf
+  allgemeine_geschaeftsbedingungen_kresic_digital_systems_de.pdf
+  allgemeine_geschaeftsbedingungen_kresic_digital_systems_en.pdf
 
 URLs: /legal/<filename>
 
