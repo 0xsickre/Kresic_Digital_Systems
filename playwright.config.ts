@@ -26,7 +26,8 @@ export default defineConfig({
     ? undefined
     : {
         // Force development mode: a parent shell with NODE_ENV=production breaks `next dev` (Edge middleware / HMR).
-        command: "cross-env NODE_ENV=development npm run dev",
+        // The specs test the real site, so maintenance mode stays off here.
+        command: "cross-env NODE_ENV=development MAINTENANCE_MODE=off npm run dev",
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,

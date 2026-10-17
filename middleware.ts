@@ -7,6 +7,11 @@ import {
   LOCALE_COOKIE,
   type LocaleCode,
 } from "@/lib/locale";
+import {
+  isMaintenanceMode,
+  MAINTENANCE_HTML,
+  MAINTENANCE_RETRY_AFTER,
+} from "@/lib/maintenance";
 
 const LOCALE_HEADER = "x-locale";
 
@@ -23,8 +28,34 @@ function pickLocaleFromAcceptLanguage(header: string | null): LocaleCode {
   return DEFAULT_LOCALE;
 }
 
+/**
+ * 503 for everything the matcher lets through. No cookie is set, and every
+ * cookie the browser sent is expired — `Clear-Site-Data` covers the ones a
+ * browser holds but did not send on this request.
+ */
+function maintenanceResponse(request: NextRequest): NextResponse {
+  const res = new NextResponse(MAINTENANCE_HTML, {
+    status: 503,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Retry-After": String(MAINTENANCE_RETRY_AFTER),
+      "X-Robots-Tag": "noindex",
+      "Clear-Site-Data": '"cookies"',
+    },
+  });
+  for (const { name } of request.cookies.getAll()) {
+    res.cookies.delete(name);
+  }
+  return res;
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (isMaintenanceMode()) {
+    return maintenanceResponse(request);
+  }
 
   if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
     return NextResponse.next();
